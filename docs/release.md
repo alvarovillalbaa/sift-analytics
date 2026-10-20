@@ -16,4 +16,14 @@ Local installs/builds stopped after the newly supplied Storage Guard preflight m
 
 Vercel project created: `sift-analytics`, ID `prj_y8cXMQAAIQIIqbvsBlrlwGNfekum`, Clous Team, Node 24. The Vercel connector returned 403 for environment-variable creation. No installed CLI fallback was found. `SIFT_SESSION_SECRET` remains required for hosted AI sessions; production intentionally fails closed without it.
 
-Publication and hosted-build receipts are appended after the remote state is inspected.
+## Publication receipt
+
+- Public GitHub repository: https://github.com/alvarovillalbaa/sift-analytics
+- Production URL: https://sift-analytics.vercel.app
+- Initial deployed commit: `14c79f902b51422bede34af77e082a0ec21e7f8d`
+- Production deployment: `dpl_EeWPdfLp4E5MNABV1NBtmVwkf8o5`, verified `READY`, Git-sourced, Node 24.
+- Hosted Next.js compilation, TypeScript, static-page generation, and eve/Nitro service build passed. Vercel reported a completed build in 43 seconds.
+- HTTP checks: homepage 200; eve health 200 with `status:ready`; DuckDB WASM 200 with `application/wasm`; browser worker 200 with JavaScript MIME; PostgreSQL discovery 200 with `configured:false`.
+- `/api/session` returned 503 with the expected missing-`SIFT_SESSION_SECRET` message. AI acceptance remains blocked on authorized environment configuration followed by redeployment and a real model/tool turn.
+
+No browser interaction, live file import, PostgreSQL source connection, or Docker runtime proof is claimed. Publication is verified; the complete conversational product acceptance remains open.

@@ -13,7 +13,7 @@ The app uses no build-time secrets. Database credentials are read only by the se
 
 ## Complete self-hosting
 
-Use the provided container or a Node.js 24 host. Set `SIFT_SESSION_SECRET` and `AI_GATEWAY_API_KEY` at runtime. The Next/eve integration runs the agent beside Next and proxies its transport and workflow callbacks. Uploaded datasets remain in each browser; the server needs no copied customer file directory.
+Use the provided container or a Node.js 24 host. Set `SIFT_SESSION_SECRET` and `AI_GATEWAY_API_KEY` at runtime. The Next/eve integration runs the agent beside Next and proxies its browser transport. Local Workflow callbacks use the eve service's internal port. Uploaded datasets remain in each browser; the server needs no copied customer file directory.
 
 ```sh
 npm ci
@@ -27,7 +27,7 @@ Or:
 docker compose up --build -d
 ```
 
-Create `.env` from `.env.example` for Docker Compose; do not commit it. Provide HTTPS with a reverse proxy and preserve streaming responses. Mount `.eve/.workflow-data` persistently; the Compose service does so. Use one instance with the default local Workflow world. Multi-instance self-hosting requires a compatible shared Workflow world and coordinated storage rather than independent local volumes.
+Create `.env` from `.env.example` for Docker Compose; do not commit it. Provide HTTPS with a reverse proxy and preserve streaming responses. Mount `.eve/.workflow-data` persistently; the Compose service does so. Use one instance with the default local Workflow world. Multi-instance self-hosting requires a compatible shared Workflow world and coordinated storage rather than independent local volumes. If adding external Workflow webhook integrations, explicitly route `/.well-known/workflow/` to the eve service; the current browser-only transport does not expose that public prefix through Next.
 
 For local/private databases, run the deployment where the database is reachable. A private worker, air-gapped installer, local model, and managed SaaS synchronization are not included in this release. Model access can send shared schemas/results outside your network independently of database execution location.
 

@@ -68,16 +68,16 @@ export default function PanelCard({ panel, onInspect, onRemove, loading = false 
   const change = changeKey && typeof rows[0]?.[changeKey] === 'number' ? rows[0][changeKey] as number : undefined;
   const tooltip = (
     <Tooltip
-      contentStyle={{ border: '1px solid #eceaf2', borderRadius: 12, boxShadow: '0 8px 28px #28233b10', padding: '10px 14px', fontSize: 12 }}
-      labelStyle={{ color: '#878391', marginBottom: 5, fontSize: 11 }}
+      contentStyle={{ border: '1px solid #e5dfee', borderRadius: 12, boxShadow: '0 8px 28px #28233b10', padding: '10px 14px', fontSize: 13, color: '#292732' }}
+      labelStyle={{ color: '#6b6878', marginBottom: 5, fontSize: 12 }}
       formatter={(value, name) => [formatValue(typeof value === 'number' || typeof value === 'string' ? value : null, panel.format), readable(String(name))]}
       cursor={panel.type === 'bar' ? { fill: '#f6f4fd' } : { stroke: '#ded7f2', strokeDasharray: '4 4' }}
     />
   );
   const axes = <>
     <CartesianGrid strokeDasharray="3 5" vertical={false} stroke="#eeeef3" />
-    <XAxis dataKey={xKey} axisLine={false} tickLine={false} tickMargin={12} minTickGap={24} tick={{ fill: '#9997a3', fontSize: 10 }} tickFormatter={axisLabel} />
-    <YAxis axisLine={false} tickLine={false} width={54} tickMargin={8} tick={{ fill: '#9997a3', fontSize: 10 }} tickFormatter={(value) => formatValue(Number(value), panel.format, true)} />
+    <XAxis dataKey={xKey} axisLine={false} tickLine={false} tickMargin={12} minTickGap={24} tick={{ fill: '#6b6878', fontSize: 12 }} tickFormatter={axisLabel} />
+    <YAxis axisLine={false} tickLine={false} width={59} tickMargin={8} tick={{ fill: '#6b6878', fontSize: 12 }} tickFormatter={(value) => formatValue(Number(value), panel.format, true)} />
   </>;
 
   function renderChart() {
@@ -95,17 +95,17 @@ export default function PanelCard({ panel, onInspect, onRemove, loading = false 
     }
     if (panel.type === 'bar') return <ResponsiveContainer width="100%" height="100%" minHeight={110}><BarChart {...common}>{axes}{tooltip}
       {yKeys.map((key, index) => <Bar key={key} dataKey={key} name={readable(key)} fill={COLORS[index % COLORS.length]} radius={[5, 5, 0, 0]} maxBarSize={38} />)}
-      {yKeys.length > 1 && <Legend iconType="circle" iconSize={6} wrapperStyle={{ fontSize: 10, paddingTop: 14 }} />}
+      {yKeys.length > 1 && <Legend iconType="circle" iconSize={7} wrapperStyle={{ fontSize: 12, paddingTop: 14 }} />}
     </BarChart></ResponsiveContainer>;
     if (panel.type === 'line') return <ResponsiveContainer width="100%" height="100%" minHeight={110}><LineChart {...common}>{axes}{tooltip}
       {yKeys.map((key, index) => <Line key={key} type="monotone" dataKey={key} name={readable(key)} stroke={COLORS[index % COLORS.length]} strokeWidth={2.5} dot={false} activeDot={{ r: 4, stroke: '#fff', strokeWidth: 2 }} />)}
-      {yKeys.length > 1 && <Legend iconType="circle" iconSize={6} wrapperStyle={{ fontSize: 10, paddingTop: 14 }} />}
+      {yKeys.length > 1 && <Legend iconType="circle" iconSize={7} wrapperStyle={{ fontSize: 12, paddingTop: 14 }} />}
     </LineChart></ResponsiveContainer>;
     return <ResponsiveContainer width="100%" height="100%" minHeight={110}><AreaChart {...common}>
       <defs>{yKeys.map((key, index) => <linearGradient key={key} id={`${chartId}-${index}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={COLORS[index % COLORS.length]} stopOpacity={0.2} /><stop offset="100%" stopColor={COLORS[index % COLORS.length]} stopOpacity={0.015} /></linearGradient>)}</defs>
       {axes}{tooltip}
       {yKeys.map((key, index) => <Area key={key} type="monotone" dataKey={key} name={readable(key)} stroke={COLORS[index % COLORS.length]} strokeWidth={2.5} fill={`url(#${chartId}-${index})`} activeDot={{ r: 4, stroke: '#fff', strokeWidth: 2 }} />)}
-      {yKeys.length > 1 && <Legend iconType="circle" iconSize={6} wrapperStyle={{ fontSize: 10, paddingTop: 14 }} />}
+      {yKeys.length > 1 && <Legend iconType="circle" iconSize={7} wrapperStyle={{ fontSize: 12, paddingTop: 14 }} />}
     </AreaChart></ResponsiveContainer>;
   }
 
