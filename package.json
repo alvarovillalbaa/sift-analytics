@@ -1,0 +1,36 @@
+{
+  "name": "sift-analytics",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Conversational analytics over your data, powered by Vercel eve and DuckDB.",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "dev": "next dev",
+    "build": "node scripts/build.mjs",
+    "start": "next start",
+    "check": "tsc --noEmit",
+    "postinstall": "node scripts/copy-duckdb.mjs"
+  },
+  "dependencies": {
+    "@duckdb/duckdb-wasm": "latest",
+    "ai": "latest",
+    "eve": "0.81.1",
+    "lucide-react": "latest",
+    "next": "latest",
+    "node-sql-parser": "latest",
+    "pg": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-grid-layout": "latest",
+    "recharts": "latest",
+    "read-excel-file": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/pg": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "typescript": "latest"
+  }
+}

@@ -1,0 +1,11 @@
+services:
+  sift:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file: .env
+    volumes:
+      - sift-workflows:/app/.eve/.workflow-data
+    restart: unless-stopped
+volumes:
+  sift-workflows:
