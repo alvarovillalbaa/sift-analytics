@@ -50,3 +50,9 @@ Source review found and corrected data-fidelity and interruption issues before l
 - Planner validation uses SQL syntax trees, so harmless quoted columns such as `"query"` or `"load"` are accepted while connector scopes remain authoritative.
 
 Targeted strict TypeScript checks cover the changed app, PostgreSQL route, EVE tools, data engine/value helpers/storage, and panel renderer. Whitespace checks pass. No local install/build, browser check, database provisioning, or live-provider suite was run; Storage Guard still reports less than the required 34 GiB. Hosted build and publication receipts follow after the corrected revision is deployed.
+
+- Corrected runtime commit: `8228cd32e8728ff3a2153469f4d314ddf128dcff`, verified on GitHub `main`.
+- Production deployment: `dpl_9Pg8DtLfDUFH8fruz8vGixjh2BcJ`, verified `READY` and assigned to https://sift-analytics.vercel.app.
+- Hosted Next.js compilation, TypeScript, and eve service builds passed; Vercel reported a completed build in 35 seconds.
+- Current HTTP checks: homepage 200; eve health 200 with `status:ready`; `/api/session` 503 for the deferred signing-secret configuration.
+- The previous goal turn made progress by publishing the application. This continuation made progress by correcting identified acceptance defects and publishing the corrected runtime. Full completion remains unproven: live AI, PostgreSQL, browser file/resize/replay behavior, and Docker runtime acceptance remain open. The signing secret remains explicitly deferred; it was not retried through a denied configuration interface.
