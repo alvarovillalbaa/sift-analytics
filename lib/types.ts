@@ -7,6 +7,7 @@ export type Dataset = {
 };
 export type QueryResult = {
   columns: string[]; rows: Record<string, Value>[]; rowCount: number;
+  columnTypes?: Record<string, string>;
   truncated: boolean; elapsedMs: number; sql: string; executedAt: string;
   sources: { name: string; refreshedAt: string }[]; approximate: boolean;
 };
@@ -14,7 +15,7 @@ export type Panel = {
   id: string; title: string;
   type: 'metric' | 'line' | 'bar' | 'area' | 'donut' | 'table';
   sql: string; datasetIds: string[]; xKey?: string; yKeys?: string[];
-  format?: 'number' | 'currency' | 'percent'; description?: string;
+  format?: 'number' | 'currency' | 'percent'; currency?: string; description?: string;
   result?: QueryResult; error?: string;
   layout?: { i: string; x: number; y: number; w: number; h: number };
 };
@@ -23,6 +24,7 @@ export type Metric = { id: string; name: string; definition: string; sql: string
 export type Workspace = {
   datasets: Dataset[]; views: View[]; activeViewId: string;
   metrics: Metric[]; shareResults: boolean; shareSchema: boolean;
+  appliedToolCallIds?: string[];
 };
 export type ConnectorCapabilities = {
   discovery: boolean; modes: ('file' | 'live-query' | 'semantic' | 'sync' | 'federation' | 'stream')[];

@@ -27,6 +27,7 @@ flowchart LR
 | Workspace, datasets, views, metrics, result and connector shapes | [`lib/types.ts`](../lib/types.ts) |
 | SELECT/WITH validation, dataset scope, function allowlist | [`lib/sql-policy.ts`](../lib/sql-policy.ts) |
 | DuckDB worker, local imports, limits and cancellation | [`lib/engine.ts`](../lib/engine.ts) |
+| Lossless JSON numbers, typed imports and Arrow value serialization | [`lib/data-values.ts`](../lib/data-values.ts) |
 | IndexedDB upload bytes and localStorage metadata | [`lib/storage.ts`](../lib/storage.ts) |
 | Deterministic demo dataset, metric definitions and initial view | [`lib/demo.ts`](../lib/demo.ts) |
 | Server-configured PostgreSQL connection and execution | [`lib/postgres.ts`](../lib/postgres.ts) and [`app/api/postgres/route.ts`](../app/api/postgres/route.ts) |
@@ -42,13 +43,21 @@ Supported uploads are CSV, TSV, JSON, JSONL/NDJSON, XLSX, and Parquet, with a 20
 
 The browser engine serializes operations. Queries validate the registered dataset identities, parse and regenerate one read-only SQL statement, then execute an outer 1,001-row probe. The public result contains at most 1,000 rows and discloses truncation. A ten-second execution timer or AbortSignal terminates the worker. The next operation recreates the engine from the deterministic demo and persisted files. Uploaded bytes and query execution do not traverse the application server.
 
+JSON number tokens and XLSX numeric cells avoid JavaScript Number conversion during import. Explicit column types preserve text IDs and exact decimals; values that exceed DuckDB's decimal capacity remain text. Arrow decimal scales and raw timestamp units survive result serialization. Charts decline values that would require unsafe numeric coercion; the inspector and exports retain the exact result. Currency labels require an explicit supported ISO code. CSV/TSV automatic type inference remains a separate precision boundary documented in the connector guide.
+
+Worker startup and import operations have 30-second deadlines; saved-file restoration has a bounded total budget. Aborting an import or query terminates its worker. Main-thread file preparation has size and complexity limits; asynchronous deadlines cannot preempt synchronous JavaScript parsing. Failed saved files appear in the source dialog and can be removed without successfully restoring them.
+
 IndexedDB stores file bytes, chosen sheets, stable dataset IDs, and import timestamps. localStorage stores dataset metadata, view definitions, layouts, metric definitions, sharing preferences, and conversation state. Workspace saving omits query result rows; panels rerun after reload. Conversation history can contain results explicitly shared with the model. Browser storage belongs to one browser profile and deployment origin. Clearing it removes the local workspace and files. Exported view/workspace JSON can contain results and should be handled as data.
+
+AI tool plans add a stable view ID and an applied-call receipt in the same workspace update. Reloading cannot retain a receipt without its view: pending panels rerun, and durable tool replay does not duplicate the view. Concurrent plans retain separate cancellation controllers. Conversation reset waits for local work, clears queued explanations, and cannot receive an old session's results; remounting cancels the old component's local work.
 
 ## PostgreSQL execution
 
 The administrator supplies connection URLs and schema-qualified table allowlists through server environment variables. Credentials are never accepted as a public request parameter. Discovery and query routes require the deployment Bearer token when configured. Dataset IDs are resolved against server configuration before execution; one query can use tables from one configured connection.
 
 The adapter uses a dedicated client, a read-only transaction, a database statement timeout, and an outer result probe. Configure a least-privilege read-only database role as an additional source boundary. An aborted browser HTTP request does not establish that PostgreSQL cancelled its work; the SQL timeout bounds server execution. See [connectors](connectors.md) for setup and current verification limits.
+
+Client-local PostgreSQL type parsers preserve exact numeric, JSON, array, and custom-type text. Calendar timestamps retain their fractional precision without passing through JavaScript Date's local-timezone conversion. Native booleans, small integers, and floating types retain their normal primitive representation; nonfinite floating values become explicit strings rather than null.
 
 The server can reach only networks available to its deployment. Self-host the application near a private database when necessary. The first version has no customer-installed private worker, outbound gateway, federation engine, or cross-source extract service.
 
@@ -62,7 +71,7 @@ The interface stores approved metric definitions alongside SQL. Revenue, custome
 
 ## Evidence and extension boundaries
 
-Results preserve the executed query, returned row count, source names/freshness, execution timestamp, duration, truncation, and approximation. A complete result is distinct from a chart displaying a subset of returned rows. Discovery time is distinct from a source's ingestion watermark. A PostgreSQL row count of `-1` means unknown.
+Results preserve the executed query, named column types, returned row count, source names/freshness, execution timestamp, duration, truncation, and approximation. Column types distinguish numeric strings from text identifiers such as `00123`, so presentation does not remove significant zeroes. A complete result is distinct from a chart displaying a subset of returned rows. Discovery time is distinct from a source's ingestion watermark. A PostgreSQL row count of `-1` means unknown.
 
 [`AnalyticsConnector`](../lib/types.ts) is the extension contract. The browser connector implements it; the server PostgreSQL adapter currently exposes equivalent query behavior through its authenticated route. Capabilities describe supported modes and execution location. Semantic layers, SaaS record synchronization, warehouses, object storage, streams, and private workers are future adapters, each with its own permission, completeness, and acceptance requirements.
 

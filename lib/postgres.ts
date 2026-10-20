@@ -1,9 +1,10 @@
 import { createHash, timingSafeEqual } from 'node:crypto';
-import { Client } from 'pg';
+import { Client, types as pgTypes } from 'pg';
 import { analyzeReadOnlySql } from './sql-policy';
 import type { Dataset, QueryResult, Value } from './types';
 
 export type PostgresConfig = { id: string; name: string; url: string; tables: string[] };
+const POSTGRES_TYPE_NAMES = new Map(Object.entries(pgTypes.builtins).map(([name, oid]) => [Number(oid), name]));
 export function connections(): PostgresConfig[] {
   const value = process.env.SIFT_POSTGRES_CONNECTIONS;
   if (!value) return [];
@@ -19,7 +20,19 @@ export function authorize(request: Request): boolean {
   return Boolean(configured && supplied && timingSafeEqual(createHash('sha256').update(configured).digest(), createHash('sha256').update(supplied).digest()));
 }
 async function withClient<T>(config: PostgresConfig, fn: (client: Client) => Promise<T>): Promise<T> {
-  const client = new Client({ connectionString: config.url, connectionTimeoutMillis: 5000, query_timeout: 12000, application_name: 'sift-read-only' });
+  const client = new Client({ connectionString: config.url, connectionTimeoutMillis: 5000, query_timeout: 12000, application_name: 'sift-read-only',
+    types: { getTypeParser(oid, format) {
+      // Keep calendar timestamps and microseconds out of JavaScript Date's timezone/millisecond conversion.
+      if (format !== 'binary' && [1082, 1114, 1184].includes(oid)) return (value: string) => {
+        if (oid === 1082) return value;
+        const timestamp = value.replace(' ', 'T');
+        return oid === 1184 ? timestamp.replace(/([+-]\d{2})$/, '$1:00') : timestamp;
+      };
+      // Preserve exact numeric/JSON/array/custom-type text; native JSON.parse and array parsers can round values.
+      if (format !== 'binary' && ![16, 21, 23, 700, 701].includes(oid)) return (value: string) => value;
+      return pgTypes.getTypeParser(oid, format);
+    } },
+  });
   try { await client.connect(); return await fn(client); } finally { await client.end().catch(() => {}); }
 }
 export async function discover(): Promise<Dataset[]> {
@@ -60,6 +73,6 @@ export async function queryPostgres(sql: string, datasetIds: string[]): Promise<
       return result;
     } catch (error) { await client.query('ROLLBACK').catch(() => {}); throw error; }
   });
-  const values = rows.rows.slice(0, 1000).map(row => Object.fromEntries(Object.entries(row).map(([k, v]) => [k, v instanceof Date ? v.toISOString() : typeof v === 'bigint' ? String(v) : (v ?? null) as Value])));
-  return { sql: validated, columns: rows.fields.map(f => f.name), rows: values, rowCount: values.length, truncated: rows.rows.length > 1000, elapsedMs: Date.now() - start, executedAt: new Date().toISOString(), sources: selected.filter(s => policy.tables.includes(s.table)).map(s => ({ name: `${s.config.name} / ${s.table}`, refreshedAt: new Date().toISOString() })), approximate: false };
+  const values = rows.rows.slice(0, 1000).map(row => Object.fromEntries(Object.entries(row).map(([k, v]) => [k, v instanceof Date ? v.toISOString() : typeof v === 'bigint' || typeof v === 'number' && !Number.isFinite(v) ? String(v) : (v ?? null) as Value])));
+  return { sql: validated, columns: rows.fields.map(f => f.name), columnTypes: Object.fromEntries(rows.fields.map(f => [f.name, POSTGRES_TYPE_NAMES.get(f.dataTypeID) ?? `oid:${f.dataTypeID}`])), rows: values, rowCount: values.length, truncated: rows.rows.length > 1000, elapsedMs: Date.now() - start, executedAt: new Date().toISOString(), sources: selected.filter(s => policy.tables.includes(s.table)).map(s => ({ name: `${s.config.name} / ${s.table}`, refreshedAt: new Date().toISOString() })), approximate: false };
 }

@@ -44,7 +44,7 @@ const source = [DEMO_DATASET_ID];
 const panels: Panel[] = [
   {
     id: 'total-revenue', title: 'Annual revenue', type: 'metric', datasetIds: source,
-    sql: 'SELECT SUM(revenue) AS revenue FROM demo_revenue', format: 'currency',
+    sql: 'SELECT SUM(revenue) AS revenue FROM demo_revenue', format: 'currency', currency: 'USD',
     description: 'Recognized subscription revenue, Jan–Dec 2025. USD; no refunds or tax in this sample.',
     layout: { i: 'total-revenue', x: 0, y: 0, w: 4, h: 3 },
   },
@@ -63,7 +63,7 @@ const panels: Panel[] = [
   {
     id: 'revenue-trend', title: 'Revenue over time', type: 'area', datasetIds: source,
     sql: 'SELECT month, SUM(revenue) AS revenue FROM demo_revenue GROUP BY month ORDER BY month',
-    xKey: 'month', yKeys: ['revenue'], format: 'currency', description: 'Monthly recognized revenue · USD',
+    xKey: 'month', yKeys: ['revenue'], format: 'currency', currency: 'USD', description: 'Monthly recognized revenue · USD',
     layout: { i: 'revenue-trend', x: 0, y: 3, w: 8, h: 5 },
   },
   {
@@ -75,7 +75,7 @@ const panels: Panel[] = [
   {
     id: 'plan-breakdown', title: 'Performance by plan', type: 'table', datasetIds: source,
     sql: "SELECT plan, SUM(revenue) AS revenue, SUM(new_customers) AS new_customers, ROUND(SUM(revenue) * 1.0 / NULLIF(SUM(customers), 0), 2) AS monthly_revenue_per_customer FROM demo_revenue GROUP BY plan ORDER BY revenue DESC",
-    format: 'currency', description: 'Annual totals and weighted monthly revenue per paying subscription · USD',
+    format: 'currency', currency: 'USD', description: 'Annual totals and weighted monthly revenue per paying subscription · USD',
     layout: { i: 'plan-breakdown', x: 0, y: 8, w: 12, h: 5 },
   },
 ];

@@ -5,9 +5,9 @@ import { useEveAgent } from 'eve/react';
 import { ArrowDownToLine, ArrowUp, Check, ChevronDown, ChevronRight, Database, FileSpreadsheet, Filter, Code2, LayoutDashboard, LoaderCircle, Menu, MessageSquare, Plus, RefreshCw, Search, Settings2, ShieldCheck, Sparkles, Square, Trash2, X } from 'lucide-react';
 import DashboardGrid from './DashboardGrid';
 import { defaultWorkspace } from '@/lib/demo';
-import { initEngine, importFile, query, deleteDataset, listWorkbookSheets, getRestoreErrors } from '@/lib/engine';
+import { initEngine, importFile, query, deleteDataset, listWorkbookSheets, getRestoreErrors, getRestoreFailures } from '@/lib/engine';
 import { loadWorkspace, saveWorkspace } from '@/lib/storage';
-import type { Dataset, Panel, QueryResult, View, Workspace } from '@/lib/types';
+import type { Panel, QueryResult, View, Workspace } from '@/lib/types';
 
 type Modal = 'sources' | 'settings' | 'metrics' | 'panel' | 'new-view' | null;
 const errorText = (error: unknown) => error instanceof Error ? error.message : String(error);
@@ -21,6 +21,7 @@ export default function SiftApp() {
   const [ready, setReady] = useState(false);
   const [authReady, setAuthReady] = useState(false);
   const [toast, setToast] = useState('');
+  const [startupError, setStartupError] = useState('');
   useEffect(() => {
     let active = true;
     void (async () => {
@@ -30,7 +31,7 @@ export default function SiftApp() {
         const saved = loadWorkspace() ?? defaultWorkspace();
         saved.datasets = [...datasets, ...saved.datasets.filter(d => d.kind === 'postgres')];
         if (active) { setWorkspace(saved); setReady(true); if (warnings.length) setToast(`Some files could not be restored: ${warnings.join('; ')}`); }
-      } catch (error) { if (active) setToast(`Data engine: ${errorText(error)}. Reload to try again.`); }
+      } catch (error) { if (active) setStartupError(`Data engine: ${errorText(error)}`); }
     })();
     void fetch('/api/session', { method: 'POST' }).then(r => {
       if (!r.ok) throw new Error('AI session is unavailable. Your local dashboards still work.');
@@ -43,11 +44,11 @@ export default function SiftApp() {
     try { saveWorkspace(workspace); } catch (error) { setToast(`Could not save workspace: ${errorText(error)}`); }
   }, [workspace, ready]);
   useEffect(() => { if (!toast) return; const timer = setTimeout(() => setToast(''), 8000); return () => clearTimeout(timer); }, [toast]);
-  if (!workspace) return <div className="boot-screen"><div className="brand-mark"><Filter size={25} /></div><h1>Sift</h1><p>{toast || 'Preparing your workspace…'}</p>{!toast && <LoaderCircle className="spin" size={20} />}</div>;
+  if (!workspace) return <div className="boot-screen"><div className="brand-mark"><Filter size={25} /></div><h1>Sift</h1><p role={startupError ? 'alert' : 'status'}>{startupError || 'Preparing your workspace…'}</p>{startupError ? <button className="button button-primary" onClick={() => window.location.reload()}>Retry workspace</button> : <LoaderCircle className="spin" size={20} />}</div>;
   return <WorkspaceApp key={authReady ? 'agent-ready' : 'local-only'} workspace={workspace} setWorkspace={setWorkspace} authReady={authReady} toast={toast} notify={setToast} />;
 }
 
-function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify }: {
+function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendNotification }: {
   workspace: Workspace; setWorkspace: React.Dispatch<React.SetStateAction<Workspace | undefined>>;
   authReady: boolean; toast: string; notify: (text: string) => void;
 }) {
@@ -70,9 +71,23 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify }: {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [metricName, setMetricName] = useState('');
   const [metricDefinition, setMetricDefinition] = useState('');
-  const processed = useRef(new Set<string>((() => { try { return JSON.parse(localStorage.getItem('sift-applied-tools') ?? '[]') as string[]; } catch { return []; } })()));
-  const pendingSummary = useRef<Record<string, unknown>[] | null>(null);
-  const abortRef = useRef<AbortController | null>(null);
+  const processed = useRef(new Set<string>(workspace.appliedToolCallIds ?? []));
+  const pendingSummary = useRef<{ sessionId: string; results: Record<string, unknown>[] } | null>(null);
+  const controllers = useRef(new Set<AbortController>());
+  const runningViews = useRef(new Set<string>());
+  const fileOperations = useRef(0);
+  const mounted = useRef(true);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      pendingSummary.current = null;
+      for (const controller of controllers.current) controller.abort();
+      controllers.current.clear();
+      runningViews.current.clear();
+    };
+  }, []);
+  function notify(message: string) { if (mounted.current) sendNotification(message); }
   const workspaceRef = useRef(workspace); workspaceRef.current = workspace;
   const [saved] = useState(() => { try { return JSON.parse(localStorage.getItem('sift-chat') ?? 'null'); } catch { return null; } });
   const agent = useEveAgent({
@@ -87,7 +102,33 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify }: {
   }, [agent.session, agent.events]);
   const busy = agent.status === 'submitted' || agent.status === 'streaming' || agent.status === 'resuming';
   const activeView = workspace.views.find(v => v.id === workspace.activeViewId) ?? workspace.views[0];
-  function update(fn: (value: Workspace) => Workspace) { setWorkspace(current => current ? fn(current) : current); }
+  function update(fn: (value: Workspace) => Workspace) { if (mounted.current) setWorkspace(current => current ? fn(current) : current); }
+  function startPlan(view: View, toolCallId: string) {
+    runningViews.current.add(view.id);
+    setExecuting(true);
+    // One workspace write persists both the requested view and its replay receipt.
+    update(w => ({ ...w, views: w.views.some(v => v.id === view.id) ? w.views : [...w.views, view], activeViewId: view.id,
+      appliedToolCallIds: [...new Set([...(w.appliedToolCallIds ?? []), toolCallId])] }));
+  }
+  function finishPlan(viewId: string) {
+    runningViews.current.delete(viewId);
+    setExecuting(runningViews.current.size > 0);
+  }
+  function savePanelResults(viewId: string, panels: Panel[]) {
+    update(w => ({ ...w, views: w.views.map(v => v.id === viewId ? { ...v, panels: v.panels.map(panel => panels.find(result => result.id === panel.id) ?? { ...panel, error: 'Query not run. Refresh this view to continue.' }) } : v) }));
+  }
+  function resetConversation() {
+    if (busy || executing || loading) return;
+    pendingSummary.current = null;
+    agent.reset();
+    localStorage.removeItem('sift-chat');
+    setLocalNotes([]);
+  }
+  function stopWork() {
+    pendingSummary.current = null;
+    for (const controller of controllers.current) controller.abort();
+    if (busy) void agent.cancel().catch(error => notify(errorText(error)));
+  }
   async function runQuery(statement: string, datasetIds: string[], signal?: AbortSignal) {
     const datasets = workspaceRef.current.datasets.filter(d => datasetIds.includes(d.id));
     if (!datasets.length) throw new Error('Choose at least one available dataset.');
@@ -99,7 +140,7 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify }: {
     return query(statement, datasets, signal);
   }
   async function evaluate(panels: Panel[]) {
-    const controller = new AbortController(); abortRef.current = controller; setLoading(true);
+    const controller = new AbortController(); controllers.current.add(controller); setLoading(true);
     const results: Panel[] = [];
     try {
       for (const panel of panels) {
@@ -108,14 +149,14 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify }: {
         catch (error) { results.push({ ...panel, result: undefined, error: errorText(error) }); }
       }
       return results;
-    } finally { setLoading(false); abortRef.current = null; }
+    } finally { controllers.current.delete(controller); setLoading(controllers.current.size > 0 || fileOperations.current > 0); }
   }
   async function refresh(view: View) {
     const panels = await evaluate(view.panels);
     update(w => ({ ...w, views: w.views.map(v => v.id === view.id ? { ...v, panels: v.panels.map(p => ({ ...p, ...panels.find(r => r.id === p.id) })) } : v) }));
   }
   useEffect(() => {
-    if (activeView?.panels.some(p => !p.result && !p.error)) void refresh(activeView);
+    if (activeView?.panels.some(p => !p.result && !p.error) && !runningViews.current.has(activeView.id)) void refresh(activeView);
     // A view is evaluated when selected; subsequent refreshes are explicit.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeView?.id]);
@@ -127,7 +168,7 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify }: {
     }));
   }
   async function send(message = text) {
-    if (!message.trim() || busy || executing) return;
+    if (!message.trim() || busy || executing || loading) return;
     if (!authReady) { notify('AI is not connected. You can still upload data and create SQL panels.'); return; }
     if (!workspace.shareSchema) { setModal('settings'); notify('Enable schema sharing to let AI work with your selected datasets.'); return; }
     setText(''); setChatOpen(true);
@@ -137,43 +178,55 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify }: {
     for (const message of agent.data.messages) for (const part of message.parts) {
       if (part.type !== 'dynamic-tool' || part.state !== 'output-available' || part.partial || processed.current.has(part.toolCallId)) continue;
       processed.current.add(part.toolCallId);
-      try { localStorage.setItem('sift-applied-tools', JSON.stringify([...processed.current].slice(-1000))); } catch { /* Applied plans remain deduplicated for this tab. */ }
       if (part.toolName === 'create_view') {
         const output = part.output as View;
         if (!output?.panels?.length) continue;
-        setExecuting(true);
+        const view: View = { ...output, id: `eve-${part.toolCallId}`, createdAt: new Date().toISOString(),
+          panels: output.panels.map((p, i) => ({ ...p, id: `${part.toolCallId}-${i}`, result: undefined, error: undefined,
+            layout: { i: `${part.toolCallId}-${i}`, x: i % 2 * 6, y: Math.floor(i / 2) * 5, w: p.type === 'metric' ? 4 : 6, h: p.type === 'metric' ? 3 : 5 } })) };
+        startPlan(view, part.toolCallId);
         void (async () => {
-          const panels = await evaluate(output.panels.map((p, i) => ({ ...p, id: crypto.randomUUID(), layout: { i: '', x: i % 2 * 6, y: Math.floor(i / 2) * 5, w: p.type === 'metric' ? 4 : 6, h: p.type === 'metric' ? 3 : 5 } })));
-          const view: View = { ...output, id: crypto.randomUUID(), panels, createdAt: new Date().toISOString() };
-          update(w => ({ ...w, views: [...w.views, view], activeViewId: view.id })); notify(`Created “${view.name}” with ${panels.length} panels.`); setExecuting(false);
-        })().catch(error => { notify(errorText(error)); setExecuting(false); });
+          const panels = await evaluate(view.panels);
+          savePanelResults(view.id, panels);
+          notify(`Created “${view.name}” with ${view.panels.length} panels.`);
+        })().catch(error => notify(errorText(error))).finally(() => finishPlan(view.id));
       }
       if (part.toolName === 'analyze_data') {
         const output = part.output as { queries?: { id: string; title: string; sql: string; datasetIds: string[] }[] };
         if (!output?.queries?.length) continue;
-        setExecuting(true);
-        const controller = new AbortController(); abortRef.current = controller;
+        const sessionId = agent.session?.sessionId;
+        const view: View = { id: `eve-${part.toolCallId}`, name: output.queries[0].title, description: 'Reproducible results from your conversation.',
+          panels: output.queries.map((plan, i) => ({ id: `${part.toolCallId}-${i}`, title: plan.title, sql: plan.sql, datasetIds: plan.datasetIds, type: 'table' })) };
+        startPlan(view, part.toolCallId);
+        const controller = new AbortController(); controllers.current.add(controller); setLoading(true);
         void (async () => {
           const results: (QueryResult & { title: string; datasetIds: string[] } | { title: string; error: string })[] = [];
-          for (const plan of output.queries!) {
+          const panels: Panel[] = [];
+          for (const panel of view.panels) {
             if (controller.signal.aborted) break;
-            try { results.push({ title: plan.title, datasetIds: plan.datasetIds, ...(await runQuery(plan.sql, plan.datasetIds, controller.signal)) }); }
-            catch (error) { results.push({ title: plan.title, error: errorText(error) }); }
+            try {
+              const result = await runQuery(panel.sql, panel.datasetIds, controller.signal);
+              results.push({ title: panel.title, datasetIds: panel.datasetIds, ...result });
+              panels.push({ ...panel, result });
+            } catch (error) {
+              results.push({ title: panel.title, error: errorText(error) });
+              panels.push({ ...panel, error: errorText(error) });
+            }
           }
-          const panels: Panel[] = results.filter((r): r is QueryResult & {title:string;datasetIds:string[]} => 'rows' in r).map(r => ({ id: crypto.randomUUID(), title: r.title, type: 'table', sql: r.sql, datasetIds: r.datasetIds, result: r }));
-          if (panels.length) { const view: View = { id: crypto.randomUUID(), name: output.queries![0].title, description: 'Reproducible results from your conversation.', panels }; update(w => ({ ...w, views: [...w.views, view], activeViewId: view.id })); }
-          if (workspaceRef.current.shareResults) pendingSummary.current = results.map(r => 'rows' in r ? { ...r, rows: r.rows.slice(0, 50), modelRowsLimited: r.rows.length > 50 } : r);
-          else setLocalNotes(notes => [...notes, 'Your analysis results are ready in a new view. To get an AI explanation, enable query-result sharing in Settings, then ask about the result.']);
-          setExecuting(false);
-        })().catch(error => { notify(errorText(error)); setExecuting(false); }).finally(() => { if (abortRef.current === controller) abortRef.current = null; });
+          savePanelResults(view.id, panels);
+          if (!controller.signal.aborted && workspaceRef.current.shareResults && sessionId) {
+            const previous = pendingSummary.current?.sessionId === sessionId ? pendingSummary.current.results : [];
+            pendingSummary.current = { sessionId, results: [...previous, ...results.map(r => 'rows' in r ? { ...r, rows: r.rows.slice(0, 50), modelRowsLimited: r.rows.length > 50 } : r)] };
+          } else if (!controller.signal.aborted) setLocalNotes(notes => [...notes, 'Your analysis view is ready. Review its results and any query errors. Enable query-result sharing in Settings for AI explanations.']);
+        })().catch(error => notify(errorText(error))).finally(() => { controllers.current.delete(controller); setLoading(controllers.current.size > 0 || fileOperations.current > 0); finishPlan(view.id); });
       }
     }
   }, [agent.data.messages]); // Tool call IDs prevent durable replay from applying a plan twice.
   useEffect(() => {
     if (agent.status !== 'ready' || executing || !pendingSummary.current) return;
-    const results = pendingSummary.current; pendingSummary.current = null;
-    if (!workspaceRef.current.shareResults) return;
-    const bounded = JSON.parse(JSON.stringify(results));
+    const summary = pendingSummary.current; pendingSummary.current = null;
+    if (!workspaceRef.current.shareResults || summary.sessionId !== agent.session?.sessionId) return;
+    const bounded = JSON.parse(JSON.stringify(summary.results));
     if (JSON.stringify(bounded).length > 60000) { notify('Results are too large to share. Use a smaller aggregate query.'); return; }
     void agent.send('Explain the locally executed results in clientContext.results. Do not call planning tools again. Ground every quantitative claim in the supplied evidence and disclose limitations.', { clientContext: { ...context(), results: bounded } }).catch(error => notify(errorText(error)));
   }, [agent.status, executing]);
@@ -184,12 +237,13 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify }: {
     }
   }
   async function upload() {
-    if (!file) return; setLoading(true);
+    if (!file) return; fileOperations.current++; setLoading(true);
+    const controller = new AbortController(); controllers.current.add(controller);
     try {
-      const dataset = await importFile(file, sheet || undefined);
+      const dataset = await importFile(file, sheet || undefined, controller.signal);
       update(w => ({ ...w, datasets: [...w.datasets.filter(d => d.id !== dataset.id), dataset], shareSchema: false, shareResults: false }));
       setFile(undefined); setSheets([]); notify(`“${dataset.name}” is ready. Your file stays on this device. Schema sharing is now off.`);
-    } catch (error) { notify(errorText(error)); } finally { setLoading(false); }
+    } catch (error) { notify(errorText(error)); } finally { controllers.current.delete(controller); fileOperations.current--; setLoading(controllers.current.size > 0 || fileOperations.current > 0); }
   }
   async function connectPostgres() {
     setPgStatus('Connecting…');
@@ -231,9 +285,9 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify }: {
           {activeView?.panels.length ? <DashboardGrid panels={activeView.panels} loading={loading} onInspect={setInspect} onRemove={id => update(w => ({ ...w, views: w.views.map(v => v.id === activeView.id ? { ...v, panels: v.panels.filter(p => p.id !== id) } : v) }))} onLayoutChange={panels => update(w => ({ ...w, views: w.views.map(v => v.id === activeView.id ? { ...v, panels } : v) }))} /> : <div className="empty-workspace"><span className="empty-icon"><LayoutDashboard size={28} /></span><h2>A blank canvas. A better question.</h2><p>Ask Sift to build a dashboard, or add your first SQL panel.</p><button className="button button-primary" onClick={() => { setText('Create a dashboard for my data'); document.getElementById('sift-prompt')?.focus(); }}><Sparkles size={16} />Start with a question</button></div>}
           <div className="workspace-footnote"><ShieldCheck size={14} />Every chart starts with a query. Click a panel’s source to see the evidence.<span>Powered by DuckDB + eve</span></div>
         </section>
-        {chatOpen && <aside className="conversation"><div className="conversation-header"><span><Sparkles size={17} />Your data partner</span><div><button className="icon-button" aria-label="New conversation" disabled={busy} onClick={() => { agent.reset(); localStorage.removeItem('sift-chat'); setLocalNotes([]); }}><Plus size={17} /></button><button className="icon-button" aria-label="Close conversation" onClick={() => setChatOpen(false)}><X size={17} /></button></div></div><div className="conversation-messages" aria-live="polite">{!agent.data.messages.length && <div className="chat-welcome"><span className="empty-icon"><Sparkles size={24} /></span><h3>Let’s find the signal.</h3><p>Ask a question, explore a trend, or turn your data into a whole new view.</p></div>}{agent.data.messages.map(message => <div className={`chat-message ${message.role}`} key={message.id}><small>{message.role === 'user' ? 'YOU' : 'SIFT'}</small>{message.parts.map((part, i) => part.type === 'text' ? <p key={i}>{part.text}</p> : part.type === 'dynamic-tool' ? <div className="tool-activity" key={i}>{part.state === 'output-available' ? <Check size={14} /> : <LoaderCircle size={14} className="spin" />}{part.toolName === 'create_view' ? 'Designing your view' : 'Planning your analysis'}</div> : null)}</div>)}{localNotes.map((note, i) => <div className="chat-message assistant" key={i}><p>{note}</p></div>)}{(busy || executing) && <div className="thinking"><span /><span /><span /><small>{executing ? 'Running queries locally' : 'Working with your data'}</small></div>}{agent.error && <div className="inline-error">{agent.error.message}<button className="button" onClick={() => { agent.reset(); localStorage.removeItem('sift-chat'); }}>Start a new conversation</button></div>}{Object.values(agent.data.inputs).filter(input => input.status === 'open').map(input => <div key={input.request.requestId} className="inline-notice"><p>{input.request.prompt}</p>{input.request.options?.map(option => <button className="button" key={option.id} disabled={agent.status === 'resuming'} onClick={() => void agent.respond([{ requestId: input.request.requestId, optionId: option.id }]).catch(error => notify(errorText(error)))}>{option.label}</button>)}</div>)}</div></aside>}
+        {chatOpen && <aside className="conversation"><div className="conversation-header"><span><Sparkles size={17} />Your data partner</span><div><button className="icon-button" aria-label="New conversation" disabled={busy || executing || loading} onClick={resetConversation}><Plus size={17} /></button><button className="icon-button" aria-label="Close conversation" onClick={() => setChatOpen(false)}><X size={17} /></button></div></div><div className="conversation-messages" aria-live="polite">{!agent.data.messages.length && <div className="chat-welcome"><span className="empty-icon"><Sparkles size={24} /></span><h3>Let’s find the signal.</h3><p>Ask a question, explore a trend, or turn your data into a whole new view.</p></div>}{agent.data.messages.map(message => <div className={`chat-message ${message.role}`} key={message.id}><small>{message.role === 'user' ? 'YOU' : 'SIFT'}</small>{message.parts.map((part, i) => part.type === 'text' ? <p key={i}>{part.text}</p> : part.type === 'dynamic-tool' ? <div className="tool-activity" key={i}>{part.state === 'output-available' ? <Check size={14} /> : <LoaderCircle size={14} className="spin" />}{part.toolName === 'create_view' ? 'Designing your view' : 'Planning your analysis'}</div> : null)}</div>)}{localNotes.map((note, i) => <div className="chat-message assistant" key={i}><p>{note}</p></div>)}{(busy || executing) && <div className="thinking"><span /><span /><span /><small>{executing ? 'Running queries locally' : 'Working with your data'}</small></div>}{agent.error && <div className="inline-error">{agent.error.message}<button className="button" disabled={busy || executing || loading} onClick={resetConversation}>Start a new conversation</button></div>}{Object.values(agent.data.inputs).filter(input => input.status === 'open').map(input => <div key={input.request.requestId} className="inline-notice"><p>{input.request.prompt}</p>{input.request.options?.map(option => <button className="button" key={option.id} disabled={agent.status === 'resuming'} onClick={() => void agent.respond([{ requestId: input.request.requestId, optionId: option.id }]).catch(error => notify(errorText(error)))}>{option.label}</button>)}</div>)}</div></aside>}
       </div>
-      <div className="composer-shell"><div className="prompt-suggestions">{suggestions.map(suggestion => <button key={suggestion} onClick={() => void send(suggestion)} disabled={busy || executing}><Sparkles size={13} />{suggestion}</button>)}</div><form className="composer" onSubmit={event => { event.preventDefault(); void send(); }}><span className="composer-spark"><Sparkles size={20} /></span><textarea id="sift-prompt" rows={1} placeholder="Ask your data anything, or describe a dashboard…" value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void send(); } }} maxLength={6000} aria-label="Ask Sift" /><button type="button" className="icon-button" aria-label="Connect data" onClick={() => setModal('sources')}><Plus size={20} /></button>{busy || loading || executing ? <button type="button" className="send-button" aria-label="Stop current work" onClick={() => { abortRef.current?.abort(); if (busy) void agent.cancel().catch(error => notify(errorText(error))); }}><Square size={14} fill="currentColor" /></button> : <button type="submit" className="send-button" aria-label="Send question" disabled={!text.trim()}><ArrowUp size={19} /></button>}</form><div className="composer-caption"><span><span className="status-dot" />{workspace.shareSchema ? 'Schema sharing on' : 'Schema sharing off'} · {workspace.shareResults ? 'Query results shared with AI' : 'Query results stay local'}</span><span>Built with <a href="https://eve.dev" target="_blank" rel="noreferrer">eve</a> <span className="key-hint">↵</span> to send</span></div></div>
+      <div className="composer-shell"><div className="prompt-suggestions">{suggestions.map(suggestion => <button key={suggestion} onClick={() => void send(suggestion)} disabled={busy || executing || loading}><Sparkles size={13} />{suggestion}</button>)}</div><form className="composer" onSubmit={event => { event.preventDefault(); void send(); }}><span className="composer-spark"><Sparkles size={20} /></span><textarea id="sift-prompt" rows={1} placeholder="Ask your data anything, or describe a dashboard…" value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void send(); } }} maxLength={6000} aria-label="Ask Sift" /><button type="button" className="icon-button" aria-label="Connect data" onClick={() => setModal('sources')}><Plus size={20} /></button>{busy || loading || executing ? <button type="button" className="send-button" aria-label="Stop current work" onClick={stopWork}><Square size={14} fill="currentColor" /></button> : <button type="submit" className="send-button" aria-label="Send question" disabled={!text.trim()}><ArrowUp size={19} /></button>}</form><div className="composer-caption"><span><span className="status-dot" />{workspace.shareSchema ? 'Schema sharing on' : 'Schema sharing off'} · {workspace.shareResults ? 'Query results shared with AI' : 'Query results stay local'}</span><span>Built with <a href="https://eve.dev" target="_blank" rel="noreferrer">eve</a> <span className="key-hint">↵</span> to send</span></div></div>
     </main>
     {toast && <div role="status" className="toast">{toast}<button className="icon-button" aria-label="Dismiss notification" onClick={() => notify('')}><X size={15} /></button></div>}
     {(modal || inspect) && <div className="dialog-backdrop" onMouseDown={e => { if (e.target === e.currentTarget) close(); }}><section role="dialog" aria-modal="true" aria-label={inspect ? inspect.title : modal ?? 'Dialog'} className={`dialog ${modal === 'sources' || inspect ? 'dialog-wide' : ''}`}><div className="dialog-header"><div><div className="eyebrow">YOUR WORKSPACE</div><h2>{inspect ? inspect.title : modal === 'sources' ? 'Bring your data' : modal === 'settings' ? 'Privacy & workspace' : modal === 'metrics' ? 'Define what matters' : modal === 'panel' ? 'Create a panel' : 'Create a view'}</h2></div><button className="icon-button" onClick={close} aria-label="Close dialog"><X size={20} /></button></div>

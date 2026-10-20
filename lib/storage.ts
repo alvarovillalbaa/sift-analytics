@@ -36,6 +36,8 @@ export function loadWorkspace(): Workspace | null {
     if (!Array.isArray(candidate.datasets) || !Array.isArray(candidate.views)
       || !Array.isArray(candidate.metrics) || typeof candidate.activeViewId !== 'string'
       || typeof candidate.shareSchema !== 'boolean' || typeof candidate.shareResults !== 'boolean') return null;
+    if (candidate.appliedToolCallIds !== undefined && (!Array.isArray(candidate.appliedToolCallIds)
+      || candidate.appliedToolCallIds.some((id) => typeof id !== 'string'))) return null;
     if (!candidate.views.every((view) => view && typeof view.id === 'string'
       && typeof view.name === 'string' && Array.isArray(view.panels)
       && view.panels.every((panel) => panel && typeof panel.id === 'string'
@@ -55,32 +57,51 @@ function openDatabase(): Promise<IDBDatabase> {
       return;
     }
     const request = indexedDB.open(DATABASE_NAME, 1);
+    let expired = false;
+    const timeout = setTimeout(() => {
+      expired = true;
+      reject(new Error('Opening local file storage exceeded the 10-second deadline.'));
+    }, 10_000);
     request.onupgradeneeded = () => {
       if (!request.result.objectStoreNames.contains(STORE_NAME)) {
         request.result.createObjectStore(STORE_NAME, { keyPath: 'id' });
       }
     };
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error ?? new Error('Could not open local file storage.'));
-    request.onblocked = () => reject(new Error('Close other Sift tabs and retry local file storage.'));
+    request.onsuccess = () => { clearTimeout(timeout); if (expired) request.result.close(); else resolve(request.result); };
+    request.onerror = () => { clearTimeout(timeout); reject(request.error ?? new Error('Could not open local file storage.')); };
+    request.onblocked = () => { clearTimeout(timeout); expired = true; reject(new Error('Close other Sift tabs and retry local file storage.')); };
   });
 }
 
-async function transact<T>(mode: IDBTransactionMode, action: (store: IDBObjectStore) => IDBRequest<T>): Promise<T> {
+async function transact<T>(mode: IDBTransactionMode, action: (store: IDBObjectStore) => IDBRequest<T>, signal?: AbortSignal): Promise<T> {
+  if (signal?.aborted) throw new DOMException('Local storage operation cancelled.', 'AbortError');
   const database = await openDatabase();
   return new Promise<T>((resolve, reject) => {
-    const transaction = database.transaction(STORE_NAME, mode);
-    const request = action(transaction.objectStore(STORE_NAME));
+    if (signal?.aborted) { database.close(); reject(new DOMException('Local storage operation cancelled.', 'AbortError')); return; }
+    let transaction: IDBTransaction;
+    let request: IDBRequest<T>;
+    try {
+      transaction = database.transaction(STORE_NAME, mode);
+      request = action(transaction.objectStore(STORE_NAME));
+    } catch (error) { database.close(); reject(error); return; }
+    const cancel = () => { try { transaction.abort(); } catch { /* Already committed or aborted. */ } };
+    const cleanup = () => { clearTimeout(timeout); signal?.removeEventListener('abort', cancel); database.close(); };
+    const timeout = setTimeout(() => {
+      cancel();
+      cleanup();
+      reject(new Error('Local file storage exceeded the 10-second deadline.'));
+    }, 10_000);
+    signal?.addEventListener('abort', cancel, { once: true });
     let value: T;
     request.onsuccess = () => { value = request.result; };
-    transaction.oncomplete = () => { database.close(); resolve(value); };
-    transaction.onerror = () => { database.close(); reject(transaction.error ?? request.error ?? new Error('Local file storage failed.')); };
-    transaction.onabort = () => { database.close(); reject(transaction.error ?? new Error('Local file storage was interrupted.')); };
+    transaction.oncomplete = () => { cleanup(); resolve(value); };
+    transaction.onerror = () => { cleanup(); reject(transaction.error ?? request.error ?? new Error('Local file storage failed.')); };
+    transaction.onabort = () => { cleanup(); reject(signal?.aborted ? new DOMException('Local storage operation cancelled.', 'AbortError') : transaction.error ?? new Error('Local file storage was interrupted.')); };
   });
 }
 
-export async function storeFile(file: StoredFile): Promise<void> {
-  await transact('readwrite', (store) => store.put(file));
+export async function storeFile(file: StoredFile, signal?: AbortSignal): Promise<void> {
+  await transact('readwrite', (store) => store.put(file), signal);
 }
 
 export function loadFiles(): Promise<StoredFile[]> {

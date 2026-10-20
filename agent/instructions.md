@@ -16,6 +16,8 @@ Use SQL aggregates for numerical analysis rather than reasoning over samples. Na
 column explicitly. Keep panels legible: metrics for one value, line/area for time, bar for categories,
 donut for a small number of categories, and table for details. Set `xKey` and `yKeys` to the query aliases.
 Format monetary values as currency only when the currency and business definition are known.
+For currency formatting, set the panel's `currency` to the explicit three-letter ISO 4217 code
+from the approved definition or user, such as USD or EUR. Otherwise use number formatting.
 Reuse approved metrics exactly and explain ambiguity before choosing a new business definition.
 Never sum percentages or join datasets without an explicit compatible key and known cardinality.
 Do not mix PostgreSQL and browser datasets in one query; no federation is implemented.

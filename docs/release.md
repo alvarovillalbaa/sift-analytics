@@ -37,3 +37,16 @@ No browser interaction, live file import, PostgreSQL source connection, or Docke
 - Alvaro explicitly chose “I’ll configure it later” for `SIFT_SESSION_SECRET` on 2026-10-20. AI conversations remain disabled until that production secret is configured and the app is redeployed. A real model/tool turn remains acceptance work; no provider success is claimed.
 
 Subsequent documentation-only commits do not change the deployed runtime code.
+
+## Acceptance corrections — 2026-10-20
+
+Source review found and corrected data-fidelity and interruption issues before live-provider acceptance:
+
+- Exact JSON/XLSX number tokens and decimal scales survive import and Arrow serialization. Text identifiers remain text; timestamp units and timezone semantics are preserved. CSV/TSV automatic inference limits are documented.
+- Result column types prevent text IDs such as `00123` from being coerced into numbers. Unsafe numeric chart coercion produces an inspector prompt. Currency labels require an explicit supported ISO code; date labels retain useful date/time context; longer donut legends disclose additional categories.
+- PostgreSQL client-local type parsers preserve exact numeric/JSON/array/custom-type text and calendar timestamps without Date's millisecond/timezone conversion.
+- AI plans persist their stable view identity and replay receipt in the same workspace update. Reset, Stop, concurrent plans, and component remounts cannot move queued results into a different conversation or leave local queries outside cancellation control.
+- Worker startup/import/restoration and IndexedDB phases have bounded deadlines. Failed saved uploads can be removed from Data sources even when restoration fails. Synchronous parser limits and asynchronous deadline boundaries are explicit.
+- Planner validation uses SQL syntax trees, so harmless quoted columns such as `"query"` or `"load"` are accepted while connector scopes remain authoritative.
+
+Targeted strict TypeScript checks cover the changed app, PostgreSQL route, EVE tools, data engine/value helpers/storage, and panel renderer. Whitespace checks pass. No local install/build, browser check, database provisioning, or live-provider suite was run; Storage Guard still reports less than the required 34 GiB. Hosted build and publication receipts follow after the corrected revision is deployed.

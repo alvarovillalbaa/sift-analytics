@@ -9,17 +9,62 @@ import {
 import type { Panel, Value } from '../lib/types';
 
 const COLORS = ['#8370df', '#b4a6ed', '#80b9ae', '#e8bc88', '#94abcc', '#df9ead'];
+const NUMERIC_STRING = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i;
+const NONFINITE_STRING = /^[+-]?(?:Infinity|NaN)$/i;
+const NUMERIC_TYPE = /^(?:DECIMAL\d*|NUMERIC|U?INT\d*|U?(?:BIG|SMALL|TINY|HUGE)INT|U?INTEGER|FLOAT\d*|DOUBLE(?:\s+PRECISION)?|REAL)(?:$|[\s[(])/i;
+const CURRENCY_CODES = new Set(typeof Intl.supportedValuesOf === 'function' ? Intl.supportedValuesOf('currency') : []);
 
-export function formatValue(value: Value | undefined, format: Panel['format'] = 'number', compact = false): string {
+function isNumeric(value: Value | undefined): value is string | number {
+  return typeof value === 'number' ? Number.isFinite(value)
+    : typeof value === 'string' && (NUMERIC_STRING.test(value.trim()) || NONFINITE_STRING.test(value.trim()));
+}
+
+function isLegacyNumeric(value: Value | undefined): boolean {
+  if (!isNumeric(value)) return false;
+  return typeof value !== 'string' || !/^(?:\+|-?0\d)/.test(value.trim());
+}
+
+function isNumericType(type: string | undefined): boolean {
+  return typeof type === 'string' && NUMERIC_TYPE.test(type.trim());
+}
+
+function unsafeIntegralString(value: Value | undefined): bigint | undefined {
+  if (typeof value !== 'string' || !/^[+-]?\d+(?:\.0+)?$/.test(value.trim())) return undefined;
+  const integer = BigInt(value.trim().split('.')[0]);
+  return integer > BigInt(Number.MAX_SAFE_INTEGER) || integer < BigInt(Number.MIN_SAFE_INTEGER) ? integer : undefined;
+}
+
+function requiresExactDisplay(value: Value | undefined): boolean {
+  if (typeof value === 'number') return !Number.isFinite(value) || Math.abs(value) > Number.MAX_SAFE_INTEGER;
+  if (typeof value !== 'string' || !isNumeric(value)) return false;
+  if (NONFINITE_STRING.test(value.trim()) || unsafeIntegralString(value) !== undefined) return true;
+  const coefficient = value.trim().split(/[eE]/)[0].replace(/^[+-]/, '').replace('.', '').replace(/^0+/, '');
+  const numeric = Number(value);
+  // Preserve significant decimal digits and exponents outside Number's representable range.
+  return coefficient.length > 15 || !Number.isFinite(numeric) || Math.abs(numeric) > Number.MAX_SAFE_INTEGER || (numeric === 0 && /[1-9]/.test(coefficient));
+}
+
+export function formatValue(value: Value | undefined, format: Panel['format'] = 'number', compact = false, currency?: string): string {
   if (value === null || value === undefined) return '—';
+  const code = currency?.trim().toUpperCase();
+  const currencyCode = format === 'currency' && code && CURRENCY_CODES.has(code) ? code : undefined;
+  const style: Intl.NumberFormatOptions = currencyCode ? { style: 'currency', currency: currencyCode } : { style: 'decimal', maximumFractionDigits: 2 };
+  const exactInteger = unsafeIntegralString(value);
+  if (exactInteger !== undefined) {
+    const formatted = new Intl.NumberFormat('en-US', {
+      ...style,
+      ...(currencyCode ? {} : { maximumFractionDigits: 0 }),
+    }).format(exactInteger);
+    return format === 'percent' ? `${formatted}%` : formatted;
+  }
+  if (typeof value === 'string' && requiresExactDisplay(value)) return `${currencyCode ? `${currencyCode} ` : ''}${value}${format === 'percent' ? '%' : ''}`;
   const numeric = typeof value === 'number' ? value : typeof value === 'string' && value.trim() ? Number(value) : NaN;
   if (!Number.isFinite(numeric)) return String(value);
   if (format === 'percent') return `${new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 }).format(numeric)}%`;
   return new Intl.NumberFormat('en-US', {
-    style: format === 'currency' ? 'currency' : 'decimal',
-    ...(format === 'currency' ? { currency: 'USD' } : {}),
+    ...style,
     notation: compact ? 'compact' : 'standard',
-    maximumFractionDigits: compact ? 1 : format === 'currency' ? 0 : 2,
+    ...(compact ? { maximumFractionDigits: 1 } : {}),
   }).format(numeric);
 }
 
@@ -27,13 +72,30 @@ function readable(value: string): string {
   return value.replace(/_/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
-function axisLabel(value: unknown): string {
-  const label = String(value ?? '');
-  if (/^\d{4}-\d{2}(?:-\d{2})?/.test(label)) {
-    const date = new Date(label.slice(0, 10));
-    if (!Number.isNaN(date.valueOf())) return date.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' });
-  }
-  return label.length > 15 ? `${label.slice(0, 13)}…` : label;
+function axisLabels(values: Value[]): (value: unknown) => string {
+  const dates = values.map((value) => {
+    if (typeof value !== 'string' || !/^\d{4}-\d{2}(?:-\d{2})?(?:$|[T ])/.test(value)) return undefined;
+    const hasTime = /[T ]\d{2}:\d{2}/.test(value);
+    const hasZone = hasTime && /(?:z|[+-]\d{2}(?::?\d{2})?)$/i.test(value);
+    // Date determines calendar granularity; timestamp labels retain the source precision and zone.
+    const calendar = value.replace(' ', 'T').replace(/(\.\d{3})\d+/, '$1');
+    const date = new Date(hasTime && !hasZone ? `${calendar}Z` : calendar);
+    return Number.isNaN(date.valueOf()) ? undefined : date;
+  });
+  const parsed = dates.filter((date): date is Date => Boolean(date));
+  const multipleYears = new Set(parsed.map((date) => date.getUTCFullYear())).size > 1;
+  const hasTime = values.some((value) => typeof value === 'string' && /[T ]\d{2}:\d{2}/.test(value));
+  const monthly = (values.every((value) => typeof value === 'string' && /^\d{4}-\d{2}$/.test(value)) || parsed.length > 1) && parsed.length === values.length && !hasTime
+    && parsed.every((date) => date.getUTCDate() === 1)
+    && new Set(parsed.map((date) => date.toISOString().slice(0, 7))).size === parsed.length;
+  return (value) => {
+    const label = String(value ?? '');
+    const index = values.indexOf(label);
+    const date = index >= 0 ? dates[index] : undefined;
+    if (!date) return label.length > 18 ? `${label.slice(0, 16)}…` : label;
+    if (hasTime) return label.replace('T', ' ');
+    return date.toLocaleDateString('en-US', { month: 'short', ...(monthly ? {} : { day: 'numeric' }), ...(multipleYears ? { year: 'numeric' } : {}), timeZone: 'UTC' });
+  };
 }
 
 function relativeTime(value: string): string {
@@ -56,28 +118,39 @@ export default function PanelCard({ panel, onInspect, onRemove, loading = false 
   const chartId = useId().replace(/:/g, '');
   const rows = panel.result?.rows ?? [];
   const columns = panel.result?.columns ?? [];
+  const columnTypes = panel.result?.columnTypes;
+  const numericColumn = (column: string) => {
+    if (columnTypes) return isNumericType(columnTypes[column]);
+    const values = rows.map((row) => row[column]).filter((value) => value !== null && value !== undefined);
+    return values.length > 0 && values.every(isLegacyNumeric);
+  };
+  const numericCell = (column: string, value: Value | undefined) => columnTypes ? isNumericType(columnTypes[column]) : isLegacyNumeric(value);
+  const tableValue = (column: string, value: Value | undefined) => numericCell(column, value)
+    ? formatValue(value, /revenue|amount|sales|value|mrr/i.test(column) ? panel.format : 'number', false, panel.currency)
+    : value === null || value === undefined ? '—' : String(value);
   const xKey = panel.xKey ?? columns[0] ?? '';
-  const numeric = (value: Value | undefined) => typeof value === 'number' || (typeof value === 'string' && /^-?\d+(\.\d+)?$/.test(value) && Number.isFinite(Number(value)));
-  const yKeys = panel.yKeys?.length ? panel.yKeys : columns.filter((column) => column !== xKey && rows.some((row) => numeric(row[column])));
-  const metricKey = panel.yKeys?.[0] ?? columns.find((column) => typeof rows[0]?.[column] === 'number') ?? columns[0];
+  const yKeys = panel.yKeys?.length ? panel.yKeys : columns.filter((column) => column !== xKey && numericColumn(column));
+  const chartNeedsExactValues = rows.some((row) => yKeys.some((key) => requiresExactDisplay(row[key])));
+  const metricKey = panel.yKeys?.[0] ?? columns.find(numericColumn);
   const metricValue = metricKey ? rows[0]?.[metricKey] : null;
   const sourceNames = panel.result?.sources.map((source) => source.name).join(', ') ?? '';
   const isMetric = panel.type === 'metric';
   const hasData = rows.length > 0;
-  const changeKey = columns.find((column) => /^(change|change_pct|growth|growth_pct)$/.test(column));
+  const formatAxisLabel = axisLabels(rows.map((row) => row[xKey]));
+  const changeKey = columns.find((column) => /^(change|change_pct|growth|growth_pct)$/.test(column) && numericColumn(column));
   const change = changeKey && typeof rows[0]?.[changeKey] === 'number' ? rows[0][changeKey] as number : undefined;
   const tooltip = (
     <Tooltip
       contentStyle={{ border: '1px solid #e5dfee', borderRadius: 12, boxShadow: '0 8px 28px #28233b10', padding: '10px 14px', fontSize: 13, color: '#292732' }}
       labelStyle={{ color: '#6b6878', marginBottom: 5, fontSize: 12 }}
-      formatter={(value, name) => [formatValue(typeof value === 'number' || typeof value === 'string' ? value : null, panel.format), readable(String(name))]}
+      formatter={(value, name) => [formatValue(typeof value === 'number' || typeof value === 'string' ? value : null, panel.format, false, panel.currency), readable(String(name))]}
       cursor={panel.type === 'bar' ? { fill: '#f6f4fd' } : { stroke: '#ded7f2', strokeDasharray: '4 4' }}
     />
   );
   const axes = <>
     <CartesianGrid strokeDasharray="3 5" vertical={false} stroke="#eeeef3" />
-    <XAxis dataKey={xKey} axisLine={false} tickLine={false} tickMargin={12} minTickGap={24} tick={{ fill: '#6b6878', fontSize: 12 }} tickFormatter={axisLabel} />
-    <YAxis axisLine={false} tickLine={false} width={59} tickMargin={8} tick={{ fill: '#6b6878', fontSize: 12 }} tickFormatter={(value) => formatValue(Number(value), panel.format, true)} />
+    <XAxis dataKey={xKey} axisLine={false} tickLine={false} tickMargin={12} minTickGap={24} tick={{ fill: '#6b6878', fontSize: 12 }} tickFormatter={formatAxisLabel} />
+    <YAxis axisLine={false} tickLine={false} width={59} tickMargin={8} tick={{ fill: '#6b6878', fontSize: 12 }} tickFormatter={(value) => formatValue(Number(value), panel.format, true, panel.currency)} />
   </>;
 
   function renderChart() {
@@ -91,7 +164,7 @@ export default function PanelCard({ panel, onInspect, onRemove, loading = false 
           {tooltip}
         </PieChart>
       </ResponsiveContainer><div className="donut-center"><span>Distribution</span><strong>{rows.length}</strong><small>segments</small></div></div>
-      <div className="donut-legend">{rows.slice(0, 8).map((row, index) => <div key={index}><span className="legend-dot" style={{ background: COLORS[index % COLORS.length] }} /><span>{String(row[xKey] ?? 'Unknown')}</span><strong>{formatValue(row[yKeys[0] ?? metricKey], panel.format, true)}</strong></div>)}</div></div>;
+      <div className="donut-legend" style={{ maxHeight: '100%', overflowY: 'auto' }}>{rows.length > 8 && <small>{rows.length - 8} more {rows.length === 9 ? 'category' : 'categories'} in chart</small>}{rows.slice(0, 8).map((row, index) => <div key={index}><span className="legend-dot" style={{ background: COLORS[index % COLORS.length] }} /><span>{String(row[xKey] ?? 'Unknown')}</span><strong>{formatValue(row[yKeys[0] ?? metricKey], panel.format, true, panel.currency)}</strong></div>)}</div></div>;
     }
     if (panel.type === 'bar') return <ResponsiveContainer width="100%" height="100%" minHeight={110}><BarChart {...common}>{axes}{tooltip}
       {yKeys.map((key, index) => <Bar key={key} dataKey={key} name={readable(key)} fill={COLORS[index % COLORS.length]} radius={[5, 5, 0, 0]} maxBarSize={38} />)}
@@ -118,8 +191,10 @@ export default function PanelCard({ panel, onInspect, onRemove, loading = false 
     {loading ? <div className="panel-state"><LoaderCircle size={20} className="spin" /><span>Querying your data…</span></div>
       : panel.error ? <div className="panel-state panel-error"><AlertCircle size={23} /><strong>We couldn’t run this query</strong><p>{panel.error}</p><button className="text-button" onClick={() => onInspect(panel)}>Review query</button></div>
       : !hasData ? <div className="panel-state"><Table2 size={24} /><strong>No matching data</strong><p>Try adjusting the query or adding a dataset.</p><button className="text-button" onClick={() => onInspect(panel)}>View query</button></div>
-      : isMetric ? <div className="metric-body"><div className="metric-value">{formatValue(metricValue, panel.format)}</div><div className="metric-context">{change !== undefined && <span className={`metric-change ${change < 0 ? 'negative' : ''}`}>{change < 0 ? <ArrowDownRight size={13} /> : <ArrowUpRight size={13} />}{Math.abs(change).toFixed(1)}%</span>}<span>{panel.description || readable(metricKey ?? 'Query result')}</span></div></div>
-      : panel.type === 'table' ? <div className="panel-table-wrap"><table className="data-table"><thead><tr>{columns.map((column) => <th key={column}>{readable(column)}</th>)}</tr></thead><tbody>{rows.slice(0, 100).map((row, index) => <tr key={index}>{columns.map((column) => <td key={column} className={typeof row[column] === 'number' ? 'numeric' : ''}>{formatValue(row[column], /revenue|amount|sales|value|mrr/i.test(column) ? panel.format : 'number')}</td>)}</tr>)}</tbody></table>{rows.length > 100 && <p className="field-help">Showing 100 of {rows.length} result rows. Open the source inspector to export all rows.</p>}</div>
+      : isMetric && !metricKey ? <div className="panel-state"><Table2 size={24} /><strong>This metric needs a numeric column</strong><p>Return a numeric measure in the query or select its value field explicitly.</p><button className="text-button" onClick={() => onInspect(panel)}>Review query</button></div>
+      : isMetric ? <div className="metric-body"><div className="metric-value">{formatValue(metricValue, panel.format, false, panel.currency)}</div><div className="metric-context">{change !== undefined && <span className={`metric-change ${change < 0 ? 'negative' : ''}`}>{change < 0 ? <ArrowDownRight size={13} /> : <ArrowUpRight size={13} />}{Math.abs(change).toFixed(1)}%</span>}<span>{panel.description || readable(metricKey ?? 'Query result')}</span></div></div>
+      : panel.type === 'table' ? <div className="panel-table-wrap"><table className="data-table"><thead><tr>{columns.map((column) => <th key={column}>{readable(column)}</th>)}</tr></thead><tbody>{rows.slice(0, 100).map((row, index) => <tr key={index}>{columns.map((column) => <td key={column} className={numericCell(column, row[column]) ? 'numeric' : ''}>{tableValue(column, row[column])}</td>)}</tr>)}</tbody></table>{rows.length > 100 && <p className="field-help">Showing 100 of {rows.length} result rows. Open the source inspector to export all rows.</p>}</div>
+      : chartNeedsExactValues ? <div className="panel-state"><AlertCircle size={24} /><strong>These values exceed chart precision</strong><p>View the exact values in the source inspector, or scale the measure in SQL before charting.</p><button className="text-button" onClick={() => onInspect(panel)}>View exact results</button></div>
       : !yKeys.length ? <div className="panel-state"><Table2 size={24} /><strong>This chart needs a numeric column</strong><p>Include a numeric measure and a label column in the query.</p><button className="text-button" onClick={() => onInspect(panel)}>Review query</button></div>
       : <div className="panel-chart" role="img" aria-label={`${panel.type} chart of ${yKeys.map(readable).join(', ')} by ${readable(xKey)}`}>{renderChart()}</div>}
 

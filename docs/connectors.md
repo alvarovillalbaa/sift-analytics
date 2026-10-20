@@ -20,6 +20,20 @@ All SQL runs through [`lib/sql-policy.ts`](../lib/sql-policy.ts). It parses one 
 
 File bytes remain on the user's browser and origin. Workspace metadata uses localStorage; uploaded bytes use IndexedDB. The DuckDB worker materializes the selected files in memory and is recreated after cancellation or a deadline. Persisted files and the sample are restored when the next query initializes it. There is no background synchronization, cross-device file storage, arbitrary URL import, or automatic connector discovery beyond the implemented adapters.
 
+### Precision and temporal values
+
+JSON/JSONL numbers are parsed as original numeric tokens before JavaScript can round them. Numeric-only JSON/XLSX columns receive explicit DECIMAL types when the entire column fits within 38 digits and one common scale; larger values or mixed columns become VARCHAR. JSON strings and XLSX text cells remain VARCHAR, preserving identifiers such as `"00123"`. Quoted empty strings remain distinct from null. Nested JSON values retain their number tokens inside the resulting JSON text. XLSX parsing preserves numeric source tokens; it cannot recover precision that Excel already discarded when writing a numeric cell.
+
+DECIMAL query results use Arrow's scale metadata and are returned as exact decimal strings; scale-zero integers can be numbers when they are within JavaScript's safe range. Large integers remain strings. Timestamp serialization reads raw Arrow integer units, preserving microseconds/nanoseconds. A timezone-naive timestamp uses `YYYY-MM-DDTHH:mm:ss[.fraction]` without a suffix; a timezone-aware timestamp is normalized to UTC and ends in `Z`. Dates and times retain their calendar/clock meaning. Calendar values outside the JavaScript date range produce an explicit error; cast them to VARCHAR in SQL to inspect their source representation. Nested, binary, and interval result values also require an explicit VARCHAR cast instead of a potentially lossy generic serialization.
+
+CSV/TSV use DuckDB's source type inference. That inference can choose DOUBLE for decimal tokens or integers beyond its default integer range, and can infer numeric types for identifier-like values. The output serializer cannot reconstruct precision already lost during source inference. For exact high-precision input, use typed Parquet DECIMAL/integer fields or JSON/XLSX with the explicit type handling above. `approximate` reports the connector's population/aggregation guarantee; it does not imply that an inferred floating-point source was exact.
+
+### Resource limits and restoration
+
+Worker module loading and startup have 30-second deadlines; file reading/parsing and import operations also have 30-second deadlines. Analytical SQL retains its 10-second deadline. Saved-file restoration has a 60-second import/replay budget, with any necessary worker startup bounded separately. A deadline or abort terminates the active DuckDB worker. Recovery recreates the sample and replays healthy persisted files; unavailable files remain stored and are exposed through `getRestoreFailures()` for retry or removal. Deleting a failed file does not require that its table successfully registered.
+
+JSON is limited to 100 levels of nesting and one million parsed values per file. JSON/XLSX table conversion is limited to two million cells and 1,000 columns. Workbook ZIP metadata is checked before extraction: at most 4,096 entries, 64 MB total expanded data, and 32 MB per entry; encrypted, split, and ZIP64 workbooks are rejected. These checks reduce expansion risk but do not turn browser parsing into a sandbox. JavaScript timers cannot preempt synchronous JSON/XML parsing; the input and complexity limits bound that work, while worker termination enforces SQL execution deadlines. IndexedDB opening/transactions have 10-second deadlines, and file persistence accepts cancellation before commit. Browser storage limits still apply.
+
 ## PostgreSQL configuration
 
 Set `SIFT_ACCESS_TOKEN` to a strong deployment secret. Set `SIFT_POSTGRES_CONNECTIONS` on the server to a JSON array:
@@ -67,11 +81,12 @@ The current local interface is:
 | Function | Result |
 | --- | --- |
 | `initEngine()` | Registered demo and restored local `Dataset[]` |
-| `importFile(file, sheet?)` | A persisted local `Dataset` |
+| `importFile(file, sheet?, signal?)` | A persisted local `Dataset`; an optional AbortSignal cancels before commit |
 | `listWorkbookSheets(file)` | Local XLSX sheet names |
 | `query(sql, datasets, signal?)` | Validated, bounded `QueryResult` |
 | `restoreFiles()` | Restored file datasets |
 | `getRestoreErrors()` | Local restoration errors to display |
+| `getRestoreFailures()` | `{ id, name, error }[]` for persisted files unavailable after restoration |
 | `deleteDataset(id)` | Remove an uploaded table and its persisted bytes |
 | `browserConnector.close()` | Terminate the worker; the next query restores persisted data |
 
