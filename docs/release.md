@@ -27,3 +27,13 @@ Vercel project created: `sift-analytics`, ID `prj_y8cXMQAAIQIIqbvsBlrlwGNfekum`,
 - `/api/session` returned 503 with the expected missing-`SIFT_SESSION_SECRET` message. AI acceptance remains blocked on authorized environment configuration followed by redeployment and a real model/tool turn.
 
 No browser interaction, live file import, PostgreSQL source connection, or Docker runtime proof is claimed. Publication is verified; the complete conversational product acceptance remains open.
+
+## Final runtime revision and deferred setup
+
+- Runtime commit: `4872badd14194fc970cf26d60ad075e9627a51da`.
+- Production deployment: `dpl_GGXXeLhfKsG4vyKxBGAJY49bw94q`, verified `READY` and assigned to https://sift-analytics.vercel.app.
+- Includes the readable typography/contrast pass, dataset selection for metric definitions, and corrected self-host callback documentation.
+- Hosted compilation, TypeScript, and eve service builds passed again. Homepage and eve health return 200. Browser session initialization still returns the expected 503 configuration error.
+- Alvaro explicitly chose “I’ll configure it later” for `SIFT_SESSION_SECRET` on 2026-10-20. AI conversations remain disabled until that production secret is configured and the app is redeployed. A real model/tool turn remains acceptance work; no provider success is claimed.
+
+Subsequent documentation-only commits do not change the deployed runtime code.
