@@ -1,6 +1,6 @@
 # Architecture
 
-Last updated: 2026-10-20
+Last updated: 2026-10-28
 
 Sift is a self-hostable Next.js application with Vercel eve for conversational planning, DuckDB WASM for browser-local analysis, and an authenticated PostgreSQL adapter for approved server-side reporting datasets.
 
@@ -71,7 +71,7 @@ The interface stores approved metric definitions alongside SQL. Revenue, custome
 
 ## Evidence and extension boundaries
 
-Results preserve the executed query, named column types, returned row count, source names/freshness, execution timestamp, duration, truncation, and approximation. Column types distinguish numeric strings from text identifiers such as `00123`, so presentation does not remove significant zeroes. A complete result is distinct from a chart displaying a subset of returned rows. Discovery time is distinct from a source's ingestion watermark. A PostgreSQL row count of `-1` means unknown.
+Results preserve the executed query, named column types, returned row count, source names/freshness, execution timestamp, duration, truncation, and approximation. Column types distinguish numeric strings from text identifiers such as `00123`, so presentation does not remove significant zeroes. Explicit metric and chart measures must exist in the returned columns and satisfy the same numeric-type predicate as inferred measures. An invalid explicit selection shows the query-review state without silently substituting another column. Exact numeric values that cannot be charted safely remain available in the inspector and exports. A complete result is distinct from a chart displaying a subset of returned rows. Discovery time is distinct from a source's ingestion watermark. A PostgreSQL row count of `-1` means unknown.
 
 [`AnalyticsConnector`](../lib/types.ts) is the extension contract. The browser connector implements it; the server PostgreSQL adapter currently exposes equivalent query behavior through its authenticated route. Capabilities describe supported modes and execution location. Semantic layers, SaaS record synchronization, warehouses, object storage, streams, and private workers are future adapters, each with its own permission, completeness, and acceptance requirements.
 

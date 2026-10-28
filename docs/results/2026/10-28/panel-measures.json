@@ -1,0 +1,170 @@
+{
+  "scope": "Actual PanelCard TSX transpiled and called with UI module/JSX stubs; no DOM/browser/server/backend/network",
+  "baselineCommit": "004f248717ba35e52b1a0dcc36eaf518c7dae42e",
+  "runs": {
+    "current": {
+      "totals": {
+        "tests": 10,
+        "suites": 0,
+        "pass": 10,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "records": [
+        {
+          "id": 1,
+          "name": "explicit VARCHAR identifier metric rejects coercing 00123 and preserves inspector access",
+          "passed": true
+        },
+        {
+          "id": 2,
+          "name": "unknown explicit metric key rejects fallback even when metadata names an absent numeric column",
+          "passed": true
+        },
+        {
+          "id": 3,
+          "name": "line area bar and donut charts reject an explicit VARCHAR measure",
+          "passed": true
+        },
+        {
+          "id": 4,
+          "name": "mixed and missing chart bindings reject partial filtering or implicit replacement",
+          "passed": true
+        },
+        {
+          "id": 5,
+          "name": "explicit DECIMAL and typed-null measures retain selected metric and chart data",
+          "passed": true
+        },
+        {
+          "id": 6,
+          "name": "automatic typed and legacy numeric inference keep identifiers out of default measures",
+          "passed": true
+        },
+        {
+          "id": 7,
+          "name": "large exact DECIMAL metrics and chart precision review retain existing behavior",
+          "passed": true
+        },
+        {
+          "id": 8,
+          "name": "date x labels and table identifiers preserve original values and row objects",
+          "passed": true
+        },
+        {
+          "id": 9,
+          "name": "explicit timestamp metric is rejected while typed all-null numeric data stays valid",
+          "passed": true
+        },
+        {
+          "id": 10,
+          "name": "loading query-error and empty-result states retain precedence without modifying data",
+          "passed": true
+        }
+      ],
+      "runtime": {
+        "nodeVersion": "v24.21.0",
+        "typescriptVersion": "5.9.3",
+        "sourceSha256": "6876f3d4e177fb780885b70cec1a273730542b4a6445f067afa0ef3d68d787a5",
+        "boundaries": [
+          "react/jsx-runtime",
+          "react",
+          "lucide-react",
+          "recharts"
+        ],
+        "actualPanelSourceExecuted": true,
+        "externalUiImplementations": "stubbed"
+      },
+      "recordedExitCode": 0
+    },
+    "baseline": {
+      "totals": {
+        "tests": 10,
+        "suites": 0,
+        "pass": 5,
+        "fail": 5,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "records": [
+        {
+          "id": 1,
+          "name": "explicit VARCHAR identifier metric rejects coercing 00123 and preserves inspector access",
+          "passed": false
+        },
+        {
+          "id": 2,
+          "name": "unknown explicit metric key rejects fallback even when metadata names an absent numeric column",
+          "passed": false
+        },
+        {
+          "id": 3,
+          "name": "line area bar and donut charts reject an explicit VARCHAR measure",
+          "passed": false
+        },
+        {
+          "id": 4,
+          "name": "mixed and missing chart bindings reject partial filtering or implicit replacement",
+          "passed": false
+        },
+        {
+          "id": 5,
+          "name": "explicit DECIMAL and typed-null measures retain selected metric and chart data",
+          "passed": true
+        },
+        {
+          "id": 6,
+          "name": "automatic typed and legacy numeric inference keep identifiers out of default measures",
+          "passed": true
+        },
+        {
+          "id": 7,
+          "name": "large exact DECIMAL metrics and chart precision review retain existing behavior",
+          "passed": true
+        },
+        {
+          "id": 8,
+          "name": "date x labels and table identifiers preserve original values and row objects",
+          "passed": true
+        },
+        {
+          "id": 9,
+          "name": "explicit timestamp metric is rejected while typed all-null numeric data stays valid",
+          "passed": false
+        },
+        {
+          "id": 10,
+          "name": "loading query-error and empty-result states retain precedence without modifying data",
+          "passed": true
+        }
+      ],
+      "runtime": {
+        "nodeVersion": "v24.21.0",
+        "typescriptVersion": "5.9.3",
+        "sourceSha256": "04ef24551f07ab4a6d1c3f58d9941963b18f72e89e637e30dfdca1b087a7f666",
+        "boundaries": [
+          "react/jsx-runtime",
+          "react",
+          "lucide-react",
+          "recharts"
+        ],
+        "actualPanelSourceExecuted": true,
+        "externalUiImplementations": "stubbed"
+      },
+      "recordedExitCode": 1
+    }
+  },
+  "hashes": {
+    "panel-measures.test.cjs": "91f7a3746caa964c436c768a2cdd84941b888e6e3b3444107be5c48c5315dca1",
+    "baseline-PanelCard.tsx": "04ef24551f07ab4a6d1c3f58d9941963b18f72e89e637e30dfdca1b087a7f666",
+    "current.tap": "44c5a854eb6f050d9535afc88254b63e77b8cb4b303367572c251afde64d82f9",
+    "baseline.tap": "ec7363d8cf790aaf5289f6a2bcf8bb473ebecfad9bbe3170559796719c9c97ec"
+  },
+  "status": "focused frontend source checks passed; React/browser/hosted acceptance separate",
+  "dataTier": "T2 authored rows and UI boundaries",
+  "commandDescription": "existing Node24 --test --test-concurrency=1 --test-reporter=tap on one temporary actual-TSX harness; baseline changes only selected source",
+  "temporaryArtifacts": "owned raw output and harness retained locally until receipt closure; not a permanent suite"
+}

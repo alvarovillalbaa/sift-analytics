@@ -56,3 +56,11 @@ Targeted strict TypeScript checks cover the changed app, PostgreSQL route, EVE t
 - Hosted Next.js compilation, TypeScript, and eve service builds passed; Vercel reported a completed build in 35 seconds.
 - Current HTTP checks: homepage 200; eve health 200 with `status:ready`; `/api/session` 503 for the deferred signing-secret configuration.
 - The previous goal turn made progress by publishing the application. This continuation made progress by correcting identified acceptance defects and publishing the corrected runtime. Full completion remains unproven: live AI, PostgreSQL, browser file/resize/replay behavior, and Docker runtime acceptance remain open. The signing secret remains explicitly deferred; it was not retried through a denied configuration interface.
+
+## Explicit measure bindings — 2026-10-28
+
+Explicit metric/chart selections now obey returned numeric column types, so a
+text identifier cannot silently become a numeric measure. The
+[owning receipt](results/2026/10-28/panel-measures.md) records ten passing focused
+frontend source checks, five matching baseline failures and separate hosted/
+browser proof limits. This does not change the deferred AI-session setup.

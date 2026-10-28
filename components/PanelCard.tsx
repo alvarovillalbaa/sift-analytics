@@ -120,6 +120,7 @@ export default function PanelCard({ panel, onInspect, onRemove, loading = false 
   const columns = panel.result?.columns ?? [];
   const columnTypes = panel.result?.columnTypes;
   const numericColumn = (column: string) => {
+    if (!columns.includes(column)) return false;
     if (columnTypes) return isNumericType(columnTypes[column]);
     const values = rows.map((row) => row[column]).filter((value) => value !== null && value !== undefined);
     return values.length > 0 && values.every(isLegacyNumeric);
@@ -130,8 +131,10 @@ export default function PanelCard({ panel, onInspect, onRemove, loading = false 
     : value === null || value === undefined ? '—' : String(value);
   const xKey = panel.xKey ?? columns[0] ?? '';
   const yKeys = panel.yKeys?.length ? panel.yKeys : columns.filter((column) => column !== xKey && numericColumn(column));
-  const chartNeedsExactValues = rows.some((row) => yKeys.some((key) => requiresExactDisplay(row[key])));
+  const chartHasNumericColumns = yKeys.length > 0 && yKeys.every(numericColumn);
+  const chartNeedsExactValues = chartHasNumericColumns && rows.some((row) => yKeys.some((key) => requiresExactDisplay(row[key])));
   const metricKey = panel.yKeys?.[0] ?? columns.find(numericColumn);
+  const metricHasNumericColumn = Boolean(metricKey && numericColumn(metricKey));
   const metricValue = metricKey ? rows[0]?.[metricKey] : null;
   const sourceNames = panel.result?.sources.map((source) => source.name).join(', ') ?? '';
   const isMetric = panel.type === 'metric';
@@ -191,11 +194,11 @@ export default function PanelCard({ panel, onInspect, onRemove, loading = false 
     {loading ? <div className="panel-state"><LoaderCircle size={20} className="spin" /><span>Querying your data…</span></div>
       : panel.error ? <div className="panel-state panel-error"><AlertCircle size={23} /><strong>We couldn’t run this query</strong><p>{panel.error}</p><button className="text-button" onClick={() => onInspect(panel)}>Review query</button></div>
       : !hasData ? <div className="panel-state"><Table2 size={24} /><strong>No matching data</strong><p>Try adjusting the query or adding a dataset.</p><button className="text-button" onClick={() => onInspect(panel)}>View query</button></div>
-      : isMetric && !metricKey ? <div className="panel-state"><Table2 size={24} /><strong>This metric needs a numeric column</strong><p>Return a numeric measure in the query or select its value field explicitly.</p><button className="text-button" onClick={() => onInspect(panel)}>Review query</button></div>
+      : isMetric && !metricHasNumericColumn ? <div className="panel-state"><Table2 size={24} /><strong>This metric needs a numeric column</strong><p>Return a numeric measure in the query or select its value field explicitly.</p><button className="text-button" onClick={() => onInspect(panel)}>Review query</button></div>
       : isMetric ? <div className="metric-body"><div className="metric-value">{formatValue(metricValue, panel.format, false, panel.currency)}</div><div className="metric-context">{change !== undefined && <span className={`metric-change ${change < 0 ? 'negative' : ''}`}>{change < 0 ? <ArrowDownRight size={13} /> : <ArrowUpRight size={13} />}{Math.abs(change).toFixed(1)}%</span>}<span>{panel.description || readable(metricKey ?? 'Query result')}</span></div></div>
       : panel.type === 'table' ? <div className="panel-table-wrap"><table className="data-table"><thead><tr>{columns.map((column) => <th key={column}>{readable(column)}</th>)}</tr></thead><tbody>{rows.slice(0, 100).map((row, index) => <tr key={index}>{columns.map((column) => <td key={column} className={numericCell(column, row[column]) ? 'numeric' : ''}>{tableValue(column, row[column])}</td>)}</tr>)}</tbody></table>{rows.length > 100 && <p className="field-help">Showing 100 of {rows.length} result rows. Open the source inspector to export all rows.</p>}</div>
+      : !chartHasNumericColumns ? <div className="panel-state"><Table2 size={24} /><strong>This chart needs a numeric column</strong><p>Include a numeric measure and a label column in the query.</p><button className="text-button" onClick={() => onInspect(panel)}>Review query</button></div>
       : chartNeedsExactValues ? <div className="panel-state"><AlertCircle size={24} /><strong>These values exceed chart precision</strong><p>View the exact values in the source inspector, or scale the measure in SQL before charting.</p><button className="text-button" onClick={() => onInspect(panel)}>View exact results</button></div>
-      : !yKeys.length ? <div className="panel-state"><Table2 size={24} /><strong>This chart needs a numeric column</strong><p>Include a numeric measure and a label column in the query.</p><button className="text-button" onClick={() => onInspect(panel)}>Review query</button></div>
       : <div className="panel-chart" role="img" aria-label={`${panel.type} chart of ${yKeys.map(readable).join(', ')} by ${readable(xKey)}`}>{renderChart()}</div>}
 
     {!isMetric && panel.description && <p className="panel-description">{panel.description}</p>}
