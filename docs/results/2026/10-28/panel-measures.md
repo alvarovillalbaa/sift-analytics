@@ -35,7 +35,7 @@ Checked component SHA256:
 `6876f3d4e177fb780885b70cec1a273730542b4a6445f067afa0ef3d68d787a5`.
 Temporary harness SHA256:
 `91f7a3746caa964c436c768a2cdd84941b888e6e3b3444107be5c48c5315dca1`.
-The bounded temporary harness and raw outputs are removed after receipt closure.
+The bounded temporary harness and raw outputs were removed after receipt review.
 No permanent test mirroring this small presentation change was added.
 
 These checks do not run React/Recharts implementations, a DOM, browser, DuckDB,
@@ -46,6 +46,20 @@ The explicitly deferred `SIFT_SESSION_SECRET` remains deferred.
 
 ## Publication
 
-GitHub source and hosted-build evidence will be recorded after publication.
-Static/source checks alone do not establish the live rendering or conversational
-acceptance documented in the [release record](../../../release.md).
+Source
+[`9833b65bbe59ccd563d3d7aab37a29013357b596`](https://github.com/alvarovillalbaa/sift-analytics/commit/9833b65bbe59ccd563d3d7aab37a29013357b596)
+was pushed to personal `main`; connected GitHub readback matched all 46 file
+paths, modes, types and blob SHAs against the local tree. Production deployment
+[`dpl_AQfP5pCpvD8TtTQqTrasoWZ6zGPY`](https://vercel.com/my-team-4f230354/sift-analytics/AQfP5pCpvD8TtTQqTrasoWZ6zGPY)
+reached READY at that exact source and owns `sift-analytics.vercel.app`.
+Bounded build logs show successful Next 16.4.2 compilation, TypeScript completion,
+eve service output and a completed build in 27 seconds. This hosted build is
+separate from the focused source checks and browser acceptance.
+
+A connected fetch of the [canonical homepage](https://sift-analytics.vercel.app)
+returned HTTP 200 with that exact deployment ID in its HTML. This is delivered
+HTML proof through the account connector, not independent anonymous or browser
+acceptance. This receipt-only follow-up preserves all checked runtime bytes;
+the source deployment above is the runtime delivery identity. Static/source
+and build checks do not establish the live rendering or conversational acceptance
+documented in the [release record](../../../release.md).
