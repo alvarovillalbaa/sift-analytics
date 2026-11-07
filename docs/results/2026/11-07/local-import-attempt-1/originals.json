@@ -1,0 +1,52 @@
+{
+  "sourceCommit": "9902661a00afb36fafe8fe6d53f523cce84a1c22",
+  "activationCommit": "06217c67e9ab49a42f6295b2f3aea9886fba9415",
+  "runId": 42405198982,
+  "jobId": 128501296706,
+  "passed": false,
+  "files": [
+    {
+      "name": "build.log.gz",
+      "bytes": 1245,
+      "sha256": "99e1d5fd906400840a38fce3b129b3e185db501497a317b6b8aae240ada8456e",
+      "uncompressedName": "build.log",
+      "uncompressedBytes": 7690,
+      "uncompressedSha256": "00bf35cd5e9e48cd99d488353addef357903e63d55b004d5fc007220d6bc2e38"
+    },
+    {
+      "name": "install.log.gz",
+      "bytes": 47,
+      "sha256": "4a20ff4a13975d92d29f4a410f8d1bd2dde17cffa079a70866d433d19bf5fb2d",
+      "uncompressedName": "install.log",
+      "uncompressedBytes": 27,
+      "uncompressedSha256": "eda7e9953a831eb10fb72bb406b58dde6ce4ddea4c2bb52fb46b102bfbe49257"
+    },
+    {
+      "name": "unit-tests.tap",
+      "bytes": 2524,
+      "sha256": "480c32a61b7ec18ddc29ed03ac710dd9bedaa4f64f7d049b01b90188f36fc418"
+    },
+    {
+      "name": "fixture-tests.tap",
+      "bytes": 553,
+      "sha256": "a30599fd15787519181eee90ed35ffbc0a6616e5ddec5b3989241139400cf12c"
+    },
+    {
+      "name": "source-before.json",
+      "bytes": 19481,
+      "sha256": "1299e56c9eb445719d8c70009c7fdf6d9f2be491ceba4730e5424216dffb2b6b"
+    },
+    {
+      "name": "source-after.json",
+      "bytes": 19482,
+      "sha256": "0ff61493e1ea4ac8a9309e7ba49b99bce6605bfb6339f0fd2d4a03f217a80986"
+    },
+    {
+      "name": "job.log.gz",
+      "bytes": 23210,
+      "sha256": "44b3e39d28ce18093eedf475fcf75a914e565846d998c6dc8dcaf12c6343868a",
+      "uncompressedBytes": 65039,
+      "uncompressedSha256": "966df0a15e737ccb67bc260dec35e3ce08df1ac542be3a1565875d7010c3c876"
+    }
+  ]
+}

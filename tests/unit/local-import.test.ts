@@ -140,7 +140,7 @@ test('FileList-like indexed collections are accepted and oversized lists are ref
   let oversizedReads = 0;
   const oversized: ArrayLike<File> = {
     length: 201,
-    get 0() { oversizedReads++; throw new Error('Indexed access happened before the count gate.'); },
+    get 0(): File { oversizedReads++; throw new Error('Indexed access happened before the count gate.'); },
   };
   assert.throws(() => planLocalFiles(oversized, false), /at most 200/);
   assert.equal(oversizedReads, 0);

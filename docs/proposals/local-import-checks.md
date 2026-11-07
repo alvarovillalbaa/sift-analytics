@@ -1,6 +1,6 @@
 # Local folder import: focused checks
 
-Prepared 7 November 2026; **browser/build packet unrun**. The 22 focused metadata/selection checks passed on the existing local Node 26.8.2; Node 24 execution remains part of CI. This packet verifies the new file/folder-selection UI through the actual production Next app, DuckDB WASM worker and IndexedDB. It does not replay earlier panel, connector, model or deployment checks. No customer files, model keys, database credentials or external account is used.
+Prepared 7 November 2026; **corrected edition awaiting execution**. [Attempt 1](../results/2026/11-07/local-import-attempt-1.md) passed five fixture and 22 metadata checks on Node 24.22.2, then failed the build's test-getter type check and strict generated-declaration guard. Its four browser cases remain unrun. The correction adds the getter's return type and refreshes declarations through locked Next's generator; all assertions and strict source guards remain. This packet verifies the new file/folder-selection UI through the actual production Next app, DuckDB WASM worker and IndexedDB. It does not replay earlier panel, connector, model or deployment checks. No customer files, model keys, database credentials or external account is used.
 
 ## Four fresh T2 cases
 
@@ -13,7 +13,7 @@ Fixture generation is dependency-free. The tiny workbook is authored OOXML in a 
 
 ## Runtime and boundaries
 
-The temporary, manual-only workflow is pinned to source `9902661a00afb36fafe8fe6d53f523cce84a1c22`. One public Ubuntu 24.04 job has a 20-minute cap. Node **24.22.2**, the existing application lock and isolated Playwright/core **1.65.0** with exact SRIs are fixed. `npm ci --ignore-scripts` is followed by the reviewed `copy-duckdb.mjs` and unmodified `npm run build` (eve build, then Next). The current config has no standalone output; the runner uses real `next start`. It does not force `VERCEL` or suppress type errors. Existing build failures remain failures. No separate broad TypeScript compile is added.
+The temporary, manual-only workflow checks its exact dispatched `github.sha`; checkout, environment and both manifests must match that immutable commit. The main-only dispatch and read-only permissions remain. One public Ubuntu 24.04 job has a 20-minute cap. Node **24.22.2**, the existing application lock and isolated Playwright/core **1.65.0** with exact SRIs are fixed. `npm ci --ignore-scripts` is followed by the reviewed `copy-duckdb.mjs` and unmodified `npm run build` (eve build, then Next). The current config has no standalone output; the runner uses real `next start`. It does not force `VERCEL` or suppress type errors. Existing build failures remain failures. No separate broad TypeScript compile is added.
 
 Only same-origin static GET/HEAD resources and the empty `POST /api/session` are admitted. The unconfigured session must return the existing 503; only its exact resource-console diagnostic is separately accounted for. Unknown routes, PostgreSQL, eve/model paths, foreign origins, WebSockets, failed requests, other console/page errors and any outbound authored canary fail. No request is fulfilled with fake data. The session 503 is not agent acceptance.
 
