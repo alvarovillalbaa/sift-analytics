@@ -1,6 +1,6 @@
 # Architecture
 
-Last updated: 2026-10-28
+Last updated: 2026-11-07
 
 Sift is a self-hostable Next.js application with Vercel eve for conversational planning, DuckDB WASM for browser-local analysis, and an authenticated PostgreSQL adapter for approved server-side reporting datasets.
 
@@ -32,6 +32,7 @@ flowchart LR
 | Deterministic demo dataset, metric definitions and initial view | [`lib/demo.ts`](../lib/demo.ts) |
 | Server-configured PostgreSQL connection and execution | [`lib/postgres.ts`](../lib/postgres.ts) and [`app/api/postgres/route.ts`](../app/api/postgres/route.ts) |
 | Workspace actions, data exposure settings and conversation UI | [`components/SiftApp.tsx`](../components/SiftApp.tsx) |
+| Local file/folder preview, selection and sequential import outcomes | [`components/LocalImport.tsx`](../components/LocalImport.tsx) and [`lib/local-import.ts`](../lib/local-import.ts) |
 | Chart/table rendering and responsive panel layout | [`components/PanelCard.tsx`](../components/PanelCard.tsx) and [`components/DashboardGrid.tsx`](../components/DashboardGrid.tsx) |
 | Portable connector acceptance helper | [`scripts/check-connector.ts`](../scripts/check-connector.ts) |
 
@@ -40,6 +41,12 @@ flowchart LR
 The first browser initialization creates a 432-row SaaS sample spanning January–December 2025 and restores uploaded files from IndexedDB. The initial view contains three metrics, a revenue trend, acquisition mix, and plan performance. Every panel has reproducible SQL and an explicit dataset scope. The sample is labeled and independent of current time or external providers.
 
 Supported uploads are CSV, TSV, JSON, JSONL/NDJSON, XLSX, and Parquet, with a 20 MB per-file limit. XLSX imports select a sheet; JSON rows must be objects. Structured JSON values become strings. Imported tables receive generated safe identifiers. Trusted import SQL materializes registered local buffers into an in-memory DuckDB database. Analytical queries cannot invoke these file readers.
+
+The file/folder picker first creates a metadata-only preview of at most 200 files. Every dataset requires explicit selection. Unsupported, empty, oversized or ambiguous paths remain visible with a refusal. A run accepts at most 20 selected files and 100 MB combined, processes them sequentially and retains each committed success independently. Relative folder paths are persisted as source names; SQL identifiers remain generated IDs. XLSX sheet inspection is explicit and cancellable. Closing the dialog aborts current work and stops its remaining queue. Retrying that preview skips completed successes; choosing files again creates a new import selection rather than a global filename deduplication policy.
+
+Import promises settle after the current operation reaches its storage outcome. A cancellation or storage timer attempts to abort the IndexedDB transaction, then uses its terminal event: a committed write is accepted even if cancellation arrives before the completion callback. The timer requests abort after ten seconds; settlement depends on the browser delivering a terminal event, rather than an independent hard wall-clock guarantee. Successful imports update the outer workspace even across its auth-driven child remount. Both sharing flags are disabled before a batch and on every committed import, and pending AI result summaries are cleared before importing.
+
+Restoration also disables both sharing flags when an IndexedDB file lacks a matching saved workspace dataset. Missing workspace metadata therefore cannot apply the generated sample's sharing defaults to a restored private file. Existing explicit sharing choices are retained when the stored workspace already includes every restored file.
 
 The browser engine serializes operations. Queries validate the registered dataset identities, parse and regenerate one read-only SQL statement, then execute an outer 1,001-row probe. The public result contains at most 1,000 rows and discloses truncation. A ten-second execution timer or AbortSignal terminates the worker. The next operation recreates the engine from the deterministic demo and persisted files. Uploaded bytes and query execution do not traverse the application server.
 

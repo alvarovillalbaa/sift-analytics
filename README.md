@@ -5,7 +5,7 @@ A conversation with your data. Sift turns questions into reproducible dashboards
 ## What you can do
 
 - Explore a ready-to-use SaaS revenue sample.
-- Import **CSV, TSV, JSON, JSONL, Excel XLSX, and Parquet** files (up to 20 MB each). Choose workbook sheets. Files remain in your browser's IndexedDB.
+- Preview a local folder or choose several **CSV, TSV, JSON, JSONL/NDJSON, Excel XLSX, and Parquet** files, then select which become datasets. Choose workbook sheets. Files remain in your browser's IndexedDB.
 - Ask eve to create saved dashboard views or plan an analysis over your selected datasets.
 - Render metrics, line/area/bar charts, donut charts, and tables. Drag and resize panels; layouts and query definitions survive reloads on the same browser and origin. Results are recalculated locally.
 - Inspect SQL, sources, execution times, freshness, and truncation. Export views/workspaces as JSON and query results as CSV.
@@ -54,6 +54,8 @@ Uploaded file bytes never go to an upload endpoint or to eve. With schema sharin
 Local workspace definitions are stored in localStorage; files use IndexedDB. Query results remain in memory unless exported or explicitly shared in conversation. Clearing site data removes local files and definitions. Server-side conversations use eve's durable session storage. Signed, HttpOnly browser identity and session-grant cookies enforce conversation ownership. Start a new conversation when a session grant expires after 24 hours.
 
 Files do not sync between devices. Use JSON/CSV exports to keep a copy. The app does not claim that two connected sources can be joined without a common approved execution engine and a modeled relationship.
+
+Folder selection is a one-time snapshot, with relative paths retained as source names. The preview reads metadata only; workbook inspection and importing read only the files you choose. A preview accepts up to 200 files; one import run accepts up to 20 files and 100 MB combined, with a 20 MB per-file limit. Successful files stay available if a later file fails or you stop the batch. Retrying the current selection skips its completed files. Choosing the folder again starts a new selection and can import additional copies. Browser folder-picker support varies; the multiple-file picker is also available.
 
 ## Deployment
 

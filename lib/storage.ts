@@ -86,17 +86,17 @@ async function transact<T>(mode: IDBTransactionMode, action: (store: IDBObjectSt
     } catch (error) { database.close(); reject(error); return; }
     const cancel = () => { try { transaction.abort(); } catch { /* Already committed or aborted. */ } };
     const cleanup = () => { clearTimeout(timeout); signal?.removeEventListener('abort', cancel); database.close(); };
+    let expired = false;
     const timeout = setTimeout(() => {
+      expired = true;
+      // Settle on the transaction event: abort() can lose to an already committed write.
       cancel();
-      cleanup();
-      reject(new Error('Local file storage exceeded the 10-second deadline.'));
     }, 10_000);
     signal?.addEventListener('abort', cancel, { once: true });
     let value: T;
     request.onsuccess = () => { value = request.result; };
     transaction.oncomplete = () => { cleanup(); resolve(value); };
-    transaction.onerror = () => { cleanup(); reject(transaction.error ?? request.error ?? new Error('Local file storage failed.')); };
-    transaction.onabort = () => { cleanup(); reject(signal?.aborted ? new DOMException('Local storage operation cancelled.', 'AbortError') : transaction.error ?? new Error('Local file storage was interrupted.')); };
+    transaction.onabort = () => { cleanup(); reject(expired ? new Error('Local file storage exceeded the 10-second deadline.') : signal?.aborted ? new DOMException('Local storage operation cancelled.', 'AbortError') : transaction.error ?? request.error ?? new Error('Local file storage was interrupted.')); };
   });
 }
 

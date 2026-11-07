@@ -76,7 +76,7 @@ function objectRowsToCsv(rows: unknown[]): PreparedFile {
 }
 
 /** Reads a workbook locally; no upload endpoint or model is involved. */
-export async function listWorkbookSheets(file: File): Promise<string[]> {
+export async function listWorkbookSheets(file: File, signal?: AbortSignal): Promise<string[]> {
   checkFile(file);
   if (extension(file.name) !== 'xlsx') throw new Error('Sheet selection is available for XLSX workbooks.');
   const sheets = await bounded(async () => {
@@ -84,7 +84,7 @@ export async function listWorkbookSheets(file: File): Promise<string[]> {
     checkWorkbookArchive(bytes);
     const { default: readWorkbook } = await import('read-excel-file/browser');
     return readWorkbook(new Blob([bytes]), { parseNumber: (text) => new ExactNumber(text) });
-  }, IMPORT_TIMEOUT_MS, 'Workbook inspection exceeded the 30-second deadline.');
+  }, IMPORT_TIMEOUT_MS, 'Workbook inspection exceeded the 30-second deadline.', signal);
   return sheets.map((sheet) => sheet.sheet);
 }
 
@@ -292,12 +292,15 @@ export async function restoreFiles(): Promise<Dataset[]> {
   return (await initEngine()).filter((dataset) => dataset.kind === 'file');
 }
 
-export async function importFile(file: File, sheet?: string, signal?: AbortSignal): Promise<Dataset> {
+export async function importFile(file: File, sheet?: string, signal?: AbortSignal, sourceName = file.name): Promise<Dataset> {
   checkFile(file);
+  if (!sourceName || sourceName.length > 4096 || /^(\/|[a-z]:)/i.test(sourceName) || sourceName.split('/').some(part => !part || part === '.' || part === '..')
+    || /[\\\u0000-\u001f\u007f]/.test(sourceName) || sourceName.split('/').at(-1) !== file.name) throw new Error('This file has an invalid source path.');
   return exclusive(async () => {
+    if (signal?.aborted) throw new DOMException('Import cancelled.', 'AbortError');
     const target = await getEngine(signal);
     const stored: StoredFile = {
-      id: `data_${crypto.randomUUID().replaceAll('-', '')}`, name: file.name,
+      id: `data_${crypto.randomUUID().replaceAll('-', '')}`, name: sourceName,
       bytes: await bounded(() => file.arrayBuffer(), IMPORT_TIMEOUT_MS, 'Reading the file exceeded the 30-second deadline.', signal), sheet, updatedAt: new Date().toISOString(),
     };
     const dataset = await workerOperation(target, () => importStoredFile(target, stored, signal), IMPORT_TIMEOUT_MS, 'File import exceeded the 30-second deadline.', signal);
@@ -309,7 +312,7 @@ export async function importFile(file: File, sheet?: string, signal?: AbortSigna
       throw new Error(`The file was not saved: ${errorMessage(error)} Check browser storage space and retry.`);
     }
     return structuredClone(dataset);
-  }, signal);
+  });
 }
 
 export async function deleteDataset(id: string): Promise<void> {

@@ -1,6 +1,6 @@
 # Connectors and SDK
 
-Last updated: 2026-10-20
+Last updated: 2026-11-07
 
 Sift separates a source, an access mode, and an execution location. A connector is supported only for the behavior its implementation and verification establish. The first implementation contains local files and server-configured PostgreSQL. Other sources require an adapter; the application does not claim universal connectivity.
 
@@ -20,6 +20,8 @@ All SQL runs through [`lib/sql-policy.ts`](../lib/sql-policy.ts). It parses one 
 
 File bytes remain on the user's browser and origin. Workspace metadata uses localStorage; uploaded bytes use IndexedDB. The DuckDB worker materializes the selected files in memory and is recreated after cancellation or a deadline. Persisted files and the sample are restored when the next query initializes it. There is no background synchronization, cross-device file storage, arbitrary URL import, or automatic connector discovery beyond the implemented adapters.
 
+The local folder picker previews a one-time snapshot of up to 200 files, including nested paths. It reads metadata before explicit selection; workbook inspection and imports read selected file contents locally. Unsupported formats, empty/oversized files, invalid relative paths and duplicate paths cannot be imported. Each run is limited to 20 selected files and 100 MB combined. Files commit independently, with per-file results and cancellation; retrying the same preview skips successes. Relative source paths and chosen workbook sheets survive reloads. Selecting a folder again is a new selection and may create additional copies. This is not folder synchronization or object-storage prefix access. Browsers without a folder picker can use the multiple-file picker.
+
 ### Precision and temporal values
 
 JSON/JSONL numbers are parsed as original numeric tokens before JavaScript can round them. Numeric-only JSON/XLSX columns receive explicit DECIMAL types when the entire column fits within 38 digits and one common scale; larger values or mixed columns become VARCHAR. JSON strings and XLSX text cells remain VARCHAR, preserving identifiers such as `"00123"`. Quoted empty strings remain distinct from null. Nested JSON values retain their number tokens inside the resulting JSON text. XLSX parsing preserves numeric source tokens; it cannot recover precision that Excel already discarded when writing a numeric cell.
@@ -32,7 +34,7 @@ CSV/TSV use DuckDB's source type inference. That inference can choose DOUBLE for
 
 Worker module loading and startup have 30-second deadlines; file reading/parsing and import operations also have 30-second deadlines. Analytical SQL retains its 10-second deadline. Saved-file restoration has a 60-second import/replay budget, with any necessary worker startup bounded separately. A deadline or abort terminates the active DuckDB worker. Recovery recreates the sample and replays healthy persisted files; unavailable files remain stored and are exposed through `getRestoreFailures()` for retry or removal. Deleting a failed file does not require that its table successfully registered.
 
-JSON is limited to 100 levels of nesting and one million parsed values per file. JSON/XLSX table conversion is limited to two million cells and 1,000 columns. Workbook ZIP metadata is checked before extraction: at most 4,096 entries, 64 MB total expanded data, and 32 MB per entry; encrypted, split, and ZIP64 workbooks are rejected. These checks reduce expansion risk but do not turn browser parsing into a sandbox. JavaScript timers cannot preempt synchronous JSON/XML parsing; the input and complexity limits bound that work, while worker termination enforces SQL execution deadlines. IndexedDB opening/transactions have 10-second deadlines, and file persistence accepts cancellation before commit. Browser storage limits still apply.
+JSON is limited to 100 levels of nesting and one million parsed values per file. JSON/XLSX table conversion is limited to two million cells and 1,000 columns. Workbook ZIP metadata is checked before extraction: at most 4,096 entries, 64 MB total expanded data, and 32 MB per entry; encrypted, split, and ZIP64 workbooks are rejected. These checks reduce expansion risk but do not turn browser parsing into a sandbox. JavaScript timers cannot preempt synchronous JSON/XML parsing; the input and complexity limits bound that work, while worker termination enforces SQL execution deadlines. IndexedDB opening has a 10-second deadline. A transaction timer requests abort after 10 seconds and then waits for its native completion/abort event, so settlement has no independent hard wall-clock guarantee. A write that committed before cancellation remains successful. Browser storage limits still apply.
 
 ## PostgreSQL configuration
 
@@ -81,8 +83,8 @@ The current local interface is:
 | Function | Result |
 | --- | --- |
 | `initEngine()` | Registered demo and restored local `Dataset[]` |
-| `importFile(file, sheet?, signal?)` | A persisted local `Dataset`; an optional AbortSignal cancels before commit |
-| `listWorkbookSheets(file)` | Local XLSX sheet names |
+| `importFile(file, sheet?, signal?, sourceName?)` | A persisted local `Dataset`; an optional validated relative source name preserves folder provenance. Cancellation attempts to abort before commit; committed writes remain successful. |
+| `listWorkbookSheets(file, signal?)` | Local XLSX sheet names with optional cancellation |
 | `query(sql, datasets, signal?)` | Validated, bounded `QueryResult` |
 | `restoreFiles()` | Restored file datasets |
 | `getRestoreErrors()` | Local restoration errors to display |

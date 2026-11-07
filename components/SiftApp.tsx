@@ -4,10 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useEveAgent } from 'eve/react';
 import { ArrowDownToLine, ArrowUp, Check, ChevronDown, ChevronRight, Database, FileSpreadsheet, Filter, Code2, LayoutDashboard, LoaderCircle, Menu, MessageSquare, Plus, RefreshCw, Search, Settings2, ShieldCheck, Sparkles, Square, Trash2, X } from 'lucide-react';
 import DashboardGrid from './DashboardGrid';
+import LocalImport from './LocalImport';
 import { defaultWorkspace } from '@/lib/demo';
-import { initEngine, importFile, query, deleteDataset, listWorkbookSheets, getRestoreErrors, getRestoreFailures } from '@/lib/engine';
+import { initEngine, query, deleteDataset, getRestoreErrors, getRestoreFailures } from '@/lib/engine';
 import { loadWorkspace, saveWorkspace } from '@/lib/storage';
-import type { Panel, QueryResult, View, Workspace } from '@/lib/types';
+import type { Dataset, Panel, QueryResult, View, Workspace } from '@/lib/types';
 
 type Modal = 'sources' | 'settings' | 'metrics' | 'panel' | 'new-view' | null;
 const errorText = (error: unknown) => error instanceof Error ? error.message : String(error);
@@ -29,6 +30,9 @@ export default function SiftApp() {
         const datasets = await initEngine();
         const warnings = getRestoreErrors();
         const saved = loadWorkspace() ?? defaultWorkspace();
+        if (datasets.some(dataset => dataset.kind === 'file' && !saved.datasets.some(previous => previous.kind === 'file' && previous.id === dataset.id))) {
+          saved.shareSchema = false; saved.shareResults = false;
+        }
         saved.datasets = [...datasets, ...saved.datasets.filter(d => d.kind === 'postgres')];
         if (active) { setWorkspace(saved); setReady(true); if (warnings.length) setToast(`Some files could not be restored: ${warnings.join('; ')}`); }
       } catch (error) { if (active) setStartupError(`Data engine: ${errorText(error)}`); }
@@ -62,9 +66,6 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
   const [localNotes, setLocalNotes] = useState<string[]>([]);
   const [token, setToken] = useState('');
   const [pgStatus, setPgStatus] = useState('');
-  const [file, setFile] = useState<File>();
-  const [sheets, setSheets] = useState<string[]>([]);
-  const [sheet, setSheet] = useState('');
   const [newName, setNewName] = useState('');
   const [sql, setSql] = useState('SELECT * FROM demo_revenue LIMIT 20');
   const [panelType, setPanelType] = useState<Panel['type']>('table');
@@ -102,7 +103,13 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
   }, [agent.session, agent.events]);
   const busy = agent.status === 'submitted' || agent.status === 'streaming' || agent.status === 'resuming';
   const activeView = workspace.views.find(v => v.id === workspace.activeViewId) ?? workspace.views[0];
-  function update(fn: (value: Workspace) => Workspace) { if (mounted.current) setWorkspace(current => current ? fn(current) : current); }
+  function update(fn: (value: Workspace) => Workspace) {
+    if (mounted.current) setWorkspace(current => {
+      if (!current) return current;
+      const next = fn(current);
+      return fileOperations.current > 0 ? { ...next, shareSchema: false, shareResults: false } : next;
+    });
+  }
   function startPlan(view: View, toolCallId: string) {
     runningViews.current.add(view.id);
     setExecuting(true);
@@ -161,7 +168,7 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeView?.id]);
   function context() {
-    const w = workspaceRef.current;
+    const w = fileOperations.current > 0 ? { ...workspaceRef.current, shareSchema: false, shareResults: false } : workspaceRef.current;
     return JSON.parse(JSON.stringify({ shareSchema: w.shareSchema, shareResults: w.shareResults,
       datasets: w.shareSchema ? w.datasets.map(({ id, name, table, columns, kind, updatedAt }) => ({ id, name, table, columns, kind, updatedAt })) : [],
       metrics: w.shareSchema ? w.metrics : [], activeView: activeView?.name,
@@ -230,20 +237,19 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
     if (JSON.stringify(bounded).length > 60000) { notify('Results are too large to share. Use a smaller aggregate query.'); return; }
     void agent.send('Explain the locally executed results in clientContext.results. Do not call planning tools again. Ground every quantitative claim in the supplied evidence and disclose limitations.', { clientContext: { ...context(), results: bounded } }).catch(error => notify(errorText(error)));
   }, [agent.status, executing]);
-  async function chooseFile(value?: File) {
-    setFile(value); setSheets([]); setSheet('');
-    if (value && /\.xlsx$/i.test(value.name)) {
-      try { const names = await listWorkbookSheets(value); setSheets(names); setSheet(names[0] ?? ''); } catch (error) { notify(errorText(error)); }
-    }
+  function beginImport(controller: AbortController) {
+    pendingSummary.current = null;
+    workspaceRef.current = { ...workspaceRef.current, shareSchema: false, shareResults: false };
+    setWorkspace(current => current ? { ...current, shareSchema: false, shareResults: false } : current);
+    fileOperations.current++; controllers.current.add(controller); setLoading(true);
   }
-  async function upload() {
-    if (!file) return; fileOperations.current++; setLoading(true);
-    const controller = new AbortController(); controllers.current.add(controller);
-    try {
-      const dataset = await importFile(file, sheet || undefined, controller.signal);
-      update(w => ({ ...w, datasets: [...w.datasets.filter(d => d.id !== dataset.id), dataset], shareSchema: false, shareResults: false }));
-      setFile(undefined); setSheets([]); notify(`“${dataset.name}” is ready. Your file stays on this device. Schema sharing is now off.`);
-    } catch (error) { notify(errorText(error)); } finally { controllers.current.delete(controller); fileOperations.current--; setLoading(controllers.current.size > 0 || fileOperations.current > 0); }
+  function finishImport(controller: AbortController) {
+    controllers.current.delete(controller); fileOperations.current--;
+    if (mounted.current) setLoading(controllers.current.size > 0 || fileOperations.current > 0);
+  }
+  function receiveImport(dataset: Dataset) {
+    // The file is already committed to IndexedDB; retain it across an auth-driven remount.
+    setWorkspace(current => current ? { ...current, datasets: [...current.datasets.filter(value => value.id !== dataset.id), dataset], shareSchema: false, shareResults: false } : current);
   }
   async function connectPostgres() {
     setPgStatus('Connecting…');
@@ -261,7 +267,10 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
     const panel: Panel = { id: crypto.randomUUID(), title: newName, type: panelType, sql, datasetIds: selectedIds, layout: { i: '', x: 0, y: Math.max(0, ...activeView.panels.map(p => (p.layout?.y ?? 0) + (p.layout?.h ?? 5))), w: panelType === 'metric' ? 4 : 6, h: panelType === 'metric' ? 3 : 5 } };
     const results = await evaluate([panel]); update(w => ({ ...w, views: w.views.map(v => v.id === activeView.id ? { ...v, panels: [...v.panels, ...results] } : v) })); setModal(null); setNewName('');
   }
-  function close() { setModal(null); setInspect(undefined); }
+  function close() {
+    if (fileOperations.current > 0) for (const controller of controllers.current) controller.abort();
+    setModal(null); setInspect(undefined);
+  }
   useEffect(() => { const handler = (event: KeyboardEvent) => { if (event.key === 'Escape') { close(); setChatOpen(false); setMobileNav(false); } }; window.addEventListener('keydown', handler); return () => window.removeEventListener('keydown', handler); }, []);
   const suggestions = ['Create a revenue dashboard', 'Which channels drive the most revenue?', 'Show revenue by region'];
   return <div className={`app-shell ${mobileNav ? 'nav-open' : ''}`}>
@@ -292,8 +301,10 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
     {toast && <div role="status" className="toast">{toast}<button className="icon-button" aria-label="Dismiss notification" onClick={() => notify('')}><X size={15} /></button></div>}
     {(modal || inspect) && <div className="dialog-backdrop" onMouseDown={e => { if (e.target === e.currentTarget) close(); }}><section role="dialog" aria-modal="true" aria-label={inspect ? inspect.title : modal ?? 'Dialog'} className={`dialog ${modal === 'sources' || inspect ? 'dialog-wide' : ''}`}><div className="dialog-header"><div><div className="eyebrow">YOUR WORKSPACE</div><h2>{inspect ? inspect.title : modal === 'sources' ? 'Bring your data' : modal === 'settings' ? 'Privacy & workspace' : modal === 'metrics' ? 'Define what matters' : modal === 'panel' ? 'Create a panel' : 'Create a view'}</h2></div><button className="icon-button" onClick={close} aria-label="Close dialog"><X size={20} /></button></div>
       {inspect && <><p>{inspect.description || 'This panel is calculated from the query below.'}</p><label className="field">SQL query<pre className="sql-block">{inspect.sql}</pre></label><div className="evidence-meta">{inspect.result ? <><span>Executed {new Date(inspect.result.executedAt).toLocaleString()}</span><span>{inspect.result.elapsedMs} ms · {inspect.result.rowCount} rows{inspect.result.truncated ? ' · truncated at 1,000 rows' : ' · complete result'}{inspect.result.approximate ? ' · approximate' : ''}</span>{inspect.result.sources.map(s => <span key={s.name}>{s.name} · refreshed {new Date(s.refreshedAt).toLocaleString()}</span>)}</> : <span>{inspect.error || 'This query has not run yet.'}</span>}</div>{inspect.result && <><div className="data-preview"><table><thead><tr>{inspect.result.columns.map(c => <th key={c}>{c}</th>)}</tr></thead><tbody>{inspect.result.rows.slice(0, 20).map((row, i) => <tr key={i}>{inspect.result!.columns.map(c => <td key={c}>{String(row[c] ?? '—')}</td>)}</tr>)}</tbody></table></div><button className="button" onClick={() => download(`${inspect.title}.csv`, [inspect.result!.columns, ...inspect.result!.rows.map(row => inspect.result!.columns.map(c => row[c]))].map(row => row.map(v => `"${String(v ?? '').replaceAll('"', '""')}"`).join(',')).join('\n'), 'text/csv')}><ArrowDownToLine size={15} />Export result CSV</button></>}</>}
-      {modal === 'sources' && <><p>Upload a file for private, local analysis, or connect a configured database.</p><div className="upload-zone"><FileSpreadsheet size={30} /><strong>Start with a file</strong><span>CSV, TSV, JSON, JSONL, XLSX or Parquet · up to 20 MB</span><input aria-label="Choose a data file" type="file" accept=".csv,.tsv,.json,.jsonl,.xlsx,.parquet" onChange={e => void chooseFile(e.target.files?.[0])} />{sheets.length > 0 && <select aria-label="Workbook sheet" value={sheet} onChange={e => setSheet(e.target.value)}>{sheets.map(s => <option key={s}>{s}</option>)}</select>}{file && <button className="button button-primary" onClick={() => void upload()} disabled={loading}>{loading ? <LoaderCircle size={16} className="spin" /> : <Plus size={16} />}Import {file.name}</button>}</div><div className="section-heading"><h3>Connected datasets</h3><span>{workspace.datasets.length} sources</span></div><div className="dataset-list">{workspace.datasets.map(d => <div className="dataset-card" key={d.id}><span className="dataset-icon">{d.kind === 'postgres' ? <Database size={21} /> : <FileSpreadsheet size={21} />}</span><div><strong>{d.name}</strong><small>{d.kind === 'demo' ? 'Sample data' : d.kind === 'postgres' ? 'Read-only PostgreSQL' : 'Stored on this device'} · {d.rowCount < 0 ? 'Live rows' : `${d.rowCount.toLocaleString()} rows`} · {d.columns.length} columns</small><code>{d.table}</code><small>Refreshed {new Date(d.updatedAt).toLocaleString()}</small></div>{d.kind !== 'demo' && <button className="icon-button" aria-label={`Remove ${d.name}`} onClick={() => void (async () => { if (d.kind === 'file') await deleteDataset(d.id); update(w => ({ ...w, datasets: w.datasets.filter(ds => ds.id !== d.id) })); })().catch(error => notify(errorText(error)))}><Trash2 size={15} /></button>}</div>)}</div><div className="postgres-connection"><h3><Database size={17} />PostgreSQL</h3><p>Your deployment administrator configures approved read-only connections. Credentials stay on the server.</p><div className="inline-fields"><input className="input" type="password" autoComplete="off" placeholder="Deployment access token" aria-label="PostgreSQL deployment access token" value={token} onChange={e => setToken(e.target.value)} /><button className="button" onClick={() => void connectPostgres()}>Connect</button></div>{pgStatus && <p className="inline-notice">{pgStatus}</p>}</div><a className="text-link" href="https://github.com/alvarovillalbaa/sift-analytics/blob/main/docs/connectors.md" target="_blank" rel="noreferrer">Build another connector with the SDK <ChevronRight size={14} /></a></>}
-      {modal === 'settings' && <><p>Your dashboards and uploaded files are stored in this browser. AI conversations run on this deployment’s model provider.</p><label className="toggle-row"><div><strong>Share dataset schemas with AI</strong><small>Table names, column names, types and metric definitions. Your uploaded file is never sent.</small></div><input type="checkbox" checked={workspace.shareSchema} onChange={e => update(w => ({ ...w, shareSchema: e.target.checked }))} /></label><label className="toggle-row"><div><strong>Share query results for explanations</strong><small>Allow up to 50 result rows per query to be sent to the AI and stored in conversation history. Results may contain raw values.</small></div><input type="checkbox" checked={workspace.shareResults} onChange={e => update(w => ({ ...w, shareResults: e.target.checked }))} /></label><div className="inline-notice"><ShieldCheck size={18} /><span>Files are scoped to this browser and origin. Export your views before clearing browser data. Private-network access requires a self-hosted deployment.</span></div><button className="button" onClick={() => download('sift-workspace.json', JSON.stringify(workspace, null, 2))}><ArrowDownToLine size={16} />Export workspace definitions & results</button></>}
+      {modal === 'sources' && <><p>Choose files or a folder for private, local analysis, or connect a configured database.</p>
+        <LocalImport disabled={busy || executing || loading} onBegin={beginImport} onEnd={finishImport} onImported={receiveImport} />
+        <div className="section-heading"><h3>Connected datasets</h3><span>{workspace.datasets.length} sources</span></div><div className="dataset-list">{workspace.datasets.map(d => <div className="dataset-card" key={d.id}><span className="dataset-icon">{d.kind === 'postgres' ? <Database size={21} /> : <FileSpreadsheet size={21} />}</span><div><strong>{d.name}</strong><small>{d.kind === 'demo' ? 'Sample data' : d.kind === 'postgres' ? 'Read-only PostgreSQL' : 'Stored on this device'} · {d.rowCount < 0 ? 'Live rows' : `${d.rowCount.toLocaleString()} rows`} · {d.columns.length} columns</small><code>{d.table}</code><small>Refreshed {new Date(d.updatedAt).toLocaleString()}</small></div>{d.kind !== 'demo' && <button className="icon-button" aria-label={`Remove ${d.name}`} disabled={loading} onClick={() => void (async () => { if (d.kind === 'file') await deleteDataset(d.id); update(w => ({ ...w, datasets: w.datasets.filter(ds => ds.id !== d.id) })); })().catch(error => notify(errorText(error)))}><Trash2 size={15} /></button>}</div>)}</div><div className="postgres-connection"><h3><Database size={17} />PostgreSQL</h3><p>Your deployment administrator configures approved read-only connections. Credentials stay on the server.</p><div className="inline-fields"><input className="input" type="password" autoComplete="off" placeholder="Deployment access token" aria-label="PostgreSQL deployment access token" value={token} onChange={e => setToken(e.target.value)} /><button className="button" disabled={loading} onClick={() => void connectPostgres()}>Connect</button></div>{pgStatus && <p className="inline-notice">{pgStatus}</p>}</div><a className="text-link" href="https://github.com/alvarovillalbaa/sift-analytics/blob/main/docs/connectors.md" target="_blank" rel="noreferrer">Build another connector with the SDK <ChevronRight size={14} /></a></>}
+      {modal === 'settings' && <><p>Your dashboards and uploaded files are stored in this browser. AI conversations run on this deployment’s model provider.</p><label className="toggle-row"><div><strong>Share dataset schemas with AI</strong><small>Table names, column names, types and metric definitions. Your uploaded file is never sent.</small></div><input type="checkbox" disabled={fileOperations.current > 0} checked={workspace.shareSchema} onChange={e => update(w => ({ ...w, shareSchema: e.target.checked }))} /></label><label className="toggle-row"><div><strong>Share query results for explanations</strong><small>Allow up to 50 result rows per query to be sent to the AI and stored in conversation history. Results may contain raw values.</small></div><input type="checkbox" disabled={fileOperations.current > 0} checked={workspace.shareResults} onChange={e => update(w => ({ ...w, shareResults: e.target.checked }))} /></label><div className="inline-notice"><ShieldCheck size={18} /><span>Files are scoped to this browser and origin. Export your views before clearing browser data. Private-network access requires a self-hosted deployment.</span></div><button className="button" onClick={() => download('sift-workspace.json', JSON.stringify(workspace, null, 2))}><ArrowDownToLine size={16} />Export workspace definitions & results</button></>}
       {modal === 'new-view' && <form onSubmit={event => { event.preventDefault(); if (!newName.trim()) return; const view: View = { id: crypto.randomUUID(), name: newName.trim(), description: 'A new perspective on your data.', panels: [] }; update(w => ({ ...w, views: [...w.views, view], activeViewId: view.id })); close(); }}><label className="field">View name<input className="input" autoFocus value={newName} onChange={e => setNewName(e.target.value)} maxLength={80} placeholder="e.g. Customer growth" required /></label><button className="button button-primary" type="submit"><Plus size={16} />Create view</button></form>}
       {modal === 'panel' && <form onSubmit={event => { event.preventDefault(); void addPanel(); }}><label className="field">Title<input className="input" value={newName} onChange={e => setNewName(e.target.value)} placeholder="Monthly revenue" required /></label><label className="field">Visualization<select className="input" value={panelType} onChange={e => setPanelType(e.target.value as Panel['type'])}>{['table', 'metric', 'area', 'line', 'bar', 'donut'].map(t => <option key={t}>{t}</option>)}</select></label><label className="field">Approved datasets<select className="input" multiple value={selectedIds} onChange={e => setSelectedIds([...e.target.selectedOptions].map(o => o.value))} required>{workspace.datasets.map(d => <option value={d.id} key={d.id}>{d.name} ({d.table})</option>)}</select></label><label className="field">Read-only SQL<textarea className="input sql-input" value={sql} onChange={e => setSql(e.target.value)} required spellCheck={false} /></label><p className="field-help">SELECT and WITH queries only. Results are limited to 1,000 rows and 10 seconds.</p><button className="button button-primary" disabled={loading} type="submit">{loading ? <LoaderCircle size={16} className="spin" /> : <Plus size={16} />}Run & add panel</button></form>}
       {modal === 'metrics' && <><p>Give AI an explicit business definition to use. Definitions belong to this workspace and are shared only when schema sharing is enabled.</p>{workspace.metrics.map(metric => <div className="metric-definition" key={metric.id}><div><strong>{metric.name}</strong><p>{metric.definition}</p><code>{metric.sql}</code></div><button className="icon-button" aria-label={`Remove ${metric.name}`} onClick={() => update(w => ({ ...w, metrics: w.metrics.filter(m => m.id !== metric.id) }))}><Trash2 size={15} /></button></div>)}<form onSubmit={event => { event.preventDefault(); update(w => ({ ...w, metrics: [...w.metrics, { id: crypto.randomUUID(), name: metricName, definition: metricDefinition, sql, datasetIds: selectedIds.length ? selectedIds : w.datasets.slice(0, 1).map(d => d.id) }] })); setMetricName(''); setMetricDefinition(''); }}><label className="field">Metric name<input className="input" value={metricName} onChange={e => setMetricName(e.target.value)} placeholder="Net revenue" required /></label><label className="field">Approved definition<textarea className="input" value={metricDefinition} onChange={e => setMetricDefinition(e.target.value)} placeholder="Revenue after refunds, in USD, recognized by invoice date…" required /></label><label className="field">Datasets<select className="input" multiple value={selectedIds.length ? selectedIds : workspace.datasets.slice(0, 1).map(d => d.id)} onChange={e => setSelectedIds([...e.target.selectedOptions].map(o => o.value))} required>{workspace.datasets.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}</select></label><label className="field">SQL expression<input className="input" value={sql} onChange={e => setSql(e.target.value)} required /></label><button className="button button-primary" type="submit"><Plus size={16} />Save definition</button></form></>}
