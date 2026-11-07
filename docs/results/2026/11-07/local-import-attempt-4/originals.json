@@ -1,0 +1,128 @@
+{
+  "sourceCommit": "cfcdfbf28c63526a2619dc03b32f20e64e2861cc",
+  "runId": 42407606569,
+  "jobId": 128508584671,
+  "passed": false,
+  "files": [
+    {
+      "name": "browser.json.gz",
+      "bytes": 15762,
+      "sha256": "7718ab08d2abde286204476732ac8144eae73781de74771348b6af93a94325dc",
+      "uncompressedName": "browser.json",
+      "uncompressedBytes": 320740,
+      "uncompressedSha256": "dc3d33375771a4f8ac0dad1eadd4dd5ed9d1a77b188644cd091738f72fbfeda6"
+    },
+    {
+      "name": "browser.stderr.log.gz",
+      "bytes": 20,
+      "sha256": "f1b651238a58fe290baec6c5e32f3bdb1943dd2bd582f02569231f7a757c7837",
+      "uncompressedName": "browser.stderr.log",
+      "uncompressedBytes": 0,
+      "uncompressedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "browser.stdout.log.gz",
+      "bytes": 20,
+      "sha256": "f1b651238a58fe290baec6c5e32f3bdb1943dd2bd582f02569231f7a757c7837",
+      "uncompressedName": "browser.stdout.log",
+      "uncompressedBytes": 0,
+      "uncompressedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "build.log.gz",
+      "bytes": 1378,
+      "sha256": "3c9a28033050376bb7846cc23a88effba64a2f11bb6ccd3d3c0249ea17b64907",
+      "uncompressedName": "build.log",
+      "uncompressedBytes": 8134,
+      "uncompressedSha256": "e6d12bdc53c1545a38a98de07a6ccf040e264cab5c070cc463ed1faa87ce5a92"
+    },
+    {
+      "name": "commit-race.png",
+      "bytes": 208765,
+      "sha256": "331f99f9f930383aa8a23d89422b40d724ddf3021cfb6c862c8be0aab23548e5"
+    },
+    {
+      "name": "desktop.png",
+      "bytes": 107688,
+      "sha256": "91873f5669bcaddadb300af064912dd23fa1d1a9fc4621c3536de619b2aeb668"
+    },
+    {
+      "name": "fixture-manifest.json",
+      "bytes": 4193,
+      "sha256": "7232d47ff251f76f9c1ca884a2ee6e3d66788acc6412c76858049fd8bc919c04"
+    },
+    {
+      "name": "fixture-tests.tap",
+      "bytes": 555,
+      "sha256": "d4b71fa62c7340adfa5a9a705cc13403ca9e10422e9fbea751dc33c7c2bf3b6f"
+    },
+    {
+      "name": "install.log.gz",
+      "bytes": 47,
+      "sha256": "8ca60791f7ed8405504d6eeb2acbf6b3f7213ada9e24e271df9f0ec762250a89",
+      "uncompressedName": "install.log",
+      "uncompressedBytes": 27,
+      "uncompressedSha256": "e924b24e85491289d1db2cf06a1018b651294e15237fdceacede9a2aff65ad8e"
+    },
+    {
+      "name": "run.json",
+      "bytes": 5087,
+      "sha256": "e20f47010b20e5dd3ab8504f99fd7b7d40295f5299a99976f7a73662a1f7df64"
+    },
+    {
+      "name": "server.stderr.log.gz",
+      "bytes": 20,
+      "sha256": "f1b651238a58fe290baec6c5e32f3bdb1943dd2bd582f02569231f7a757c7837",
+      "uncompressedName": "server.stderr.log",
+      "uncompressedBytes": 0,
+      "uncompressedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "server.stdout.log.gz",
+      "bytes": 165,
+      "sha256": "8b780856c419769fde5963a2ab0f333e8f5e2038b8aac4464fa7d43fd51b6aac",
+      "uncompressedName": "server.stdout.log",
+      "uncompressedBytes": 205,
+      "uncompressedSha256": "335d3c3463cc51344bb7c2f780008a6a4faa4840860a0df14cbad915aebcd74b"
+    },
+    {
+      "name": "source-after.json.gz",
+      "bytes": 7819,
+      "sha256": "ab2726a5a660b86a0196c27727e3a639460196d471f8e2c40c33531e1ad5f1ab",
+      "uncompressedName": "source-after.json",
+      "uncompressedBytes": 36050,
+      "uncompressedSha256": "7dd80bdd473d0bcdf34a704e6cf308a3a1c78c308f74663ef86915c165fa8b3b"
+    },
+    {
+      "name": "source-before.json.gz",
+      "bytes": 7819,
+      "sha256": "ab2726a5a660b86a0196c27727e3a639460196d471f8e2c40c33531e1ad5f1ab",
+      "uncompressedName": "source-before.json",
+      "uncompressedBytes": 36050,
+      "uncompressedSha256": "7dd80bdd473d0bcdf34a704e6cf308a3a1c78c308f74663ef86915c165fa8b3b"
+    },
+    {
+      "name": "tools-lock.json",
+      "bytes": 1064,
+      "sha256": "2fa84b8293c8e0da7953f61ce00ae75c27f19081d3f3f5e5017b077f053377ad"
+    },
+    {
+      "name": "unit-tests.tap",
+      "bytes": 2532,
+      "sha256": "fdf06f7b2eb92da26b6266dd2c667f0f45d3e48b48e8cab2721293c0e5efe93b"
+    },
+    {
+      "name": "workbook.png",
+      "bytes": 219673,
+      "sha256": "68dde16befb99f92a8036b994c747eb9b938c1276f885b9f073cfda649fcd97d"
+    },
+    {
+      "name": "job.log.gz",
+      "bytes": 577007,
+      "sha256": "7c14cc59275499963844b89c1623d403d0906f17179dc5eb4b2d7823e319eed7",
+      "uncompressedName": "job.log",
+      "uncompressedBytes": 852232,
+      "uncompressedSha256": "be2b6c1236bb90b81a6eeefa762ca4f8201d798812c0f6d57557fcbea4264328"
+    }
+  ]
+}
