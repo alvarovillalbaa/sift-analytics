@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "removedAt": "2026-11-07T20:39:43.670842+00:00",
+  "filesRemoved": 14,
+  "bytesRemoved": 6343076,
+  "rootRemoved": true,
+  "payloadIdentityChecks": {
+    "uidModeInodeSizeSha256": true,
+    "sourceGitBlobEquality": true,
+    "exactDirectoryInventory": true
+  },
+  "lsof": {
+    "exitCode": 1,
+    "stdoutBytes": 0,
+    "stderrBytes": 0,
+    "scope": "exact task-created payload files"
+  },
+  "canonicalSourcesAndOriginalsRetained": true,
+  "scope": "Reproducible private upload JSON copies only; not CI scratch or unrelated storage",
+  "validatedGitHead": "a4a2db8de0daaf27edb6564ac91c89dae56de0f2"
+}

@@ -16,5 +16,6 @@
   "browserRun": 42408226622,
   "httpCheckerSource": "dad28070a9d0d4ebd40767d390cb53b32958643b",
   "httpRun": 42411324573,
-  "scope": "Separate provider metadata readback and anonymous HTTP observations; no per-asset Git attestation or hosted-browser claim."
+  "scope": "Separate provider metadata readback and anonymous HTTP observations; no per-asset Git attestation or hosted-browser claim.",
+  "temporaryUploadCleanup": "local-import-cleanup.json"
 }
