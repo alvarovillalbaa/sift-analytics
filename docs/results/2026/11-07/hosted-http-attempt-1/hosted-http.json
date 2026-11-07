@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "711b469ec298ba445090e960d21704fb94c2385f",
+  "origin": "https://sift-analytics.vercel.app",
+  "startedAt": "2026-11-07T20:17:58.563Z",
+  "ownerSuppliedDeploymentContext": {
+    "deployment": "dpl_J5ZPhyWokYaNF9gYzRE13LqH2L3R",
+    "source": "3b06822cf61ad5a18c0029004366f000a5f9db7f",
+    "independentlyReattestedHere": false
+  },
+  "limits": {
+    "requestMs": 15000,
+    "httpWorkMs": 150000,
+    "bodyBytes": 1048576,
+    "totalReceivedBodyBudget": 6291456,
+    "maximumChunksFetched": 15
+  },
+  "requests": [
+    {
+      "label": "homepage",
+      "url": "https://sift-analytics.vercel.app/",
+      "method": "GET",
+      "startedAt": "2026-11-07T20:17:58.563Z",
+      "status": 200,
+      "headers": {
+        "label": "sanitized parsed headers; whitelist only, never raw header values",
+        "totalFieldCount": 18,
+        "sensitiveFieldsWithheld": 0,
+        "redirectLocationPresent": false,
+        "safe": {
+          "content-type": "text/html; charset=utf-8",
+          "content-length": "7313",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "date": "Sat, 07 Nov 2026 20:17:59 GMT",
+          "age": "0",
+          "etag": "\"a56f012c53ae37d84d4979d0ef83fc5e\"",
+          "server": "Vercel",
+          "x-vercel-cache": "PRERENDER"
+        }
+      },
+      "observedBytes": 7313,
+      "bytes": 7313,
+      "sha256": "3b2d4d0ad806a5747dacb69f5befc4d79b57f4dee55de03d6a920ab0b03120d1",
+      "complete": true,
+      "responseEnd": true,
+      "responseClose": true,
+      "responseMessageComplete": true,
+      "requestClose": true,
+      "socketClose": true,
+      "error": null,
+      "bodyRetained": "home.html",
+      "deadlineAt": "2026-11-07T20:18:13.564Z",
+      "observedSha256": "3b2d4d0ad806a5747dacb69f5befc4d79b57f4dee55de03d6a920ab0b03120d1",
+      "finishedAt": "2026-11-07T20:17:59.105Z"
+    }
+  ],
+  "retainedBodies": [
+    {
+      "name": "home.html",
+      "bytes": 7313,
+      "sha256": "3b2d4d0ad806a5747dacb69f5befc4d79b57f4dee55de03d6a920ab0b03120d1",
+      "complete": true
+    }
+  ],
+  "matchedAsset": null,
+  "passed": false,
+  "error": "The expression evaluated to a falsy value:\n\n  assert.ok(candidates.length > 0)\n",
+  "proofLimits": [
+    "Anonymous HTTP only; no hosted browser, IndexedDB/import/query, model or account proof.",
+    "A matching public bundle proves the reviewed UI strings are served, not byte equivalence of all assets or a deployment-to-Git attestation.",
+    "Headers are explicitly sanitized JSON only; cookie/auth values are never retained. No cookie jar, Authorization, redirects, retries or protection bypass.",
+    "Body hashes cover observed HTTP representation bytes. Incomplete prefixes and missing terminal/socket events remain failures. HTTP work uses Connection: close."
+  ],
+  "observedBodyBytes": 7313,
+  "finishedAt": "2026-11-07T20:17:59.126Z"
+}

@@ -135,7 +135,7 @@ if (process.argv[2] === '--emit') {
       const source = /\bsrc\s*=\s*(["'])([^"']+)\1/i.exec(tag[0]); if (!source) continue;
       const url = new URL(source[2], ORIGIN);
       if (url.origin !== ORIGIN || url.username || url.password || url.search || url.hash || url.pathname.length > 512
-        || !url.pathname.startsWith('/_next/static/chunks/') || !url.pathname.endsWith('.js') || /%2f|%5c/i.test(url.pathname)
+        || !['/_next/static/chunks/', '/_next/static/immutable/chunks/'].some(prefix => url.pathname.startsWith(prefix)) || !url.pathname.endsWith('.js') || /%2f|%5c/i.test(url.pathname)
         || url.pathname.split('/').some((part) => part === '.' || part === '..')) continue;
       if (!candidates.includes(url.pathname)) candidates.push(url.pathname);
     }

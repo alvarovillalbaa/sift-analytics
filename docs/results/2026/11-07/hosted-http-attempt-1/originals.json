@@ -1,0 +1,43 @@
+{
+  "checkerSource": "711b469ec298ba445090e960d21704fb94c2385f",
+  "ownerSuppliedRuntimeSource": "3b06822cf61ad5a18c0029004366f000a5f9db7f",
+  "runId": 42410362522,
+  "jobId": 128516978014,
+  "passed": false,
+  "files": [
+    {
+      "name": "home.html",
+      "bytes": 7313,
+      "sha256": "3b2d4d0ad806a5747dacb69f5befc4d79b57f4dee55de03d6a920ab0b03120d1"
+    },
+    {
+      "name": "hosted-http.json",
+      "bytes": 2902,
+      "sha256": "3cba879d372fd5321fc6643fcfbac7fe1494404902904a288d6bba72bd605a73"
+    },
+    {
+      "name": "source-after.json.gz",
+      "bytes": 10387,
+      "sha256": "772165dba6e58d268eeb92b7185d5b2e43ab204af1c2834a3f28638f58d7a907",
+      "uncompressedName": "source-after.json",
+      "uncompressedBytes": 53315,
+      "uncompressedSha256": "7730ee3f61990b3ba80ce7f8d0639508fd9bf06c7498c23e468359cc57d26be5"
+    },
+    {
+      "name": "source-before.json.gz",
+      "bytes": 10387,
+      "sha256": "772165dba6e58d268eeb92b7185d5b2e43ab204af1c2834a3f28638f58d7a907",
+      "uncompressedName": "source-before.json",
+      "uncompressedBytes": 53315,
+      "uncompressedSha256": "7730ee3f61990b3ba80ce7f8d0639508fd9bf06c7498c23e468359cc57d26be5"
+    },
+    {
+      "name": "job.log.gz",
+      "bytes": 21585,
+      "sha256": "1ffc532ab69324d0292e5c6f02f96001887bd727b7d6cd68ad41941b86b34447",
+      "uncompressedName": "job.log",
+      "uncompressedBytes": 58763,
+      "uncompressedSha256": "eae07b5fd2269f67bb76bba834ec4624bed4d0213a66f1130a9b6de629b9404f"
+    }
+  ]
+}
