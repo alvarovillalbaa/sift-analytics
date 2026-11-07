@@ -1,0 +1,15 @@
+# Local import checks — attempt 2 failed
+
+[Run 42405847950](https://github.com/alvarovillalbaa/sift-analytics/actions/runs/42405847950), job `128503247515`, checked `66845627d375d054ee9aeaadf8fcafd69472d82a`. Its verdict remains **failed**. Five fixture and 22 selection checks, the actual eve/Next production build, and both strict 67-file source guards passed. Before/after manifests are byte-identical: SHA-256 `077e98ff31eb03f6960d74ab0b581fc15d80126dbb34969075fc9737f87e51ac`.
+
+The four actual Chromium cases produced separate outcomes:
+
+- **L01/L02 failed:** selected imports, partial failure and retry were observed. Reload preserved each dataset and original file by ID, but reordered the dataset array using IndexedDB's random-ID key order. Manual aggregate SQL was not reached. Each case also retained a real `/api/session` `net::ERR_ABORTED`; its cause was not observed. It is not waived.
+- **L03 passed its functional checks:** the native transaction completed; the injected Stop click triggered exactly one native `InvalidStateError` on late abort. The committed file remained acknowledged, the queued file stayed absent, and retry imported only that remaining file. This is an authored timing control, not ordinary-user race coverage or whole-packet acceptance.
+- **L04 failed:** both real workbook sheets were observed and South imported with exact bytes and selected-sheet metadata. The exact accessible label `Read-only SQL` could not locate the textarea. SQL, ordinary reload and the missing-metadata control were not reached.
+
+All four contexts and pages closed through expected paths. The supervisor remained false: its browser child exited 1; its owned server received exactly SIGTERM and returned 143, which locked Next 16.4.2 explicitly uses for TERM. EOF, descriptor closure and original process-group absence were observed. Two additional process-scan errors retained no PID or errno, so their ownership and cause remain unproven. This packet does not establish complete residue closure.
+
+Follow-up changes preserve every original assertion: retain saved dataset order; give the SQL textarea an explicit accessible label; require positive per-request session completion before navigation/normal closure; accept server 143 only on our exact TERM path; and record process identities/errors with a cutoff measured before task installation/build. Only exact unchanged identities born before that cutoff can be excluded; task-created build/tool residue and stable unreadable new identities remain in scope. These are new observations, not a retrospective explanation of this failed run.
+
+The [originals manifest](local-import-attempt-2/originals.json) binds all 15 complete decoded captures (including the screenshot) and the full losslessly compressed job log. Original log: 401,180 bytes, SHA-256 `7cd956cef11d1c441d753501381b43c2fd4eecf27be246ce6c8fe764adc2a835`. The browser report is retained losslessly as `browser.json.gz`; no failed observation was edited. The [earlier failed attempt](local-import-attempt-1.md) remains separate. No hosted, model, PostgreSQL or physical-device acceptance is claimed.

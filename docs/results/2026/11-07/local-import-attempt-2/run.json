@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "66845627d375d054ee9aeaadf8fcafd69472d82a",
+  "startedAt": "2026-11-07T19:23:21.519Z",
+  "commands": [
+    {
+      "label": "server",
+      "args": [
+        "node_modules/next/dist/bin/next",
+        "start",
+        "--hostname",
+        "127.0.0.1",
+        "--port",
+        "4173"
+      ],
+      "pid": 3863,
+      "identity": {
+        "pid": 3863,
+        "uid": 1001,
+        "ppid": 3852,
+        "pgid": 3863,
+        "startTime": "10470",
+        "state": "R"
+      },
+      "exitCode": 143,
+      "signal": null,
+      "closeObserved": true,
+      "streams": {
+        "stdout": {
+          "bytes": 205,
+          "retainedBytes": 205,
+          "sha256": "1bb82d74a390ee91c71eb2382735fa779346781d9c1324c1a77b296924890f55",
+          "eof": true,
+          "descriptorClosed": true,
+          "overflow": false
+        },
+        "stderr": {
+          "bytes": 0,
+          "retainedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "eof": true,
+          "descriptorClosed": true,
+          "overflow": false
+        }
+      },
+      "signalsSent": [
+        "SIGTERM"
+      ],
+      "originalGroupAbsent": true
+    },
+    {
+      "label": "browser",
+      "args": [
+        "tests/e2e/local-import.spec.mjs"
+      ],
+      "pid": 3907,
+      "identity": {
+        "pid": 3907,
+        "uid": 1001,
+        "ppid": 3852,
+        "pgid": 3907,
+        "startTime": "10596",
+        "state": "R"
+      },
+      "exitCode": 1,
+      "signal": null,
+      "closeObserved": true,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "retainedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "eof": true,
+          "descriptorClosed": true,
+          "overflow": false
+        },
+        "stderr": {
+          "bytes": 0,
+          "retainedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "eof": true,
+          "descriptorClosed": true,
+          "overflow": false
+        }
+      },
+      "signalsSent": [],
+      "originalGroupAbsent": true
+    }
+  ],
+  "cleanup": {
+    "ownedMarkedProcessesRemaining": [],
+    "failures": [
+      "browser:The expression evaluated to a falsy value:\n\n  assert.ok(tracked.row.exitCode === 0 && tracked.row.signal === null && tracked.row.signalsSent.length === 0)\n",
+      "server:The expression evaluated to a falsy value:\n\n  assert.ok(tracked.row.exitCode === 0 || tracked.row.signal === 'SIGTERM')\n",
+      "owned_process_scan_uncertain",
+      "owned_process_scan_uncertain"
+    ]
+  },
+  "passed": false,
+  "proofLimits": [
+    "Owned child groups and terminal pipes are observed; an external job kill remains an infrastructure boundary."
+  ],
+  "browserBudgetMs": 300000,
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(tracked.row.exitCode === 0 && tracked.row.signal === null && tracked.row.signalsSent.length === 0)\n\n    at stop (file:///home/runner/work/sift-analytics/sift-analytics/tests/support/run-browser.mjs:79:31)\n    at async file:///home/runner/work/sift-analytics/sift-analytics/tests/support/run-browser.mjs:96:3",
+  "finishedAt": "2026-11-07T19:24:02.088Z"
+}

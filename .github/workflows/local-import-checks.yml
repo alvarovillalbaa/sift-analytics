@@ -20,6 +20,8 @@ jobs:
         run: |
           task_root="$RUNNER_TEMP/sift-local-import"
           mkdir -m 700 "$task_root"
+          started_ticks="$(python3 -c 'text = open("/proc/self/stat").read(); print(text[text.rfind(")") + 2:].split()[19])')"
+          printf 'SIFT_IMPORT_START_TICKS=%s\n' "$started_ticks" >> "$GITHUB_ENV"
           nonce="$(openssl rand -hex 16)"
           printf %s "$nonce" > "$task_root/.owner"
           chmod 600 "$task_root/.owner"

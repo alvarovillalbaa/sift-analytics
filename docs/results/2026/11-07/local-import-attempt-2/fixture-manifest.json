@@ -1,0 +1,100 @@
+{
+  "canary": "SIFT_LOCAL_IMPORT_CANARY_8f37db42_20261107",
+  "normal": {
+    "directory": "/home/runner/work/_temp/sift-local-import/authored-import",
+    "name": "authored-import",
+    "files": [
+      {
+        "relative": "north/sales.csv",
+        "text": "item,amount,canary\nnorth-a,10,SIFT_LOCAL_IMPORT_CANARY_8f37db42_20261107\nnorth-b,20,SIFT_LOCAL_IMPORT_CANARY_8f37db42_20261107\n",
+        "rows": 2,
+        "total": 30,
+        "selected": true,
+        "path": "authored-import/north/sales.csv",
+        "absolute": "/home/runner/work/_temp/sift-local-import/authored-import/north/sales.csv",
+        "bytes": 127,
+        "sha256": "2236c45c74f934ac322aa5d6b72e104f72b1149c5fda7cfe2da635ef408b5102"
+      },
+      {
+        "relative": "south/sales.csv",
+        "text": "item,amount,canary\nsouth-a,7,SIFT_LOCAL_IMPORT_CANARY_8f37db42_20261107\n",
+        "rows": 1,
+        "total": 7,
+        "selected": true,
+        "path": "authored-import/south/sales.csv",
+        "absolute": "/home/runner/work/_temp/sift-local-import/authored-import/south/sales.csv",
+        "bytes": 72,
+        "sha256": "9fade5cd6941a2e541db95387aecac6262cc06d5841fdefbfbad612dd4c25b7e"
+      },
+      {
+        "relative": "events.json",
+        "text": "[{\"item\":\"event-a\",\"amount\":3,\"canary\":\"SIFT_LOCAL_IMPORT_CANARY_8f37db42_20261107\"},{\"item\":\"event-b\",\"amount\":4,\"canary\":\"SIFT_LOCAL_IMPORT_CANARY_8f37db42_20261107\"}]\n",
+        "rows": 2,
+        "total": 7,
+        "selected": true,
+        "path": "authored-import/events.json",
+        "absolute": "/home/runner/work/_temp/sift-local-import/authored-import/events.json",
+        "bytes": 170,
+        "sha256": "c662060de433b47436893c46e8009f01af10651ff8a58b1a2f77f07193df91f7"
+      },
+      {
+        "relative": "notes.ndjson",
+        "text": "{\"item\":\"note-a\",\"amount\":5,\"canary\":\"SIFT_LOCAL_IMPORT_CANARY_8f37db42_20261107\"}\n",
+        "rows": 1,
+        "total": 5,
+        "selected": true,
+        "path": "authored-import/notes.ndjson",
+        "absolute": "/home/runner/work/_temp/sift-local-import/authored-import/notes.ndjson",
+        "bytes": 83,
+        "sha256": "db050d65868aaec3620eb91c2c03820027ef6ca5b2d5bebc474779d5e26a1f60"
+      },
+      {
+        "relative": "bad.json",
+        "text": "{\"broken\": SIFT_LOCAL_IMPORT_CANARY_8f37db42_20261107 NOT_JSON}\n",
+        "selected": true,
+        "invalid": true,
+        "path": "authored-import/bad.json",
+        "absolute": "/home/runner/work/_temp/sift-local-import/authored-import/bad.json",
+        "bytes": 64,
+        "sha256": "c3ac3f7a74e3845c7fc43885df1f40b6ab76595151035071662040e2cdc22274"
+      },
+      {
+        "relative": "ignored.csv",
+        "text": "item,amount,canary\nmust-stay-unselected,9999,SIFT_LOCAL_IMPORT_CANARY_8f37db42_20261107\n",
+        "rows": 1,
+        "total": 9999,
+        "selected": false,
+        "path": "authored-import/ignored.csv",
+        "absolute": "/home/runner/work/_temp/sift-local-import/authored-import/ignored.csv",
+        "bytes": 88,
+        "sha256": "658411c5c695b746ae33db2fa2a8cae2e7e2b34485fdc4d02e4ea4e3b858fb22"
+      }
+    ]
+  },
+  "commitRace": {
+    "directory": "/home/runner/work/_temp/sift-local-import/committed-import",
+    "name": "committed-import",
+    "files": [
+      {
+        "relative": "first.csv",
+        "text": "item,amount,canary\ncommitted-first,11,SIFT_LOCAL_IMPORT_CANARY_8f37db42_20261107\n",
+        "rows": 1,
+        "total": 11,
+        "path": "committed-import/first.csv",
+        "absolute": "/home/runner/work/_temp/sift-local-import/committed-import/first.csv",
+        "bytes": 81,
+        "sha256": "43f83b7baf8c3eaf732e268756579314ce874605984fd46200c9e4adfec7b516"
+      },
+      {
+        "relative": "second.csv",
+        "text": "item,amount,canary\nqueued-second,13,SIFT_LOCAL_IMPORT_CANARY_8f37db42_20261107\n",
+        "rows": 1,
+        "total": 13,
+        "path": "committed-import/second.csv",
+        "absolute": "/home/runner/work/_temp/sift-local-import/committed-import/second.csv",
+        "bytes": 79,
+        "sha256": "fb9a83d660cb7f2fda49f77b393f43019d9a4b2918953aef26128f9f1350810f"
+      }
+    ]
+  }
+}

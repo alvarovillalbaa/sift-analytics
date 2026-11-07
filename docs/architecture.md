@@ -48,6 +48,8 @@ Import promises settle after the current operation reaches its storage outcome. 
 
 Restoration also disables both sharing flags when an IndexedDB file lacks a matching saved workspace dataset. Missing workspace metadata therefore cannot apply the generated sample's sharing defaults to a restored private file. Existing explicit sharing choices are retained when the stored workspace already includes every restored file.
 
+Restored datasets retain their saved workspace order rather than the random-ID key order returned by IndexedDB. Newly discovered files without saved positions follow the known datasets.
+
 The browser engine serializes operations. Queries validate the registered dataset identities, parse and regenerate one read-only SQL statement, then execute an outer 1,001-row probe. The public result contains at most 1,000 rows and discloses truncation. A ten-second execution timer or AbortSignal terminates the worker. The next operation recreates the engine from the deterministic demo and persisted files. Uploaded bytes and query execution do not traverse the application server.
 
 JSON number tokens and XLSX numeric cells avoid JavaScript Number conversion during import. Explicit column types preserve text IDs and exact decimals; values that exceed DuckDB's decimal capacity remain text. Arrow decimal scales and raw timestamp units survive result serialization. Charts decline values that would require unsafe numeric coercion; the inspector and exports retain the exact result. Currency labels require an explicit supported ISO code. CSV/TSV automatic type inference remains a separate precision boundary documented in the connector guide.

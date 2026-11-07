@@ -1,0 +1,13 @@
+✔ four selected healthy files independently total 49 across six rows (0.94981ms)
+✔ same basenames have distinct relative identities and authored contents (0.196508ms)
+✔ malformed JSON really refuses while JSON and NDJSON have exact numeric rows (1.021785ms)
+✔ unselected 9999 decoy changes the aggregate if accidentally imported (0.227987ms)
+✔ commit-race fixture has two different ordered payloads and a known total (0.200485ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 80.035346

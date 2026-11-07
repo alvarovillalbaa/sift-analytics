@@ -8,11 +8,16 @@ import { guardRoot } from './fixtures.mjs';
 const root = process.env.SIFT_IMPORT_RUN_ROOT; const proof = process.env.SIFT_IMPORT_PROOF_DIR;
 assert.ok(root && proof); await guardRoot(root, process.env.SIFT_IMPORT_NONCE);
 assert.equal(process.version, 'v24.22.2');
+const taskStartTicks = process.env.SIFT_IMPORT_START_TICKS;
+assert.ok(/^[1-9][0-9]{0,19}$/.test(taskStartTicks ?? ''), 'A positive bounded task-start tick cutoff is required');
 const env = {};
-for (const key of ['HOME', 'PATH', 'LANG', 'LC_ALL', 'TZ', 'TMPDIR', 'TEMP', 'TMP', 'CI', 'SOURCE_COMMIT', 'SIFT_IMPORT_RUN_ROOT', 'SIFT_IMPORT_NONCE', 'SIFT_IMPORT_PROOF_DIR', 'SIFT_IMPORT_PLAYWRIGHT_DIR', 'PLAYWRIGHT_BROWSERS_PATH']) if (process.env[key] !== undefined) env[key] = process.env[key];
+for (const key of ['HOME', 'PATH', 'LANG', 'LC_ALL', 'TZ', 'TMPDIR', 'TEMP', 'TMP', 'CI', 'SOURCE_COMMIT', 'SIFT_IMPORT_RUN_ROOT', 'SIFT_IMPORT_NONCE', 'SIFT_IMPORT_START_TICKS', 'SIFT_IMPORT_PROOF_DIR', 'SIFT_IMPORT_PLAYWRIGHT_DIR', 'PLAYWRIGHT_BROWSERS_PATH']) if (process.env[key] !== undefined) env[key] = process.env[key];
 env.NODE_ENV = 'production'; env.NEXT_TELEMETRY_DISABLED = '1';
-const report = { schemaVersion: 1, sourceCommit: env.SOURCE_COMMIT, startedAt: new Date().toISOString(), commands: [], cleanup: {}, passed: false, proofLimits: ['Owned child groups and terminal pipes are observed; an external job kill remains an infrastructure boundary.'] };
+const report = { schemaVersion: 1, sourceCommit: env.SOURCE_COMMIT, startedAt: new Date().toISOString(), commands: [], cleanup: {}, passed: false, proofLimits: ['Owned child groups and terminal pipes are observed; an external job kill remains an infrastructure boundary.', 'Only exact unchanged same-UID baseline identities born before the recorded task-start cutoff are excluded from the later marker scan; task-created build/tool residue remains in scope. This is not a host-wide absence check.'] };
 const children = [];
+const baseline = new Map();
+const processLimit = 2048;
+report.processBaseline = { limit: processLimit, taskStartTicks, exclusionScope: 'exact_unchanged_pre_task_identities_only', complete: false, identities: [] };
 const workEnd = Date.now() + 360000;
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 async function identity(pid) {
@@ -22,6 +27,8 @@ async function identity(pid) {
   } catch (error) { if (error.code === 'ENOENT' || error.code === 'ESRCH') return null; throw error; }
 }
 function groupGone(pgid) { try { process.kill(-pgid, 0); return false; } catch (error) { if (error.code === 'ESRCH') return true; throw error; } }
+function sameIdentity(a, b) { return a.pid === b.pid && a.uid === b.uid && a.pgid === b.pgid && a.startTime === b.startTime; }
+function errorCode(error) { return typeof error.code === 'string' && /^[A-Z0-9_]{1,32}$/.test(error.code) ? error.code : 'UNKNOWN'; }
 async function launch(label, args) {
   const row = { label, args, pid: null, identity: null, exitCode: null, signal: null, closeObserved: false, streams: {}, signalsSent: [] };
   report.commands.push(row);
@@ -77,10 +84,20 @@ async function stop(tracked, expectedServer = false) {
   assert.ok(Object.values(tracked.row.streams).every((stream) => stream.eof && stream.descriptorClosed && !stream.overflow));
   assert.ok(!tracked.row.signalsSent.includes('SIGKILL'));
   if (!expectedServer) assert.ok(tracked.row.exitCode === 0 && tracked.row.signal === null && tracked.row.signalsSent.length === 0);
-  else assert.ok(tracked.row.exitCode === 0 || tracked.row.signal === 'SIGTERM');
+  else assert.ok(tracked.row.exitCode === 0 || tracked.row.signal === 'SIGTERM'
+    || tracked.row.exitCode === 143 && tracked.row.signal === null && tracked.row.signalsSent.length === 1 && tracked.row.signalsSent[0] === 'SIGTERM');
 }
 let server;
 try {
+  const supervisorIdentity = await identity(process.pid);
+  assert.ok(supervisorIdentity && BigInt(taskStartTicks) <= BigInt(supervisorIdentity.startTime), 'Task-start cutoff must not follow supervisor launch');
+  for (const name of await readdir('/proc')) {
+    if (!/^[0-9]+$/.test(name)) continue;
+    const info = await identity(Number(name)); if (!info || info.uid !== process.getuid()) continue;
+    assert.ok(baseline.size < processLimit, 'Same-UID process baseline exceeds its bound');
+    baseline.set(info.pid, info); report.processBaseline.identities.push(info);
+  }
+  report.processBaseline.complete = true;
   server = await launch('server', ['node_modules/next/dist/bin/next', 'start', '--hostname', '127.0.0.1', '--port', '4173']);
   const readyEnd = Math.min(Date.now() + 60000, workEnd); let ready = false;
   while (Date.now() < readyEnd) {
@@ -107,15 +124,33 @@ finally {
   }
   const ancestors = new Set([process.pid]); let ancestor = await identity(process.pid);
   while (ancestor?.ppid > 1 && !ancestors.has(ancestor.ppid)) { ancestors.add(ancestor.ppid); ancestor = await identity(ancestor.ppid); }
-  const remaining = [];
-  for (const name of await readdir('/proc')) {
-    if (!/^[0-9]+$/.test(name) || ancestors.has(Number(name))) continue;
-    const info = await identity(Number(name)); if (!info || info.uid !== process.getuid()) continue;
-    try {
-      const variables = (await readFile(`/proc/${name}/environ`)).toString().split('\0');
-      if (variables.includes(`SIFT_IMPORT_RUN_ROOT=${root}`)) remaining.push(info);
-    } catch (error) { if (!['ENOENT', 'ESRCH'].includes(error.code)) failures.push('owned_process_scan_uncertain'); }
+  const remaining = []; const skipped = []; const scanErrors = [];
+  let inspected = 0;
+  try {
+    for (const name of await readdir('/proc')) {
+      if (!/^[0-9]+$/.test(name) || ancestors.has(Number(name))) continue;
+      const info = await identity(Number(name)); if (!info || info.uid !== process.getuid()) continue;
+      assert.ok(++inspected <= processLimit, 'Same-UID process scan exceeds its bound');
+      const previous = baseline.get(info.pid);
+      if (report.processBaseline.complete && previous && sameIdentity(previous, info) && BigInt(info.startTime) < BigInt(taskStartTicks)) { skipped.push(info); continue; }
+      try {
+        const variables = (await readFile(`/proc/${name}/environ`)).toString().split('\0');
+        if (variables.includes(`SIFT_IMPORT_RUN_ROOT=${root}`)) remaining.push(info);
+      } catch (error) {
+        const record = { ...info, errno: errorCode(error), identityAfter: null, disposition: null }; scanErrors.push(record);
+        try { record.identityAfter = await identity(info.pid); }
+        catch (recheckError) { record.recheckErrno = errorCode(recheckError); record.disposition = 'identity_recheck_failed'; failures.push('owned_process_scan_uncertain'); continue; }
+        if (!record.identityAfter) record.disposition = 'vanished';
+        else if (record.identityAfter.startTime !== info.startTime) record.disposition = 'pid_reused';
+        else { record.disposition = 'stable_unreadable'; failures.push('owned_process_scan_uncertain'); }
+      }
+    }
+  } catch (error) {
+    report.cleanup.scanError = { errno: errorCode(error) }; failures.push('owned_process_scan_failed');
   }
+  report.cleanup.baselineProcessesSkipped = skipped;
+  report.cleanup.baselineProcessesSkippedCount = skipped.length;
+  report.cleanup.scanErrors = scanErrors;
   report.cleanup.ownedMarkedProcessesRemaining = remaining;
   if (remaining.length) failures.push('owned_marked_processes_remain');
   report.cleanup.failures = failures; report.passed &&= failures.length === 0;

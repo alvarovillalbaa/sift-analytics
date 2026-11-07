@@ -33,6 +33,8 @@ let browserClosing = false;
 const globalFailures = [];
 browser.on('disconnected', () => { if (!browserClosing) globalFailures.push('unexpected_browser_disconnect'); });
 const live = new Set();
+const sessionControls = new WeakMap();
+const SESSION_DEADLINE_MS = 10000;
 process.once('SIGTERM', () => {
   globalFailures.push('supervisor_deadline_signal');
   browserClosing = true;
@@ -48,10 +50,72 @@ function allowed(request) {
 }
 async function fresh(profile, result, fault = false) {
   const context = await browser.newContext({ viewport: profile === 'narrow' ? { width: 390, height: 844 } : { width: 1440, height: 1000 }, isMobile: profile === 'narrow', hasTouch: profile === 'narrow', serviceWorkers: 'block', acceptDownloads: false });
-  live.add(context); result.boundary = { requests: [], violations: [], failures: [], console: [], sessionResponses: [], expectedSessionConsole: 0, pagesCreated: 0, websockets: 0 };
+  live.add(context); result.boundary = { requests: [], violations: [], failures: [], console: [], sessionResponses: [], sessionRequests: [], sessionNavigations: [], sessionCheckpoints: [], expectedSessionConsole: 0, pagesCreated: 0, websockets: 0 };
   result.cleanup = { closeExpected: false, contextClosed: false, pageClosed: false };
   const boundary = result.boundary;
   const fail = (code) => { if (boundary.violations.length < 30) boundary.violations.push(code); };
+  const sessions = new Map(); const sessionJobs = new Set(); let navigation = 0; let sessionOverflow = false;
+  function beginNavigation(phase) {
+    navigation++;
+    boundary.sessionNavigations.push({ ordinal: navigation, phase, startedAt: Date.now() });
+  }
+  function sessionRequest(request) {
+    const url = new URL(request.url());
+    if (url.origin !== ORIGIN || url.pathname !== '/api/session') return null;
+    let row = sessions.get(request);
+    if (!row) {
+      if (sessions.size >= 16) { sessionOverflow = true; fail('session_request_bound'); return null; }
+      row = { ordinal: sessions.size + 1, navigation, method: request.method(), path: url.pathname, startedAt: Date.now(), status: null, responseAt: null,
+        requestFinishedAt: null, failedAt: null, failure: null, finishedStartedAt: null, finishedDeadlineAt: null, finishedSettledAt: null, finishedResolvedNull: false,
+        completionError: null, responseTimeoutAt: null, checkpointTimeoutAt: null };
+      sessions.set(request, row); boundary.sessionRequests.push(row);
+    }
+    return row;
+  }
+  function finishSession(response, row) {
+    if (!row || row.finishedStartedAt !== null) { fail('session_response_identity'); return; }
+    row.status = response.status(); row.responseAt = Date.now(); row.finishedStartedAt = Date.now(); row.finishedDeadlineAt = row.finishedStartedAt + SESSION_DEADLINE_MS;
+    const job = (async () => {
+      let timer;
+      try {
+        const outcome = await Promise.race([response.finished(), new Promise((_, reject) => {
+          timer = setTimeout(() => { row.responseTimeoutAt = Date.now(); reject(new Error('session_finished_timeout')); }, SESSION_DEADLINE_MS);
+        })]);
+        assert.equal(outcome, null, 'The observed session response must finish successfully');
+        if (Date.now() >= row.finishedDeadlineAt) { row.responseTimeoutAt ??= Date.now(); throw new Error('session_finished_timeout'); }
+        row.finishedResolvedNull = true;
+      } catch (error) {
+        row.completionError = String(error?.message ?? error).slice(0, 500);
+        fail(row.responseTimeoutAt ? 'session_finished_timeout' : 'session_finished_rejected');
+      } finally { clearTimeout(timer); row.finishedSettledAt = Date.now(); }
+    })();
+    sessionJobs.add(job); void job.finally(() => sessionJobs.delete(job));
+  }
+  async function settleSessions(phase) {
+    const checkpoint = { phase, navigation, startedAt: Date.now(), deadlineAt: null, settledAt: null, observedOrdinals: [], completed: false, error: null };
+    boundary.sessionCheckpoints.push(checkpoint);
+    const deadline = checkpoint.startedAt + SESSION_DEADLINE_MS;
+    checkpoint.deadlineAt = deadline;
+    try {
+      while (true) {
+        const rows = [...sessions.values()]; checkpoint.observedOrdinals = rows.map((row) => row.ordinal);
+        assert.equal(sessionOverflow, false, 'Every session request must fit the bounded identity ledger');
+        assert.ok(rows.every((row) => row.failedAt === null && row.completionError === null && row.responseTimeoutAt === null && row.checkpointTimeoutAt === null), 'An observed session request failed or timed out');
+        const observedThisNavigation = rows.some((row) => row.navigation === navigation);
+        if (Date.now() >= deadline) {
+          for (const row of rows) if (!row.finishedResolvedNull || row.requestFinishedAt === null) row.checkpointTimeoutAt ??= Date.now();
+          fail(observedThisNavigation ? 'session_checkpoint_timeout' : 'session_request_not_observed');
+          throw new Error(observedThisNavigation ? 'session_checkpoint_timeout' : 'session_request_not_observed');
+        }
+        if (observedThisNavigation && rows.every((row) => row.status === 503 && row.finishedResolvedNull && row.requestFinishedAt !== null)) {
+          checkpoint.completed = true; break;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 20));
+      }
+    } catch (error) { checkpoint.error = String(error?.message ?? error).slice(0, 500); throw error; }
+    finally { checkpoint.settledAt = Date.now(); }
+  }
+  sessionControls.set(context, { result, beginNavigation, settleSessions, drain: () => Promise.allSettled([...sessionJobs]) });
   context.on('page', (page) => {
     boundary.pagesCreated++; if (boundary.pagesCreated > 1) fail('extra_page');
     page.on('pageerror', (error) => fail(`page_error:${error.message.slice(0, 500)}`));
@@ -67,15 +131,23 @@ async function fresh(profile, result, fault = false) {
   });
   context.on('close', () => { result.cleanup.contextClosed = true; if (!result.cleanup.closeExpected) fail('unexpected_context_close'); });
   context.on('request', (request) => {
+    sessionRequest(request);
     if (boundary.requests.length < 150) boundary.requests.push({ method: request.method(), path: new URL(request.url()).pathname }); else fail('request_bound');
     const exposed = `${request.url()}\n${JSON.stringify(request.headers())}\n${request.postData() ?? ''}`;
     if (exposed.includes(CANARY)) fail('authored_canary_network_leak');
     if (!allowed(request)) fail('request_outside_finite_local_policy');
   });
-  context.on('requestfailed', (request) => { if (boundary.failures.length < 20) boundary.failures.push({ path: new URL(request.url()).pathname, failure: request.failure()?.errorText }); fail('request_failed'); });
+  context.on('requestfinished', (request) => { const row = sessions.get(request); if (row) row.requestFinishedAt = Date.now(); });
+  context.on('requestfailed', (request) => {
+    const row = sessions.get(request); if (row) { row.failedAt = Date.now(); row.failure = request.failure()?.errorText ?? 'unknown'; }
+    if (boundary.failures.length < 20) boundary.failures.push({ path: new URL(request.url()).pathname, failure: request.failure()?.errorText }); fail('request_failed');
+  });
   context.on('response', (response) => {
     const url = new URL(response.url());
-    if (url.pathname === '/api/session') { boundary.sessionResponses.push(response.status()); if (response.status() !== 503) fail('unexpected_session_configuration'); }
+    if (url.origin === ORIGIN && url.pathname === '/api/session') {
+      boundary.sessionResponses.push(response.status()); finishSession(response, sessions.get(response.request()));
+      if (response.status() !== 503) fail('unexpected_session_configuration');
+    }
     else if (response.status() >= 400) fail(`http_${response.status()}:${url.pathname}`);
   });
   await context.route('**/*', async (route) => {
@@ -112,10 +184,30 @@ async function fresh(profile, result, fault = false) {
     };
   });
   const page = await context.newPage(); page.setDefaultTimeout(15000); page.setDefaultNavigationTimeout(45000);
+  beginNavigation('startup');
   const response = await page.goto(ORIGIN, { waitUntil: 'load' }); assert.equal(response.status(), 200);
   await expect(page.getByRole('button', { name: 'Add panel', exact: true })).toBeVisible({ timeout: 60000 });
   await expect(page.getByRole('button', { name: 'Refresh', exact: true })).toBeEnabled({ timeout: 60000 });
+  await settleSessions('startup-complete');
   return { context, page };
+}
+async function reloadPage(page, context, phase) {
+  const control = sessionControls.get(context);
+  await control.settleSessions(`before-${phase}`);
+  control.beginNavigation(phase);
+  await page.reload({ waitUntil: 'load' });
+  await control.settleSessions(`after-${phase}`);
+}
+async function closeContext(context, result) {
+  const control = sessionControls.get(context);
+  try { await control.settleSessions('before-context-close'); result.cleanup.sessionsCompletedBeforeClose = true; }
+  catch (error) { result.cleanup.sessionsCompletedBeforeClose = false; result.cleanup.sessionCompletionError = String(error?.message ?? error).slice(0, 500); }
+  finally {
+    result.cleanup.closeExpected = true;
+    await context.close();
+    await control.drain();
+    live.delete(context);
+  }
 }
 async function sources(page, profile) {
   if (profile === 'narrow') await page.getByRole('button', { name: 'Open navigation', exact: true }).tap();
@@ -205,7 +297,7 @@ async function ordinary(profile, result) {
     const retried = await snapshot(page, result, 'failed-only-retry'); assertSources(retried, healthy, baseline);
     assert.deepEqual(retried.files, imported.files); assert.equal(retried.workspaceRaw, imported.workspaceRaw);
     await dialog.getByRole('button', { name: 'Close dialog', exact: true }).click();
-    await page.reload({ waitUntil: 'load' });
+    await reloadPage(page, context, 'folder-reload');
     await expect(page.getByRole('button', { name: 'Refresh', exact: true })).toBeEnabled({ timeout: 60000 }); await persistReady(page, 4);
     const restored = await snapshot(page, result, 'reload'); assertSources(restored, healthy, baseline); assert.deepEqual(restored.files, imported.files);
     assert.deepEqual(restored.workspace.datasets, imported.workspace.datasets);
@@ -242,7 +334,7 @@ async function ordinary(profile, result) {
     assert.equal(Object.hasOwn(ownView.panels[0], 'result'), false);
     await page.screenshot({ path: path.join(PROOF, `${profile}.png`), fullPage: false });
     result.checks = { folderInputRealDirectory: true, sixInitiallyUncheckedMetadataRows: true, explicitSubsetOnly: true, nestedBasenamesDistinct: true, malformedJSONPartialFailure: true, retryPreservesSuccesses: true, indexedDBDurableAfterReload: true, localSQLAggregate49AcrossSixRows: true, sharingRemainsOff: true };
-  } finally { result.cleanup.closeExpected = true; await context.close(); live.delete(context); }
+  } finally { await closeContext(context, result); }
 }
 async function commitRace(result) {
   const { context, page } = await fresh('desktop', result, true); result.snapshots = [];
@@ -264,7 +356,7 @@ async function commitRace(result) {
     assert.deepEqual(retried.files.find((file) => file.id === stopped.files[0].id), stopped.files[0]);
     await page.screenshot({ path: path.join(PROOF, 'commit-race.png'), fullPage: false });
     result.checks = { nativeTransactionActuallyCompleted: true, stopClickedByExplicitFaultControl: true, completedFileAcknowledgedDespiteLateAbort: true, queuedFileNotImportedAfterStop: true, retryImportsOnlyRemaining: true };
-  } finally { result.cleanup.closeExpected = true; await context.close(); live.delete(context); }
+  } finally { await closeContext(context, result); }
 }
 async function workbook(result) {
   const { context, page } = await fresh('desktop', result); result.snapshots = [];
@@ -301,7 +393,7 @@ async function workbook(result) {
     await page.getByRole('button', { name: `Inspect ${title}`, exact: true }).click(); dialog = page.getByRole('dialog', { name: title, exact: true });
     await expect(dialog.locator('.data-preview tbody td')).toHaveText(['9']);
     await dialog.getByRole('button', { name: 'Close dialog', exact: true }).click();
-    await page.reload({ waitUntil: 'load' }); await expect(page.getByRole('button', { name: 'Refresh', exact: true })).toBeEnabled({ timeout: 60000 }); await persistReady(page, 1);
+    await reloadPage(page, context, 'workbook-reload'); await expect(page.getByRole('button', { name: 'Refresh', exact: true })).toBeEnabled({ timeout: 60000 }); await persistReady(page, 1);
     const restored = await snapshot(page, result, 'chosen-sheet-reload'); assert.deepEqual(restored.files, imported.files);
     assert.deepEqual(restored.workspace.datasets, imported.workspace.datasets);
     await page.getByRole('button', { name: `Inspect ${title}`, exact: true }).click(); dialog = page.getByRole('dialog', { name: title, exact: true });
@@ -310,14 +402,14 @@ async function workbook(result) {
     await dialog.getByRole('button', { name: 'Close dialog', exact: true }).click();
     // Explicit missing-metadata fault control; this is not a normal persistence step.
     await page.evaluate(() => localStorage.removeItem('sift.workspace.v1'));
-    await page.reload({ waitUntil: 'load' }); await expect(page.getByRole('button', { name: 'Refresh', exact: true })).toBeEnabled({ timeout: 60000 }); await persistReady(page, 1);
+    await reloadPage(page, context, 'missing-metadata-reload'); await expect(page.getByRole('button', { name: 'Refresh', exact: true })).toBeEnabled({ timeout: 60000 }); await persistReady(page, 1);
     const withoutMetadata = await snapshot(page, result, 'injected-missing-workspace-metadata');
     assert.deepEqual(withoutMetadata.files, imported.files);
     assert.equal(withoutMetadata.workspace.shareSchema, false); assert.equal(withoutMetadata.workspace.shareResults, false);
     assert.equal(withoutMetadata.workspace.datasets.find((item) => item.id === dataset.id).name, `${file.path} · South`);
     result.workbook = { bytes: file.bytes, sha256: file.sha256, sheets: ['North', 'South'], selected: 'South', unselectedControlAmount: 99, actualSouthAmount: '9', sql };
     result.checks = { realFileChooser: true, importGatedUntilSheetInspection: true, twoNativeSheetsObserved: true, selectedSouthImported: true, localSQLReturns9Not99: true, chosenSheetAndBytesPersistAfterReload: true, injectedMissingMetadataKeepsSharingOffAndFileIntact: true };
-  } finally { result.cleanup.closeExpected = true; await context.close(); live.delete(context); }
+  } finally { await closeContext(context, result); }
 }
 try {
   for (const [id, title, action] of [
@@ -331,14 +423,16 @@ try {
       await action(result);
       assert.deepEqual(result.boundary.violations, []); assert.deepEqual(result.boundary.failures, []); assert.deepEqual(result.boundary.console, []);
       assert.ok(result.boundary.sessionResponses.length >= 1 && result.boundary.sessionResponses.every((status) => status === 503));
+      assert.ok(result.boundary.sessionRequests.length >= 1 && result.boundary.sessionRequests.every((row) => row.status === 503 && row.finishedResolvedNull && row.requestFinishedAt !== null && row.failedAt === null && row.completionError === null && row.responseTimeoutAt === null && row.checkpointTimeoutAt === null));
+      assert.ok(result.boundary.sessionCheckpoints.every((checkpoint) => checkpoint.completed));
       assert.ok(result.boundary.expectedSessionConsole <= result.boundary.sessionResponses.length);
       assert.equal(result.boundary.pagesCreated, 1); assert.equal(result.boundary.websockets, 0);
-      assert.ok(result.cleanup.contextClosed && result.cleanup.pageClosed); result.status = 'passed';
+      assert.ok(result.cleanup.contextClosed && result.cleanup.pageClosed && result.cleanup.sessionsCompletedBeforeClose); result.status = 'passed';
     } catch (error) { result.status = 'failed'; result.error = String(error.stack ?? error).slice(0, 12000); }
     await writeFile(path.join(PROOF, 'browser.json'), `${JSON.stringify(report, null, 2)}\n`);
   }
 } finally {
-  for (const context of live) await context.close().catch(() => globalFailures.push('unclosed_context'));
+  for (const context of live) await closeContext(context, sessionControls.get(context).result).catch(() => globalFailures.push('unclosed_context'));
   browserClosing = true; await browser.close();
   report.fixtureUnchanged = await verifyFixture(fixtures) && await verifyFixture(raceFixture);
   report.globalFailures = globalFailures;
