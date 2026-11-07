@@ -61,6 +61,8 @@ Folder selection is a one-time snapshot, with relative paths retained as source 
 
 See [Vercel and self-hosting](docs/deployment.md), [architecture](docs/architecture.md), and [connector SDK](docs/connectors.md). eve is preview software; the dependency lockfile captures this release's framework versions.
 
+The [focused local-import receipt](docs/results/2026/11-07/local-import-checks.md) records 27 authored checks, a real production build and four passing desktop/narrow Chromium scenarios. It separates actual browser-local file/SQL proof from hosted bootstrap, model, PostgreSQL and physical-device acceptance.
+
 ## License
 
 MIT. See [LICENSE](LICENSE).

@@ -1,0 +1,7 @@
+{
+  "scope": "Independent DNS observation after the anonymous HTTP transport failure; not an HTTP access result",
+  "hostname": "sift-analytics.vercel.app",
+  "errorType": "gaierror",
+  "errno": 8,
+  "message": "[Errno 8] nodename nor servname provided, or not known"
+}

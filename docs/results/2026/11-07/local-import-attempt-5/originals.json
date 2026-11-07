@@ -1,0 +1,133 @@
+{
+  "sourceCommit": "3b06822cf61ad5a18c0029004366f000a5f9db7f",
+  "runId": 42408226622,
+  "jobId": 128510469802,
+  "passed": true,
+  "files": [
+    {
+      "name": "browser.json.gz",
+      "bytes": 16239,
+      "sha256": "8715b21a86129a295469fe2960c64018302b1fad9564b646f0d9ee842f86d83c",
+      "uncompressedName": "browser.json",
+      "uncompressedBytes": 341917,
+      "uncompressedSha256": "08fd0daa97c4ba23f002aa7cc80812273d89baa79cba50d703c38c8f508be3ef"
+    },
+    {
+      "name": "browser.stderr.log.gz",
+      "bytes": 20,
+      "sha256": "f1b651238a58fe290baec6c5e32f3bdb1943dd2bd582f02569231f7a757c7837",
+      "uncompressedName": "browser.stderr.log",
+      "uncompressedBytes": 0,
+      "uncompressedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "browser.stdout.log.gz",
+      "bytes": 20,
+      "sha256": "f1b651238a58fe290baec6c5e32f3bdb1943dd2bd582f02569231f7a757c7837",
+      "uncompressedName": "browser.stdout.log",
+      "uncompressedBytes": 0,
+      "uncompressedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "build.log.gz",
+      "bytes": 1379,
+      "sha256": "0ac40fe08e1708e962a4bf982d19ef00e9b5e5509623cd9ea23a5dbdd46cfb08",
+      "uncompressedName": "build.log",
+      "uncompressedBytes": 8134,
+      "uncompressedSha256": "909e7142374bf639a225bc895f73df25ca59155908617fff49beb6460585a650"
+    },
+    {
+      "name": "commit-race.png",
+      "bytes": 208638,
+      "sha256": "9b4ac53e9942ec5795dc615e33de269ebceca04b8790080a3e67f33ac479e431"
+    },
+    {
+      "name": "desktop.png",
+      "bytes": 107572,
+      "sha256": "2e283cfc48d0ec9cc4499ccfae61e0bd2f70055c6a16d6e477063b469c09b5c9"
+    },
+    {
+      "name": "fixture-manifest.json",
+      "bytes": 4193,
+      "sha256": "7232d47ff251f76f9c1ca884a2ee6e3d66788acc6412c76858049fd8bc919c04"
+    },
+    {
+      "name": "fixture-tests.tap",
+      "bytes": 555,
+      "sha256": "d07869c6dd1758e54535f933d07143aea11da044b936fffff72175f8c21866a3"
+    },
+    {
+      "name": "install.log.gz",
+      "bytes": 46,
+      "sha256": "c83641dd330d9e2dc77dad5418a73c8a4ae4f783dfaa8006b061898308e6320c",
+      "uncompressedName": "install.log",
+      "uncompressedBytes": 26,
+      "uncompressedSha256": "69aad571096d95a7f131c2fb9a2087111543cf51fd7f8c6d7062e8705ef203a4"
+    },
+    {
+      "name": "narrow.png",
+      "bytes": 46868,
+      "sha256": "68049ea8049c225c531e337c3a119589a86f6afc676a6fb1aa1141780eeb3179"
+    },
+    {
+      "name": "run.json",
+      "bytes": 4390,
+      "sha256": "92beb23c0ba151f89e4b87ab31bd0ef5fa7eb106f7b0576aba670b40d014abd3"
+    },
+    {
+      "name": "server.stderr.log.gz",
+      "bytes": 20,
+      "sha256": "f1b651238a58fe290baec6c5e32f3bdb1943dd2bd582f02569231f7a757c7837",
+      "uncompressedName": "server.stderr.log",
+      "uncompressedBytes": 0,
+      "uncompressedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "server.stdout.log.gz",
+      "bytes": 164,
+      "sha256": "c1520ef54abe17a118cee6180944a00ef351293463fc1d1e258b447d577cf563",
+      "uncompressedName": "server.stdout.log",
+      "uncompressedBytes": 204,
+      "uncompressedSha256": "f326b3e8bead0d61e0388c35361abb4e0b8187c18fe87c462e6dfe493c26b787"
+    },
+    {
+      "name": "source-after.json.gz",
+      "bytes": 8860,
+      "sha256": "9f5df3834ced49a88e00b19b3ae3b351898a434eebc6d772cceb8d02cb093c23",
+      "uncompressedName": "source-after.json",
+      "uncompressedBytes": 43592,
+      "uncompressedSha256": "02817ea4607ea396eb4c67c7d9a5239619e6360c6bfa7e7ddd9f99e41cba3dd5"
+    },
+    {
+      "name": "source-before.json.gz",
+      "bytes": 8860,
+      "sha256": "9f5df3834ced49a88e00b19b3ae3b351898a434eebc6d772cceb8d02cb093c23",
+      "uncompressedName": "source-before.json",
+      "uncompressedBytes": 43592,
+      "uncompressedSha256": "02817ea4607ea396eb4c67c7d9a5239619e6360c6bfa7e7ddd9f99e41cba3dd5"
+    },
+    {
+      "name": "tools-lock.json",
+      "bytes": 1064,
+      "sha256": "2fa84b8293c8e0da7953f61ce00ae75c27f19081d3f3f5e5017b077f053377ad"
+    },
+    {
+      "name": "unit-tests.tap",
+      "bytes": 2531,
+      "sha256": "626d797a2d31a0c704c995c6cd7c923c46a988e2648938331f39add869c420d0"
+    },
+    {
+      "name": "workbook.png",
+      "bytes": 172037,
+      "sha256": "5db84cb22a34c6e0fcf251c1cf4c6e9e0e3757be221b3133511f59b27fdc1745"
+    },
+    {
+      "name": "job.log.gz",
+      "bytes": 573587,
+      "sha256": "26e69f36d216d583386ee836eb63dc933a8ab55721aef23d78a629256789d8ab",
+      "uncompressedName": "job.log",
+      "uncompressedBytes": 849016,
+      "uncompressedSha256": "1bc3fa3f9f600f1ba9643675bc697e138fdd401c7e5b214f9ff59a8855fce226"
+    }
+  ]
+}

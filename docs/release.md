@@ -64,3 +64,11 @@ text identifier cannot silently become a numeric measure. The
 [owning receipt](results/2026/10-28/panel-measures.md) records ten passing focused
 frontend source checks, five matching baseline failures and separate hosted/
 browser proof limits. This does not change the deferred AI-session setup.
+
+## Local folder imports — 2026-11-07
+
+Explicit local folder/multiple-file selection now previews metadata before reading contents, preserves nested source paths, bounds each selection and reports independent file outcomes. Workbook sheet choice, successful-file retry exclusion, commit-aware cancellation and privacy recovery survive reloads. Saved dataset ordering, the SQL editor label, client session-body consumption and the mobile navigation close hit area were corrected during actual acceptance.
+
+The [owning result](results/2026/11-07/local-import-checks.md) records five fixture/22 selection passes, a real eve/Next build and four passing desktop/narrow Chromium scenarios at `3b06822cf61ad5a18c0029004366f000a5f9db7f`. All four earlier failed packets remain retained. Strict 122-file source guards, eight session-response completions and owned process cleanup passed; no source-check or abort waiver was used. The temporary browser workflow is retired.
+
+Vercel `dpl_J5ZPhyWokYaNF9gYzRE13LqH2L3R` is READY at that checked source and canonical alias. Hosted HTTP and hosted-browser evidence remain separate. AI-session signing setup stays explicitly deferred; no paid plan, account, provider/model call, database migration or production-data fixture is part of this release.

@@ -9,9 +9,10 @@ Sift separates a source, an access mode, and an execution location. A connector 
 | Source | Access and execution | Scope and limits | Current verification boundary |
 | --- | --- | --- | --- |
 | Deterministic SaaS sample | SQL in a browser DuckDB worker | One registered sample table; 432 rows | SQL policy and deterministic generation checked; runtime and rendered results require browser verification |
-| CSV / TSV | Local upload → DuckDB worker | 20 MB/file; first row is a header | Implemented; live import, restoration, and edge-case format checks remain acceptance work |
-| JSON / JSONL / NDJSON | Local parsing → DuckDB worker | Array of objects or one object per line; nested values become JSON strings; at most 1,000 columns | Implemented; live format and type verification remains acceptance work |
-| Excel XLSX | Local workbook/sheet selection → DuckDB worker | Header row plus data; 20 MB/file; at most 1,000 columns | Implemented using `read-excel-file`; legacy `.xls` is not supported |
+| CSV / TSV | Local upload → DuckDB worker | 20 MB/file; first row is a header | Authored CSV import/retry/reload and SQL passed in the [focused browser packet](results/2026/11-07/local-import-checks.md); TSV and general format/type edges remain unverified |
+| JSON / JSONL / NDJSON | Local parsing → DuckDB worker | Array of objects or one object per line; nested values become JSON strings; at most 1,000 columns | Authored JSON/NDJSON, malformed-JSON refusal, reload and SQL passed; JSONL and general type edges remain unverified |
+| Excel XLSX | Local workbook/sheet selection → DuckDB worker | Header row plus data; 20 MB/file; at most 1,000 columns | Authored two-sheet selection, selected values and reload passed; general/customer workbooks remain unverified; legacy `.xls` is unsupported |
+| Local folder snapshot | Explicit local metadata preview and subset → DuckDB worker | 200 preview files; 20 selected/100 MiB per run; 20 MiB/file; no synchronization | Desktop/narrow Chromium, nested names, partial failure/retry, exact persistence and SQL passed with authored fixtures |
 | Parquet | Registered local file → DuckDB worker | 20 MB/file | Implemented; live Parquet/type checks remain acceptance work |
 | PostgreSQL | Live SQL on the deployment server | Administrator-configured `schema.table` allowlist; access token; one connection per query; 1,000-row result; 10-second SQL deadline | Adapter and API implemented; no database credentials or live-source proof assumed |
 | MySQL, SQL Server, Sheets, warehouses, SaaS, semantic models, streams, private workers | No shipped implementation | No supported mode declared | Extension candidates |

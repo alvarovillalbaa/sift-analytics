@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "origin": "https://sift-analytics.vercel.app",
+  "expectedDeploymentFromOwner": "dpl_J5ZPhyWokYaNF9gYzRE13LqH2L3R",
+  "expectedSourceFromOwner": "3b06822cf61ad5a18c0029004366f000a5f9db7f",
+  "startedAt": "2026-11-07T20:00:11.143135Z",
+  "requests": [
+    {
+      "name": "home",
+      "method": "GET",
+      "url": "https://sift-analytics.vercel.app/",
+      "startedAt": "2026-11-07T20:00:11.143600Z",
+      "secondsLimit": 15,
+      "byteLimit": 1048576,
+      "status": null,
+      "error": "URLError",
+      "complete": false,
+      "finishedAt": "2026-11-07T20:00:11.185413Z"
+    }
+  ],
+  "matchedAsset": null,
+  "bodyBytesRetained": 0,
+  "proofLimits": [
+    "Anonymous HTTP only; no hosted browser, file import, IndexedDB, query, model, account or production-write proof.",
+    "Owner supplied deployment/source identity is context, not independently re-attested by these HTTP requests.",
+    "Header files are Python parsed-header serializations, not wire-byte captures; sensitive values are confined to 0600 private files and redacted from labelled sanitized files.",
+    "Bodies are bounded original HTTP representations requested with Accept-Encoding identity; incomplete prefixes are explicitly marked, not full-file hashes.",
+    "No cookies/auth sent, no inherited proxy, no redirects followed, no protection bypass or authentication retry."
+  ],
+  "httpReleaseObserved": false,
+  "stoppedAfterAnonymousHomepageFailure": true,
+  "finishedAt": "2026-11-07T20:00:11.185434Z"
+}
