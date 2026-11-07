@@ -1,0 +1,553 @@
+{
+  "schemaVersion": 1,
+  "tier": "T2",
+  "sourceCommit": "e3a47a915be3245790cc7707def6d0dbd5660691",
+  "node": "v24.22.2",
+  "cases": [
+    {
+      "id": "L01",
+      "title": "desktop explicit folder subset persists and queries with real DuckDB",
+      "status": "failed",
+      "boundary": {
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/0ltmrrmwj_9bl.css"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/3333gs1h_w689.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/3xmius13vdsx2.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/2khxl0v1q4i6n.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/turbopack-2c3mg3r-05n1w.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/0umf92h1sb77c.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/0j67kanh3xhu8.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/0mnxoc5y6y05p.js"
+          },
+          {
+            "method": "POST",
+            "path": "/api/session"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/41_02ne0xksvf.js"
+          },
+          {
+            "method": "GET",
+            "path": "/duckdb/duckdb-browser-mvp.worker.js"
+          },
+          {
+            "method": "GET",
+            "path": "/duckdb/duckdb-mvp.wasm"
+          }
+        ],
+        "violations": [
+          "session_finished_timeout"
+        ],
+        "failures": [],
+        "console": [],
+        "sessionResponses": [
+          503
+        ],
+        "sessionRequests": [
+          {
+            "ordinal": 1,
+            "navigation": 1,
+            "method": "POST",
+            "path": "/api/session",
+            "startedAt": 1794080270852,
+            "status": 503,
+            "responseAt": 1794080270873,
+            "requestFinishedAt": null,
+            "failedAt": null,
+            "failure": null,
+            "finishedStartedAt": 1794080270873,
+            "finishedDeadlineAt": 1794080280873,
+            "finishedSettledAt": 1794080280873,
+            "finishedResolvedNull": false,
+            "completionError": "session_finished_timeout",
+            "responseTimeoutAt": 1794080280873,
+            "checkpointTimeoutAt": null
+          }
+        ],
+        "sessionNavigations": [
+          {
+            "ordinal": 1,
+            "phase": "startup",
+            "startedAt": 1794080270531
+          }
+        ],
+        "sessionCheckpoints": [
+          {
+            "phase": "startup-complete",
+            "navigation": 1,
+            "startedAt": 1794080272674,
+            "deadlineAt": 1794080282674,
+            "settledAt": 1794080280873,
+            "observedOrdinals": [
+              1
+            ],
+            "completed": false,
+            "error": "An observed session request failed or timed out"
+          },
+          {
+            "phase": "before-context-close",
+            "navigation": 1,
+            "startedAt": 1794080311885,
+            "deadlineAt": 1794080321885,
+            "settledAt": 1794080311885,
+            "observedOrdinals": [
+              1
+            ],
+            "completed": false,
+            "error": "An observed session request failed or timed out"
+          }
+        ],
+        "expectedSessionConsole": 1,
+        "pagesCreated": 1,
+        "websockets": 0
+      },
+      "cleanup": {
+        "closeExpected": true,
+        "contextClosed": true,
+        "pageClosed": true,
+        "sessionsCompletedBeforeClose": false,
+        "sessionCompletionError": "An observed session request failed or timed out"
+      },
+      "error": "AssertionError [ERR_ASSERTION]: An observed session request failed or timed out\n    at settleSessions (file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/local-import.spec.mjs:103:16)\n    at async fresh (file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/local-import.spec.mjs:191:3)\n    at async ordinary (file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/local-import.spec.mjs:271:29)\n    at async file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/local-import.spec.mjs:423:7"
+    },
+    {
+      "id": "L02",
+      "title": "narrow touch explicit folder subset persists and queries with real DuckDB",
+      "status": "failed",
+      "boundary": {
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/0ltmrrmwj_9bl.css"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/3333gs1h_w689.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/3xmius13vdsx2.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/2khxl0v1q4i6n.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/turbopack-2c3mg3r-05n1w.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/0umf92h1sb77c.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/0j67kanh3xhu8.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/0mnxoc5y6y05p.js"
+          },
+          {
+            "method": "POST",
+            "path": "/api/session"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/41_02ne0xksvf.js"
+          },
+          {
+            "method": "GET",
+            "path": "/duckdb/duckdb-browser-mvp.worker.js"
+          },
+          {
+            "method": "GET",
+            "path": "/duckdb/duckdb-mvp.wasm"
+          }
+        ],
+        "violations": [
+          "session_finished_timeout"
+        ],
+        "failures": [],
+        "console": [],
+        "sessionResponses": [
+          503
+        ],
+        "sessionRequests": [
+          {
+            "ordinal": 1,
+            "navigation": 1,
+            "method": "POST",
+            "path": "/api/session",
+            "startedAt": 1794080281185,
+            "status": 503,
+            "responseAt": 1794080281194,
+            "requestFinishedAt": null,
+            "failedAt": null,
+            "failure": null,
+            "finishedStartedAt": 1794080281194,
+            "finishedDeadlineAt": 1794080291194,
+            "finishedSettledAt": 1794080291195,
+            "finishedResolvedNull": false,
+            "completionError": "session_finished_timeout",
+            "responseTimeoutAt": 1794080291194,
+            "checkpointTimeoutAt": null
+          }
+        ],
+        "sessionNavigations": [
+          {
+            "ordinal": 1,
+            "phase": "startup",
+            "startedAt": 1794080280904
+          }
+        ],
+        "sessionCheckpoints": [
+          {
+            "phase": "startup-complete",
+            "navigation": 1,
+            "startedAt": 1794080283010,
+            "deadlineAt": 1794080293010,
+            "settledAt": 1794080291203,
+            "observedOrdinals": [
+              1
+            ],
+            "completed": false,
+            "error": "An observed session request failed or timed out"
+          },
+          {
+            "phase": "before-context-close",
+            "navigation": 1,
+            "startedAt": 1794080311897,
+            "deadlineAt": 1794080321897,
+            "settledAt": 1794080311897,
+            "observedOrdinals": [
+              1
+            ],
+            "completed": false,
+            "error": "An observed session request failed or timed out"
+          }
+        ],
+        "expectedSessionConsole": 1,
+        "pagesCreated": 1,
+        "websockets": 0
+      },
+      "cleanup": {
+        "closeExpected": true,
+        "contextClosed": true,
+        "pageClosed": true,
+        "sessionsCompletedBeforeClose": false,
+        "sessionCompletionError": "An observed session request failed or timed out"
+      },
+      "error": "AssertionError [ERR_ASSERTION]: An observed session request failed or timed out\n    at settleSessions (file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/local-import.spec.mjs:103:16)\n    at async fresh (file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/local-import.spec.mjs:191:3)\n    at async ordinary (file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/local-import.spec.mjs:271:29)\n    at async file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/local-import.spec.mjs:423:7"
+    },
+    {
+      "id": "L03",
+      "title": "native IndexedDB completion before Stop preserves the committed file and retries only the queue",
+      "status": "failed",
+      "boundary": {
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/0ltmrrmwj_9bl.css"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/3333gs1h_w689.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/3xmius13vdsx2.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/2khxl0v1q4i6n.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/turbopack-2c3mg3r-05n1w.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/0umf92h1sb77c.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/0j67kanh3xhu8.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/0mnxoc5y6y05p.js"
+          },
+          {
+            "method": "POST",
+            "path": "/api/session"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/41_02ne0xksvf.js"
+          },
+          {
+            "method": "GET",
+            "path": "/duckdb/duckdb-browser-mvp.worker.js"
+          },
+          {
+            "method": "GET",
+            "path": "/duckdb/duckdb-mvp.wasm"
+          }
+        ],
+        "violations": [
+          "session_finished_timeout"
+        ],
+        "failures": [],
+        "console": [],
+        "sessionResponses": [
+          503
+        ],
+        "sessionRequests": [
+          {
+            "ordinal": 1,
+            "navigation": 1,
+            "method": "POST",
+            "path": "/api/session",
+            "startedAt": 1794080291531,
+            "status": 503,
+            "responseAt": 1794080291541,
+            "requestFinishedAt": null,
+            "failedAt": null,
+            "failure": null,
+            "finishedStartedAt": 1794080291541,
+            "finishedDeadlineAt": 1794080301541,
+            "finishedSettledAt": 1794080301541,
+            "finishedResolvedNull": false,
+            "completionError": "session_finished_timeout",
+            "responseTimeoutAt": 1794080301541,
+            "checkpointTimeoutAt": null
+          }
+        ],
+        "sessionNavigations": [
+          {
+            "ordinal": 1,
+            "phase": "startup",
+            "startedAt": 1794080291231
+          }
+        ],
+        "sessionCheckpoints": [
+          {
+            "phase": "startup-complete",
+            "navigation": 1,
+            "startedAt": 1794080293356,
+            "deadlineAt": 1794080303356,
+            "settledAt": 1794080301548,
+            "observedOrdinals": [
+              1
+            ],
+            "completed": false,
+            "error": "An observed session request failed or timed out"
+          },
+          {
+            "phase": "before-context-close",
+            "navigation": 1,
+            "startedAt": 1794080311901,
+            "deadlineAt": 1794080321901,
+            "settledAt": 1794080311901,
+            "observedOrdinals": [
+              1
+            ],
+            "completed": false,
+            "error": "An observed session request failed or timed out"
+          }
+        ],
+        "expectedSessionConsole": 1,
+        "pagesCreated": 1,
+        "websockets": 0
+      },
+      "cleanup": {
+        "closeExpected": true,
+        "contextClosed": true,
+        "pageClosed": true,
+        "sessionsCompletedBeforeClose": false,
+        "sessionCompletionError": "An observed session request failed or timed out"
+      },
+      "error": "AssertionError [ERR_ASSERTION]: An observed session request failed or timed out\n    at settleSessions (file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/local-import.spec.mjs:103:16)\n    at async fresh (file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/local-import.spec.mjs:191:3)\n    at async commitRace (file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/local-import.spec.mjs:340:29)\n    at async file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/local-import.spec.mjs:423:7"
+    },
+    {
+      "id": "L04",
+      "title": "actual XLSX sheet selection imports South and restores its chosen sheet after reload",
+      "status": "failed",
+      "boundary": {
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/0ltmrrmwj_9bl.css"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/3333gs1h_w689.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/3xmius13vdsx2.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/2khxl0v1q4i6n.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/turbopack-2c3mg3r-05n1w.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/0umf92h1sb77c.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/0j67kanh3xhu8.js"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/0mnxoc5y6y05p.js"
+          },
+          {
+            "method": "POST",
+            "path": "/api/session"
+          },
+          {
+            "method": "GET",
+            "path": "/_next/static/chunks/41_02ne0xksvf.js"
+          },
+          {
+            "method": "GET",
+            "path": "/duckdb/duckdb-browser-mvp.worker.js"
+          },
+          {
+            "method": "GET",
+            "path": "/duckdb/duckdb-mvp.wasm"
+          }
+        ],
+        "violations": [
+          "session_finished_timeout"
+        ],
+        "failures": [],
+        "console": [],
+        "sessionResponses": [
+          503
+        ],
+        "sessionRequests": [
+          {
+            "ordinal": 1,
+            "navigation": 1,
+            "method": "POST",
+            "path": "/api/session",
+            "startedAt": 1794080301855,
+            "status": 503,
+            "responseAt": 1794080301863,
+            "requestFinishedAt": null,
+            "failedAt": null,
+            "failure": null,
+            "finishedStartedAt": 1794080301863,
+            "finishedDeadlineAt": 1794080311863,
+            "finishedSettledAt": 1794080311864,
+            "finishedResolvedNull": false,
+            "completionError": "session_finished_timeout",
+            "responseTimeoutAt": 1794080311864,
+            "checkpointTimeoutAt": null
+          }
+        ],
+        "sessionNavigations": [
+          {
+            "ordinal": 1,
+            "phase": "startup",
+            "startedAt": 1794080301577
+          }
+        ],
+        "sessionCheckpoints": [
+          {
+            "phase": "startup-complete",
+            "navigation": 1,
+            "startedAt": 1794080303680,
+            "deadlineAt": 1794080313680,
+            "settledAt": 1794080311883,
+            "observedOrdinals": [
+              1
+            ],
+            "completed": false,
+            "error": "An observed session request failed or timed out"
+          },
+          {
+            "phase": "before-context-close",
+            "navigation": 1,
+            "startedAt": 1794080311906,
+            "deadlineAt": 1794080321906,
+            "settledAt": 1794080311906,
+            "observedOrdinals": [
+              1
+            ],
+            "completed": false,
+            "error": "An observed session request failed or timed out"
+          }
+        ],
+        "expectedSessionConsole": 1,
+        "pagesCreated": 1,
+        "websockets": 0
+      },
+      "cleanup": {
+        "closeExpected": true,
+        "contextClosed": true,
+        "pageClosed": true,
+        "sessionsCompletedBeforeClose": false,
+        "sessionCompletionError": "An observed session request failed or timed out"
+      },
+      "error": "AssertionError [ERR_ASSERTION]: An observed session request failed or timed out\n    at settleSessions (file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/local-import.spec.mjs:103:16)\n    at async fresh (file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/local-import.spec.mjs:191:3)\n    at async workbook (file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/local-import.spec.mjs:362:29)\n    at async file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/local-import.spec.mjs:423:7"
+    }
+  ],
+  "passed": false,
+  "proofLimits": [
+    "Authored files and private Chromium contexts only; no customer folder, server database, account or model.",
+    "L03 explicitly injects a native IndexedDB completion/Stop-button race; it is not ordinary-user timing evidence.",
+    "XLSX proof uses one authored two-sheet workbook; Parquet, model analysis and deployed hosting are outside these four cases."
+  ],
+  "browser": "158.0.8127.18",
+  "fixtureUnchanged": true,
+  "globalFailures": []
+}

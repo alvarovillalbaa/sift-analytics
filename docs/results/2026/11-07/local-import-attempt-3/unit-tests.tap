@@ -1,0 +1,34 @@
+(node:2289) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/sift-analytics/sift-analytics/tests/unit/local-import.test.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/runner/work/sift-analytics/sift-analytics/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ Supported extensions produce deterministic sorted candidates without reading contents (2.231595ms)
+✔ File mode ignores folder metadata and uses only file.name (0.234882ms)
+✔ Folder paths retain spaces and Unicode beneath one common root (0.3406ms)
+✔ Unsafe folder paths remain visible and cannot be selected (0.412007ms)
+✔ Folder selection requires an actual root and matching file basename (0.200681ms)
+✔ A folder path at the 4,096-character boundary is allowed (0.178647ms)
+✔ Paths above 4,096 characters are visibly refused in folder and file mode (0.284687ms)
+✔ Mixed folder roots invalidate all well-formed rows rather than choosing an arbitrary root (0.16039ms)
+✔ Every exact duplicate path is visibly rejected and still has a distinct ID (0.208683ms)
+✔ Only exact duplicate paths collide; case-distinct names remain distinct (0.223024ms)
+✔ Unsupported, empty and oversized files remain visible with readable errors (0.22638ms)
+✔ A 20 MiB file is allowed but invalid numeric metadata is refused (0.194722ms)
+✔ Exactly 200 metadata candidates are allowed (1.785776ms)
+✔ More than 200 candidates are refused before any file metadata is accessed (0.358467ms)
+✔ FileList-like indexed collections are accepted and oversized lists are refused before indexed access (0.208092ms)
+✔ Invalid unselected rows do not block a valid explicit subset (0.128542ms)
+✔ Empty, unknown, malformed and repeated selection IDs are refused (0.112419ms)
+✔ An invalid or duplicate candidate identity is refused without ambiguity (0.11375ms)
+✔ At most twenty files can be selected independently of the preview count (0.269644ms)
+✔ The aggregate limit permits exactly 100 MiB and refuses a larger selection (0.152008ms)
+✔ Selection validation checks file metadata again and rejects duplicated paths (0.105779ms)
+✔ Planning and validation leave caller-owned arrays and candidates unchanged (0.180831ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 298.719198

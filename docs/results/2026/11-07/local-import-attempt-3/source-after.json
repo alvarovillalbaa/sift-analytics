@@ -1,0 +1,770 @@
+{
+  "head": "e3a47a915be3245790cc7707def6d0dbd5660691",
+  "files": [
+    {
+      "path": ".dockerignore",
+      "mode": "100644",
+      "blob": "02fec69ef2034a2fd1785260e975428b608c93f3",
+      "observedMode": "100644",
+      "observedBlob": "02fec69ef2034a2fd1785260e975428b608c93f3",
+      "bytes": 79,
+      "sha256": "640bb5ab685c20f6c3874c37b67f59eb9e3733d9f732d25e0b1a0c04afee3e59"
+    },
+    {
+      "path": ".env.example",
+      "mode": "100644",
+      "blob": "ccfc54b01fb0844628a6f6d1844cb2bbfe94adeb",
+      "observedMode": "100644",
+      "observedBlob": "ccfc54b01fb0844628a6f6d1844cb2bbfe94adeb",
+      "bytes": 421,
+      "sha256": "87ab4aa879af8f802838d36988879fcb0744271cc4592195bbb3bbaec74f496b"
+    },
+    {
+      "path": ".github/workflows/local-import-checks.yml",
+      "mode": "100644",
+      "blob": "94f2a3f3bba952d034e8f02d5cc79ba969355005",
+      "observedMode": "100644",
+      "observedBlob": "94f2a3f3bba952d034e8f02d5cc79ba969355005",
+      "bytes": 5309,
+      "sha256": "25575ce92a7878c29483854013d5f87065dbd3831e9283b770efd9fee37be9da"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "blob": "3e72c65abb7bee82d919b35e21d8d3ba79a2ff3f",
+      "observedMode": "100644",
+      "observedBlob": "3e72c65abb7bee82d919b35e21d8d3ba79a2ff3f",
+      "bytes": 104,
+      "sha256": "f06d282499267b8d2fd0cb42cf1103a24957bd05c800b398bae886cd05ffa9b0"
+    },
+    {
+      "path": ".nvmrc",
+      "mode": "100644",
+      "blob": "a45fd52cc5891570d6299fab38643103c3955474",
+      "observedMode": "100644",
+      "observedBlob": "a45fd52cc5891570d6299fab38643103c3955474",
+      "bytes": 3,
+      "sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+    },
+    {
+      "path": "AGENTS.md",
+      "mode": "100644",
+      "blob": "cd683220a0ae6a06b4c82424b36f03b6d208b25c",
+      "observedMode": "100644",
+      "observedBlob": "cd683220a0ae6a06b4c82424b36f03b6d208b25c",
+      "bytes": 950,
+      "sha256": "7957af970de3a23293287d8a35d179371396f3fc3cb5ab24c33414d26cb91aee"
+    },
+    {
+      "path": "Dockerfile",
+      "mode": "100644",
+      "blob": "aa1cc9db07d51f58e6018cf02dbe3b85e29bc102",
+      "observedMode": "100644",
+      "observedBlob": "aa1cc9db07d51f58e6018cf02dbe3b85e29bc102",
+      "bytes": 290,
+      "sha256": "b07fa4f49c4cd4ab5f39cfc66640f970349a1bcf86ce12c82356415a87d69f2c"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "blob": "5fb52b674e5a4d756d26a8fc3619651bb3b28798",
+      "observedMode": "100644",
+      "observedBlob": "5fb52b674e5a4d756d26a8fc3619651bb3b28798",
+      "bytes": 1072,
+      "sha256": "7edafcd8ebca4ecabedfad6e3c3d4872ce0ef6b49c3658a8b6e644cfb884d32d"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "blob": "f1f381a082c36300e1f0f36650ffc95ca2eebefd",
+      "observedMode": "100644",
+      "observedBlob": "f1f381a082c36300e1f0f36650ffc95ca2eebefd",
+      "bytes": 4990,
+      "sha256": "f0d8b9d66e8217f6a482ea4b6153ed41bbaf0ce10b9174416c5b732d259adbad"
+    },
+    {
+      "path": "agent/agent.ts",
+      "mode": "100644",
+      "blob": "3805998fbec83eb349a3a3e4f079af4c442c8aec",
+      "observedMode": "100644",
+      "observedBlob": "3805998fbec83eb349a3a3e4f079af4c442c8aec",
+      "bytes": 297,
+      "sha256": "6dbdae8eab324f2c6848a82f5bac275d9b8b4257ab691eb5f57b8897c227ac1e"
+    },
+    {
+      "path": "agent/channels/eve.ts",
+      "mode": "100644",
+      "blob": "9737c6ba4becf2cc3c1072d68f80423ffef67dd6",
+      "observedMode": "100644",
+      "observedBlob": "9737c6ba4becf2cc3c1072d68f80423ffef67dd6",
+      "bytes": 6553,
+      "sha256": "6f215d91707e96b165fea7ec4ebb052c0bbd5bfcc1d3313fedc19b913e48571e"
+    },
+    {
+      "path": "agent/instructions.md",
+      "mode": "100644",
+      "blob": "ea4a188b9d3b1b7b8c73c43c5750922ebae54f44",
+      "observedMode": "100644",
+      "observedBlob": "ea4a188b9d3b1b7b8c73c43c5750922ebae54f44",
+      "bytes": 2974,
+      "sha256": "a180a2eed123dfb6d3b66758be5ad3af9ac9f16b2938cf0ed2b8439cc76b15db"
+    },
+    {
+      "path": "agent/lib/plans.ts",
+      "mode": "100644",
+      "blob": "c0a0fae6fd45e0dca932f1c9560dc94db51ffa08",
+      "observedMode": "100644",
+      "observedBlob": "c0a0fae6fd45e0dca932f1c9560dc94db51ffa08",
+      "bytes": 2867,
+      "sha256": "767f4d2303f49553a7200741b949f184699abc98cd377671b16ac6ea705e3c01"
+    },
+    {
+      "path": "agent/tools/analyze_data.ts",
+      "mode": "100644",
+      "blob": "b49ab95e317c8b323a0568a750f625eaeead4222",
+      "observedMode": "100644",
+      "observedBlob": "b49ab95e317c8b323a0568a750f625eaeead4222",
+      "bytes": 424,
+      "sha256": "3382e2c0a077440b0c0b8243e43dd90bab8bd218733ab6b31d884bcead7d5d42"
+    },
+    {
+      "path": "agent/tools/create_view.ts",
+      "mode": "100644",
+      "blob": "1c87e5ba1a11c4034398983c82ccd6d90e097311",
+      "observedMode": "100644",
+      "observedBlob": "1c87e5ba1a11c4034398983c82ccd6d90e097311",
+      "bytes": 421,
+      "sha256": "18f251390296cd1f49dfe08e37702432a5fbeab3d8af1f6c4e7d32c91581c02d"
+    },
+    {
+      "path": "app/api/postgres/route.ts",
+      "mode": "100644",
+      "blob": "4f24ee69b293a613439e225445ca11bf553847fe",
+      "observedMode": "100644",
+      "observedBlob": "4f24ee69b293a613439e225445ca11bf553847fe",
+      "bytes": 1626,
+      "sha256": "219695e57d0d49c182a237ae28947abd0b40d5e28ca3fec781e4000a04c45afc"
+    },
+    {
+      "path": "app/api/session/route.ts",
+      "mode": "100644",
+      "blob": "04c0ecb7a63e11424cc94d3d5a45fcf3cf261950",
+      "observedMode": "100644",
+      "observedBlob": "04c0ecb7a63e11424cc94d3d5a45fcf3cf261950",
+      "bytes": 980,
+      "sha256": "c611a174ebda1b7689b1b0b91d16e0cb04b694eb6a6ab170f9d058868fdea170"
+    },
+    {
+      "path": "app/globals.css",
+      "mode": "100644",
+      "blob": "4030cecf81f22c21347b8829c555488c8aaead84",
+      "observedMode": "100644",
+      "observedBlob": "4030cecf81f22c21347b8829c555488c8aaead84",
+      "bytes": 33630,
+      "sha256": "be7407750da8625ad84482b321bc00d5474beafe3483e4b280298beed91223a7"
+    },
+    {
+      "path": "app/icon.svg",
+      "mode": "100644",
+      "blob": "42d062323dcfd1dc3b49f4008a6004f9824bc0a4",
+      "observedMode": "100644",
+      "observedBlob": "42d062323dcfd1dc3b49f4008a6004f9824bc0a4",
+      "bytes": 225,
+      "sha256": "a151cd990946eedcca014725233501688b670f67464daa290448f83306aa82c9"
+    },
+    {
+      "path": "app/layout.tsx",
+      "mode": "100644",
+      "blob": "dcd31242253867ff43de3cce1fbe7724954ec926",
+      "observedMode": "100644",
+      "observedBlob": "dcd31242253867ff43de3cce1fbe7724954ec926",
+      "bytes": 434,
+      "sha256": "744e6ee3697818c6a65fef10e65018604b38764d7d0f4d52620c2eb42a20e932"
+    },
+    {
+      "path": "app/page.tsx",
+      "mode": "100644",
+      "blob": "8f74c7d470ead28d44ec2dd63b70442025d8ab07",
+      "observedMode": "100644",
+      "observedBlob": "8f74c7d470ead28d44ec2dd63b70442025d8ab07",
+      "bytes": 99,
+      "sha256": "342303111aeaa7ef26e3f3452736d4cc2f1d1f19f595289d1c732da9109959d1"
+    },
+    {
+      "path": "components/DashboardGrid.tsx",
+      "mode": "100644",
+      "blob": "6a269aa9d09e4be9ed2029b92537d77146fe7788",
+      "observedMode": "100644",
+      "observedBlob": "6a269aa9d09e4be9ed2029b92537d77146fe7788",
+      "bytes": 3111,
+      "sha256": "a77c7405c98af3c85e4be5e4d1612f10112f508d54c47c2caa06af32c7ccab9f"
+    },
+    {
+      "path": "components/LocalImport.tsx",
+      "mode": "100644",
+      "blob": "e225cc5eb3c3138f5534050bfa7697b14d94594d",
+      "observedMode": "100644",
+      "observedBlob": "e225cc5eb3c3138f5534050bfa7697b14d94594d",
+      "bytes": 8690,
+      "sha256": "cf13410d8c62c16268075d689ae5700ca50fc8fb0638d07bf7fa4df7c6ac982f"
+    },
+    {
+      "path": "components/PanelCard.tsx",
+      "mode": "100644",
+      "blob": "74052da2ac52bdd15d8f2d57a333408860e35d30",
+      "observedMode": "100644",
+      "observedBlob": "74052da2ac52bdd15d8f2d57a333408860e35d30",
+      "bytes": 17106,
+      "sha256": "6876f3d4e177fb780885b70cec1a273730542b4a6445f067afa0ef3d68d787a5"
+    },
+    {
+      "path": "components/SiftApp.tsx",
+      "mode": "100644",
+      "blob": "7a0b435237f8ceb2fad324a62f929076f4c6821b",
+      "observedMode": "100644",
+      "observedBlob": "7a0b435237f8ceb2fad324a62f929076f4c6821b",
+      "bytes": 38159,
+      "sha256": "374eea05f19b6e6ae88dfc03963ab22a972d140046ccfdcbdf0c6c6618c57db5"
+    },
+    {
+      "path": "compose.yaml",
+      "mode": "100644",
+      "blob": "68ff8d3b7c05c9ceee5ba838a8e5194f14d45f1f",
+      "observedMode": "100644",
+      "observedBlob": "68ff8d3b7c05c9ceee5ba838a8e5194f14d45f1f",
+      "bytes": 197,
+      "sha256": "b3846be79d9948502d3a2a8cce148b5553f0dcdffe5d0756b5d87658aaaa2a19"
+    },
+    {
+      "path": "docs/architecture.md",
+      "mode": "100644",
+      "blob": "61bc6041c9098023f8d2bf344bc0400e673f6d9e",
+      "observedMode": "100644",
+      "observedBlob": "61bc6041c9098023f8d2bf344bc0400e673f6d9e",
+      "bytes": 11745,
+      "sha256": "5479b67c5f87d81ae4a16be8fde0096080d475eff6f23a5dad974158d46c8632"
+    },
+    {
+      "path": "docs/connectors.md",
+      "mode": "100644",
+      "blob": "8ea66425d93c31876142230bf1435bbb529f2075",
+      "observedMode": "100644",
+      "observedBlob": "8ea66425d93c31876142230bf1435bbb529f2075",
+      "bytes": 13866,
+      "sha256": "bbc4a9a859e0244edc4536b97708bac2f8171b2aa62993869c986f137fb50d58"
+    },
+    {
+      "path": "docs/deployment.md",
+      "mode": "100644",
+      "blob": "6ea46c90e3c0be48ca0279f7b9f96bacd461b23b",
+      "observedMode": "100644",
+      "observedBlob": "6ea46c90e3c0be48ca0279f7b9f96bacd461b23b",
+      "bytes": 3139,
+      "sha256": "11a8bababc85a2da7e97730adfc48b70abeee170ece08a6ea72c06a91326ba64"
+    },
+    {
+      "path": "docs/proposals/local-import-checks.md",
+      "mode": "100644",
+      "blob": "441515b21dc6f5c2a7f283eef37078f3dc41898a",
+      "observedMode": "100644",
+      "observedBlob": "441515b21dc6f5c2a7f283eef37078f3dc41898a",
+      "bytes": 7210,
+      "sha256": "6c092428e56ff71e7a5b97c12fc31d00926c74f32b57f0990fc4718917eafbad"
+    },
+    {
+      "path": "docs/release.md",
+      "mode": "100644",
+      "blob": "77bf7e3c012d0a34309c10a8f0bbc0815059fa48",
+      "observedMode": "100644",
+      "observedBlob": "77bf7e3c012d0a34309c10a8f0bbc0815059fa48",
+      "bytes": 6910,
+      "sha256": "7329c0137169471a1b1dd51dd7e04650463fb9304dc77b32f3e61cd2fd23e26f"
+    },
+    {
+      "path": "docs/results/2026/10-28/panel-measures.json",
+      "mode": "100644",
+      "blob": "e242d548d6d2620890cdba86db0ca5247917652f",
+      "observedMode": "100644",
+      "observedBlob": "e242d548d6d2620890cdba86db0ca5247917652f",
+      "bytes": 5730,
+      "sha256": "7d82345bb5a6d152d84f697d4aae9abf48d60ddd1cb79b4de11baef677f72526"
+    },
+    {
+      "path": "docs/results/2026/10-28/panel-measures.md",
+      "mode": "100644",
+      "blob": "2826975605d9cb39f445444b071df9bfe59ffd26",
+      "observedMode": "100644",
+      "observedBlob": "2826975605d9cb39f445444b071df9bfe59ffd26",
+      "bytes": 3859,
+      "sha256": "e35f1c98f38846c60b0987802a27b34c1704df234091b1df5069b0bcef67ec72"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-1.md",
+      "mode": "100644",
+      "blob": "de8f930d5bc92526d5551fce3efe681358d805ac",
+      "observedMode": "100644",
+      "observedBlob": "de8f930d5bc92526d5551fce3efe681358d805ac",
+      "bytes": 2170,
+      "sha256": "eb9ecebbc4c425d13758c60c217be960a62c483826be40e2fe6e43b2f8414800"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-1/build.log.gz",
+      "mode": "100644",
+      "blob": "62464e8e868ccb613c9070b31899f9cd9fe24b99",
+      "observedMode": "100644",
+      "observedBlob": "62464e8e868ccb613c9070b31899f9cd9fe24b99",
+      "bytes": 1245,
+      "sha256": "99e1d5fd906400840a38fce3b129b3e185db501497a317b6b8aae240ada8456e"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-1/fixture-tests.tap",
+      "mode": "100644",
+      "blob": "c7b7f04db6668004a213b2c83adceb2afdcdc789",
+      "observedMode": "100644",
+      "observedBlob": "c7b7f04db6668004a213b2c83adceb2afdcdc789",
+      "bytes": 553,
+      "sha256": "a30599fd15787519181eee90ed35ffbc0a6616e5ddec5b3989241139400cf12c"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-1/install.log.gz",
+      "mode": "100644",
+      "blob": "028d42b290f05976c9d5314416bcbf184a1162e7",
+      "observedMode": "100644",
+      "observedBlob": "028d42b290f05976c9d5314416bcbf184a1162e7",
+      "bytes": 47,
+      "sha256": "4a20ff4a13975d92d29f4a410f8d1bd2dde17cffa079a70866d433d19bf5fb2d"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-1/job.log.gz",
+      "mode": "100644",
+      "blob": "aec7c90324435f5327d9af68e28351140023f2cd",
+      "observedMode": "100644",
+      "observedBlob": "aec7c90324435f5327d9af68e28351140023f2cd",
+      "bytes": 23210,
+      "sha256": "44b3e39d28ce18093eedf475fcf75a914e565846d998c6dc8dcaf12c6343868a"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-1/originals.json",
+      "mode": "100644",
+      "blob": "47600480c2a2b501dacc7b3cffe70528770d3398",
+      "observedMode": "100644",
+      "observedBlob": "47600480c2a2b501dacc7b3cffe70528770d3398",
+      "bytes": 1729,
+      "sha256": "c1c37bbfd21bafaa114ce6a8f8cdaa32db2f02eaab9c4b9f856008cff5c501cf"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-1/source-after.json",
+      "mode": "100644",
+      "blob": "05114abed08db26d0b7c298b1fa5eb6398251779",
+      "observedMode": "100644",
+      "observedBlob": "05114abed08db26d0b7c298b1fa5eb6398251779",
+      "bytes": 19482,
+      "sha256": "0ff61493e1ea4ac8a9309e7ba49b99bce6605bfb6339f0fd2d4a03f217a80986"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-1/source-before.json",
+      "mode": "100644",
+      "blob": "d605e29fd28a16c7136c04abf1d4650cff1a6249",
+      "observedMode": "100644",
+      "observedBlob": "d605e29fd28a16c7136c04abf1d4650cff1a6249",
+      "bytes": 19481,
+      "sha256": "1299e56c9eb445719d8c70009c7fdf6d9f2be491ceba4730e5424216dffb2b6b"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-1/unit-tests.tap",
+      "mode": "100644",
+      "blob": "bf304a318da7a7d89328020dfa566f850e70d784",
+      "observedMode": "100644",
+      "observedBlob": "bf304a318da7a7d89328020dfa566f850e70d784",
+      "bytes": 2524,
+      "sha256": "480c32a61b7ec18ddc29ed03ac710dd9bedaa4f64f7d049b01b90188f36fc418"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2.md",
+      "mode": "100644",
+      "blob": "20ce21f3b8ed8101595090dfc78ece0d91226e14",
+      "observedMode": "100644",
+      "observedBlob": "20ce21f3b8ed8101595090dfc78ece0d91226e14",
+      "bytes": 3132,
+      "sha256": "9b4ff344a1678be5be3643a299cef0e0dd93188dd5c387b1983e93a176efac5f"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/browser.json.gz",
+      "mode": "100644",
+      "blob": "082a1a9438d81331a72c953b73d9038e7992be0b",
+      "observedMode": "100644",
+      "observedBlob": "082a1a9438d81331a72c953b73d9038e7992be0b",
+      "bytes": 13124,
+      "sha256": "45843605f6defae74ab53b7497293b443096215aabd24e22d7bf91e136ef863d"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/browser.stderr.log.gz",
+      "mode": "100644",
+      "blob": "615bb342a6605e7680c152abd369be5292bf11e6",
+      "observedMode": "100644",
+      "observedBlob": "615bb342a6605e7680c152abd369be5292bf11e6",
+      "bytes": 20,
+      "sha256": "f1b651238a58fe290baec6c5e32f3bdb1943dd2bd582f02569231f7a757c7837"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/browser.stdout.log.gz",
+      "mode": "100644",
+      "blob": "615bb342a6605e7680c152abd369be5292bf11e6",
+      "observedMode": "100644",
+      "observedBlob": "615bb342a6605e7680c152abd369be5292bf11e6",
+      "bytes": 20,
+      "sha256": "f1b651238a58fe290baec6c5e32f3bdb1943dd2bd582f02569231f7a757c7837"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/build.log.gz",
+      "mode": "100644",
+      "blob": "c220cf00fa57df6803afb2db5b7e0c95b5cb5861",
+      "observedMode": "100644",
+      "observedBlob": "c220cf00fa57df6803afb2db5b7e0c95b5cb5861",
+      "bytes": 1379,
+      "sha256": "7eeef453f8003e5a3645860c83d1bd3094b91f89d88901f905ba4cc0fb170f70"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/commit-race.png",
+      "mode": "100644",
+      "blob": "0fc87d86d65763378c174078b330018de593a2e3",
+      "observedMode": "100644",
+      "observedBlob": "0fc87d86d65763378c174078b330018de593a2e3",
+      "bytes": 208750,
+      "sha256": "a52057fe494eb77517b8199b268266d8b803d6763d9bf1fa39611f8daeb2222b"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/fixture-manifest.json",
+      "mode": "100644",
+      "blob": "2e1c9e9bdc91d80c4629eb68132cdc387412546a",
+      "observedMode": "100644",
+      "observedBlob": "2e1c9e9bdc91d80c4629eb68132cdc387412546a",
+      "bytes": 4193,
+      "sha256": "7232d47ff251f76f9c1ca884a2ee6e3d66788acc6412c76858049fd8bc919c04"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/fixture-tests.tap",
+      "mode": "100644",
+      "blob": "6ba0891cd8dbfcc841c7b344343c01b7dc8e8ee9",
+      "observedMode": "100644",
+      "observedBlob": "6ba0891cd8dbfcc841c7b344343c01b7dc8e8ee9",
+      "bytes": 554,
+      "sha256": "7504e4c1adfc68f187789376b93b02652db409fe28a47323308e0964511c256a"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/install.log.gz",
+      "mode": "100644",
+      "blob": "631d84f5adeb939ef49166b9f3eb91ab917d550f",
+      "observedMode": "100644",
+      "observedBlob": "631d84f5adeb939ef49166b9f3eb91ab917d550f",
+      "bytes": 47,
+      "sha256": "8ca60791f7ed8405504d6eeb2acbf6b3f7213ada9e24e271df9f0ec762250a89"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/job.log.gz",
+      "mode": "100644",
+      "blob": "b4d48833d3c754e714e27cb2721288849f466616",
+      "observedMode": "100644",
+      "observedBlob": "b4d48833d3c754e714e27cb2721288849f466616",
+      "bytes": 248365,
+      "sha256": "a3c88de766c8b7b94df19837ef150de2a1f77b64574013061fafe6d77ae48869"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/originals.json",
+      "mode": "100644",
+      "blob": "91cddf44679cadc41b59136367a92dbd020c1a8c",
+      "observedMode": "100644",
+      "observedBlob": "91cddf44679cadc41b59136367a92dbd020c1a8c",
+      "bytes": 3938,
+      "sha256": "9e3c736c19ea13fe99b1e325a2a67ab0f168a8a2912df617a49ed6cbfbdbf31d"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/run.json",
+      "mode": "100644",
+      "blob": "ad54cb2e747745dffaa90d41ae483f55edcdf1ec",
+      "observedMode": "100644",
+      "observedBlob": "ad54cb2e747745dffaa90d41ae483f55edcdf1ec",
+      "bytes": 3326,
+      "sha256": "d6ac493244d813b23640bbdb3f431a172ee2f1808f81be070ed60f7db60bbbf7"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/server.stderr.log.gz",
+      "mode": "100644",
+      "blob": "615bb342a6605e7680c152abd369be5292bf11e6",
+      "observedMode": "100644",
+      "observedBlob": "615bb342a6605e7680c152abd369be5292bf11e6",
+      "bytes": 20,
+      "sha256": "f1b651238a58fe290baec6c5e32f3bdb1943dd2bd582f02569231f7a757c7837"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/server.stdout.log.gz",
+      "mode": "100644",
+      "blob": "059e96fc3a74a06bc32bc7a94f9f7c4f40f09226",
+      "observedMode": "100644",
+      "observedBlob": "059e96fc3a74a06bc32bc7a94f9f7c4f40f09226",
+      "bytes": 165,
+      "sha256": "087242051d18241540228b117cda5c3a3737de63fdbe120f550ab5a9f1eff54c"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/source-after.json",
+      "mode": "100644",
+      "blob": "5f9a09f65990f493961ddcffa6fb55f83f093f89",
+      "observedMode": "100644",
+      "observedBlob": "5f9a09f65990f493961ddcffa6fb55f83f093f89",
+      "bytes": 22858,
+      "sha256": "077e98ff31eb03f6960d74ab0b581fc15d80126dbb34969075fc9737f87e51ac"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/source-before.json",
+      "mode": "100644",
+      "blob": "5f9a09f65990f493961ddcffa6fb55f83f093f89",
+      "observedMode": "100644",
+      "observedBlob": "5f9a09f65990f493961ddcffa6fb55f83f093f89",
+      "bytes": 22858,
+      "sha256": "077e98ff31eb03f6960d74ab0b581fc15d80126dbb34969075fc9737f87e51ac"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/tools-lock.json",
+      "mode": "100644",
+      "blob": "2fa8973b2db5a935696b55bd6e79620d4555d4b1",
+      "observedMode": "100644",
+      "observedBlob": "2fa8973b2db5a935696b55bd6e79620d4555d4b1",
+      "bytes": 1064,
+      "sha256": "2fa84b8293c8e0da7953f61ce00ae75c27f19081d3f3f5e5017b077f053377ad"
+    },
+    {
+      "path": "docs/results/2026/11-07/local-import-attempt-2/unit-tests.tap",
+      "mode": "100644",
+      "blob": "44e33d278bdc5956b8a8251ecae01f218cc22e0a",
+      "observedMode": "100644",
+      "observedBlob": "44e33d278bdc5956b8a8251ecae01f218cc22e0a",
+      "bytes": 2530,
+      "sha256": "a1e526aa8601392a53b3e906e48f2d94e81dc357b61be7513af4760720faf849"
+    },
+    {
+      "path": "lib/auth.ts",
+      "mode": "100644",
+      "blob": "c5f8c995de34a0027e6f52bfbeb5efd732114059",
+      "observedMode": "100644",
+      "observedBlob": "c5f8c995de34a0027e6f52bfbeb5efd732114059",
+      "bytes": 4817,
+      "sha256": "5e3afcce43513c4b2ace30b2bebf60a93e728d34e8b1ed3beb249d70188fc7a2"
+    },
+    {
+      "path": "lib/data-values.ts",
+      "mode": "100644",
+      "blob": "c6a67eae3a0dc8bec0e8f99b9ffca3bb8a1665c0",
+      "observedMode": "100644",
+      "observedBlob": "c6a67eae3a0dc8bec0e8f99b9ffca3bb8a1665c0",
+      "bytes": 10915,
+      "sha256": "3e225e9ec548c5e34e3bad6ff57e23a0a107894617f9958c7fcdf2d9d5658060"
+    },
+    {
+      "path": "lib/demo.ts",
+      "mode": "100644",
+      "blob": "d679e87594e72e291071304cb6976fb855ea55f8",
+      "observedMode": "100644",
+      "observedBlob": "d679e87594e72e291071304cb6976fb855ea55f8",
+      "bytes": 5521,
+      "sha256": "cf577b8d210c31e0cb84912d4b0fce0c96344e5b1e580a8c686b461d536cea9e"
+    },
+    {
+      "path": "lib/engine.ts",
+      "mode": "100644",
+      "blob": "a53cad6d054d4890becfdc6589d204256f06e40b",
+      "observedMode": "100644",
+      "observedBlob": "a53cad6d054d4890becfdc6589d204256f06e40b",
+      "bytes": 22252,
+      "sha256": "460d65b89c32f9a04362cbfa5ad2b5edb681dbc5d406c8ea1327919f5b4b4850"
+    },
+    {
+      "path": "lib/local-import.ts",
+      "mode": "100644",
+      "blob": "8de5cfc0099684b0bceac55f9dfaf3c0fbb4f78b",
+      "observedMode": "100644",
+      "observedBlob": "8de5cfc0099684b0bceac55f9dfaf3c0fbb4f78b",
+      "bytes": 4710,
+      "sha256": "1dba94efd8baaf65019935c3a4a22266aa881ebd6637d851da92dbc9709dcf31"
+    },
+    {
+      "path": "lib/postgres.ts",
+      "mode": "100644",
+      "blob": "e643468959e613619bda66134e799f68c1440715",
+      "observedMode": "100644",
+      "observedBlob": "e643468959e613619bda66134e799f68c1440715",
+      "bytes": 5472,
+      "sha256": "65c628bf37ef6e6dd8c9b5608961203ded1a79ca85a97406010e3fbf9f037258"
+    },
+    {
+      "path": "lib/sql-policy.ts",
+      "mode": "100644",
+      "blob": "288a71ebedb87882130a48477e4032cefa827b8d",
+      "observedMode": "100644",
+      "observedBlob": "288a71ebedb87882130a48477e4032cefa827b8d",
+      "bytes": 6499,
+      "sha256": "fe639ac3cab1110ad9bd9dd9c7b1ffa08ab0531ba6b5d649ba02a98d6e603109"
+    },
+    {
+      "path": "lib/storage.ts",
+      "mode": "100644",
+      "blob": "884fde3e4c4e55f49e5df47c59f5cd991c36354d",
+      "observedMode": "100644",
+      "observedBlob": "884fde3e4c4e55f49e5df47c59f5cd991c36354d",
+      "bytes": 5604,
+      "sha256": "e5c8580b020e4b3a6dd7799cd5e6048074c6f256208b5b9c6a4333022a216cbb"
+    },
+    {
+      "path": "lib/types.ts",
+      "mode": "100644",
+      "blob": "618cbcd4e42afc212cf6e1fb201dc3068426e81e",
+      "observedMode": "100644",
+      "observedBlob": "618cbcd4e42afc212cf6e1fb201dc3068426e81e",
+      "bytes": 1921,
+      "sha256": "f327181da9887727ba7f338f99c3e1c50f76a0b1086ce7dbdebc49ae37898a21"
+    },
+    {
+      "path": "next-env.d.ts",
+      "mode": "100644",
+      "blob": "ce4e94a6b10f160ee021fe18939af160d2927dcf",
+      "observedMode": "100644",
+      "observedBlob": "ce4e94a6b10f160ee021fe18939af160d2927dcf",
+      "bytes": 288,
+      "sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b"
+    },
+    {
+      "path": "next.config.ts",
+      "mode": "100644",
+      "blob": "c7fd2c60738622b3a9bb73f5bba30e46ef8cc09f",
+      "observedMode": "100644",
+      "observedBlob": "c7fd2c60738622b3a9bb73f5bba30e46ef8cc09f",
+      "bytes": 176,
+      "sha256": "59180728403316654a7b0ea57d61f6b7bd6062ebe9aaa5c7d8ba51d1dc446233"
+    },
+    {
+      "path": "package-lock.json",
+      "mode": "100644",
+      "blob": "9a47299911ff0de33916ff40490f18810074ffba",
+      "observedMode": "100644",
+      "observedBlob": "9a47299911ff0de33916ff40490f18810074ffba",
+      "bytes": 117804,
+      "sha256": "8726376275284ee65af11748927cb9626295e5e4f12d3e0cc84f25268ee0b07e"
+    },
+    {
+      "path": "package.json",
+      "mode": "100644",
+      "blob": "1cb3961c6e3bbb0ef7cc681ea454106885d9564d",
+      "observedMode": "100644",
+      "observedBlob": "1cb3961c6e3bbb0ef7cc681ea454106885d9564d",
+      "bytes": 935,
+      "sha256": "005f47fdb99b360a727ff94fa5e0bb1f52204956d4ade987bc20c25920e8cea7"
+    },
+    {
+      "path": "scripts/build.mjs",
+      "mode": "100644",
+      "blob": "6fb74fcf1f67573822d2738a663550a998e3104b",
+      "observedMode": "100644",
+      "observedBlob": "6fb74fcf1f67573822d2738a663550a998e3104b",
+      "bytes": 460,
+      "sha256": "9dba2d7b24db413a2ec7fbefd43a70b7fcddf66d8cb241b86fe61bf13a2dd820"
+    },
+    {
+      "path": "scripts/check-connector.ts",
+      "mode": "100644",
+      "blob": "4d28bb706991d9754230d513fc52cc50bee30c19",
+      "observedMode": "100644",
+      "observedBlob": "4d28bb706991d9754230d513fc52cc50bee30c19",
+      "bytes": 8102,
+      "sha256": "e87d482e813ae14ff6cfc9f27c1e6220d633eb26007c28b3457a13f69211a2cb"
+    },
+    {
+      "path": "scripts/copy-duckdb.mjs",
+      "mode": "100644",
+      "blob": "4295b0b7ce5ec756510fad760426285f112647cb",
+      "observedMode": "100644",
+      "observedBlob": "4295b0b7ce5ec756510fad760426285f112647cb",
+      "bytes": 286,
+      "sha256": "50265907a4ccbe4e9520f0cd4fe66ae443ee26f506ba07150bab6ae4d0daa6c1"
+    },
+    {
+      "path": "tests/e2e/local-import.spec.mjs",
+      "mode": "100644",
+      "blob": "d05929951f43a0b3a042c591aebc6256706a9a30",
+      "observedMode": "100644",
+      "observedBlob": "d05929951f43a0b3a042c591aebc6256706a9a30",
+      "bytes": 35301,
+      "sha256": "1a39baaf8d223c0a1ebac2bfcc59e78a24d995b56d4c4581f6a6b21da538ce80"
+    },
+    {
+      "path": "tests/fixtures/workbook.mjs",
+      "mode": "100644",
+      "blob": "79bb55262f8177032543508df998b5adaac71198",
+      "observedMode": "100644",
+      "observedBlob": "79bb55262f8177032543508df998b5adaac71198",
+      "bytes": 4071,
+      "sha256": "7aea2742640430b0520bbf15e94e22dbb15a40ed548091a616529091d548762c"
+    },
+    {
+      "path": "tests/support/emit-proof.mjs",
+      "mode": "100644",
+      "blob": "6fc01134593110a164b9e7e5cbef5677e5fed9e5",
+      "observedMode": "100644",
+      "observedBlob": "6fc01134593110a164b9e7e5cbef5677e5fed9e5",
+      "bytes": 1442,
+      "sha256": "456ee94f051eebe7c856d059709392926c4cdd2a7f7ca279cb3279403d4bb885"
+    },
+    {
+      "path": "tests/support/fixtures.mjs",
+      "mode": "100644",
+      "blob": "5f502942715011616fffe6badca82f9036b41365",
+      "observedMode": "100644",
+      "observedBlob": "5f502942715011616fffe6badca82f9036b41365",
+      "bytes": 3315,
+      "sha256": "51c0249a83773fdc3c0c9017874dc6b62b003ca851cfe4085402ff0f31dcf03b"
+    },
+    {
+      "path": "tests/support/fixtures.test.mjs",
+      "mode": "100644",
+      "blob": "c57653b0d19cbef03b03b0f4281ace3d98c74772",
+      "observedMode": "100644",
+      "observedBlob": "c57653b0d19cbef03b03b0f4281ace3d98c74772",
+      "bytes": 1817,
+      "sha256": "18b46378ce90328f4dec8d74c8a266c10a150ad4638fea0ff88c0c297bc79f4e"
+    },
+    {
+      "path": "tests/support/run-browser.mjs",
+      "mode": "100644",
+      "blob": "c3023e6ec6b17043dd3e0c6a1164868b1e71f36d",
+      "observedMode": "100644",
+      "observedBlob": "c3023e6ec6b17043dd3e0c6a1164868b1e71f36d",
+      "bytes": 11176,
+      "sha256": "7f3f1f3e6112dee26ed02f11c58df6c236d289f6080433337c843bdb1a9d5c09"
+    },
+    {
+      "path": "tests/support/source-manifest.mjs",
+      "mode": "100644",
+      "blob": "e4913794942a91318b75d6edd7537ffc5e81a9f6",
+      "observedMode": "100644",
+      "observedBlob": "e4913794942a91318b75d6edd7537ffc5e81a9f6",
+      "bytes": 1602,
+      "sha256": "0b89133067c88324103057879ba0d2828c18b3152a898a9370858997026c554c"
+    },
+    {
+      "path": "tests/unit/local-import.test.ts",
+      "mode": "100644",
+      "blob": "d24f0c8bced94866a02270337ac299574e3012f5",
+      "observedMode": "100644",
+      "observedBlob": "d24f0c8bced94866a02270337ac299574e3012f5",
+      "bytes": 10405,
+      "sha256": "5d8d25395edd06b22f206f513ccb7edca4edbabc9d204299ed6b587997aabfdf"
+    },
+    {
+      "path": "tsconfig.json",
+      "mode": "100644",
+      "blob": "687c68e486ed0f2eee2de54d9e5b71be280c2e71",
+      "observedMode": "100644",
+      "observedBlob": "687c68e486ed0f2eee2de54d9e5b71be280c2e71",
+      "bytes": 590,
+      "sha256": "b0312eb8bd8223936a5616a1de20855610cad0f8e4b3c006b683a178edef71e8"
+    }
+  ]
+}

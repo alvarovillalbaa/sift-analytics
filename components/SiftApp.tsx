@@ -39,7 +39,8 @@ export default function SiftApp() {
         if (active) { setWorkspace(saved); setReady(true); if (warnings.length) setToast(`Some files could not be restored: ${warnings.join('; ')}`); }
       } catch (error) { if (active) setStartupError(`Data engine: ${errorText(error)}`); }
     })();
-    void fetch('/api/session', { method: 'POST' }).then(r => {
+    void fetch('/api/session', { method: 'POST' }).then(async r => {
+      await r.text();
       if (!r.ok) throw new Error('AI session is unavailable. Your local dashboards still work.');
       if (active) setAuthReady(true);
     }).catch(error => { if (active) setToast(errorText(error)); });

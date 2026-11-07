@@ -1,0 +1,104 @@
+{
+  "sourceCommit": "e3a47a915be3245790cc7707def6d0dbd5660691",
+  "runId": 42407046929,
+  "jobId": 128506879642,
+  "passed": false,
+  "files": [
+    {
+      "name": "browser.json",
+      "bytes": 18263,
+      "sha256": "fde471ddc7364b08d221c141616171bc33d042cd92da342df57ac53ccd3a6370"
+    },
+    {
+      "name": "browser.stderr.log.gz",
+      "bytes": 20,
+      "sha256": "f1b651238a58fe290baec6c5e32f3bdb1943dd2bd582f02569231f7a757c7837",
+      "uncompressedName": "browser.stderr.log",
+      "uncompressedBytes": 0,
+      "uncompressedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "browser.stdout.log.gz",
+      "bytes": 20,
+      "sha256": "f1b651238a58fe290baec6c5e32f3bdb1943dd2bd582f02569231f7a757c7837",
+      "uncompressedName": "browser.stdout.log",
+      "uncompressedBytes": 0,
+      "uncompressedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "build.log.gz",
+      "bytes": 1377,
+      "sha256": "fe419c7923364f50d7e18413fa72e58f93ae0fec8442c0206109d1e5ba02b1ff",
+      "uncompressedName": "build.log",
+      "uncompressedBytes": 8134,
+      "uncompressedSha256": "70b351b66b118a24da0de9ee3f8f6c351100eca0ac10690abd4202663a6adbdf"
+    },
+    {
+      "name": "fixture-manifest.json",
+      "bytes": 4193,
+      "sha256": "7232d47ff251f76f9c1ca884a2ee6e3d66788acc6412c76858049fd8bc919c04"
+    },
+    {
+      "name": "fixture-tests.tap",
+      "bytes": 555,
+      "sha256": "8570ba827a2723ff010e6cdb913ba6266b0d63e8da8a36c3e6eefeb846337425"
+    },
+    {
+      "name": "install.log.gz",
+      "bytes": 46,
+      "sha256": "c83641dd330d9e2dc77dad5418a73c8a4ae4f783dfaa8006b061898308e6320c",
+      "uncompressedName": "install.log",
+      "uncompressedBytes": 26,
+      "uncompressedSha256": "69aad571096d95a7f131c2fb9a2087111543cf51fd7f8c6d7062e8705ef203a4"
+    },
+    {
+      "name": "run.json",
+      "bytes": 4985,
+      "sha256": "bf778e410326ff23fb51a051e530d4766c3b1d6aac354f96472b658dbdf29174"
+    },
+    {
+      "name": "server.stderr.log.gz",
+      "bytes": 20,
+      "sha256": "f1b651238a58fe290baec6c5e32f3bdb1943dd2bd582f02569231f7a757c7837",
+      "uncompressedName": "server.stderr.log",
+      "uncompressedBytes": 0,
+      "uncompressedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "server.stdout.log.gz",
+      "bytes": 164,
+      "sha256": "a7bd76a99c0ebe19f0f18d8a018d1080c6bca8820f694f4df5ca02910df77921",
+      "uncompressedName": "server.stdout.log",
+      "uncompressedBytes": 204,
+      "uncompressedSha256": "18e2ca49a27d416dbe9420d6b5561924c43d7a11780a03f6434f907c6e00a364"
+    },
+    {
+      "name": "source-after.json",
+      "bytes": 29646,
+      "sha256": "6db9701ed23be68e6e22f1ee01911d6a88feb5da77ea2662c09e1eae9fdc8ffc"
+    },
+    {
+      "name": "source-before.json",
+      "bytes": 29646,
+      "sha256": "6db9701ed23be68e6e22f1ee01911d6a88feb5da77ea2662c09e1eae9fdc8ffc"
+    },
+    {
+      "name": "tools-lock.json",
+      "bytes": 1064,
+      "sha256": "2fa84b8293c8e0da7953f61ce00ae75c27f19081d3f3f5e5017b077f053377ad"
+    },
+    {
+      "name": "unit-tests.tap",
+      "bytes": 2527,
+      "sha256": "adf96f6cff6daa4d39c9db9ba7d8f9ccdf269feb16aaed64582819006d984743"
+    },
+    {
+      "name": "job.log.gz",
+      "bytes": 32207,
+      "sha256": "d4930287460ac8e96d66f4db9d9c97e6493c29037c1cf5e216b049f2281cb35b",
+      "uncompressedName": "job.log",
+      "uncompressedBytes": 107657,
+      "uncompressedSha256": "8ed20bb1ae85e68551b8c956ef724c5f6deab746eb2944f5a2abbd1466bb221e"
+    }
+  ]
+}
