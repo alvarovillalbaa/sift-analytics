@@ -10,7 +10,7 @@ const ORIGIN = 'https://sift-analytics.vercel.app';
 const ROOT = process.env.SIFT_HOSTED_HTTP_DIR;
 const NONCE = process.env.SIFT_HOSTED_HTTP_NONCE;
 const sha = (bytes) => createHash('sha256').update(bytes).digest('hex');
-const MAX_BODY = 1024 * 1024, MAX_TOTAL = 6 * MAX_BODY;
+const MAX_BODY = 1024 * 1024, MAX_CLIENT_BODY = 4 * MAX_BODY, MAX_TOTAL = 8 * MAX_BODY;
 assert.equal(process.version, 'v24.22.2');
 assert.ok(ROOT && path.isAbsolute(ROOT) && /^[a-f0-9]{32}$/.test(NONCE ?? ''));
 const info = await lstat(ROOT), owner = await lstat(path.join(ROOT, '.owner'));
@@ -27,8 +27,8 @@ if (process.argv[2] === '--emit') {
   for (const name of (await readdir(ROOT)).sort()) {
     if (name === '.owner') continue;
     assert.ok(allowed.test(name)); const entry = path.join(ROOT, name), stat = await lstat(entry);
-    assert.ok(stat.isFile() && !stat.isSymbolicLink() && stat.uid === process.getuid() && stat.size <= 2 * MAX_BODY);
-    total += stat.size; assert.ok(total <= 8 * MAX_BODY);
+    assert.ok(stat.isFile() && !stat.isSymbolicLink() && stat.uid === process.getuid() && stat.size <= (name === 'matched-client.js' ? MAX_CLIENT_BODY : 2 * MAX_BODY));
+    total += stat.size; assert.ok(total <= MAX_TOTAL);
     const bytes = await readFile(entry), packed = gzipSync(bytes, { level: 9, mtime: 0 }), encoded = packed.toString('base64');
     console.log(`SIFT_HOSTED_HTTP_FILE ${JSON.stringify({ name, bytes: bytes.length, sha256: sha(bytes), gzipBytes: packed.length, chunks: Math.ceil(encoded.length / 3000) })}`);
     for (let offset = 0; offset < encoded.length; offset += 3000) console.log(`SIFT_HOSTED_HTTP_CHUNK ${JSON.stringify({ name, index: offset / 3000, data: encoded.slice(offset, offset + 3000) })}`);
@@ -41,7 +41,7 @@ if (process.argv[2] === '--emit') {
   let observedBytes = 0;
   const report = { schemaVersion: 1, sourceCommit: process.env.SOURCE_COMMIT, origin: ORIGIN, startedAt: new Date(started).toISOString(),
     ownerSuppliedDeploymentContext: { deployment: 'dpl_J5ZPhyWokYaNF9gYzRE13LqH2L3R', source: '3b06822cf61ad5a18c0029004366f000a5f9db7f', independentlyReattestedHere: false },
-    limits: { requestMs: 15000, httpWorkMs: 150000, bodyBytes: MAX_BODY, totalReceivedBodyBudget: MAX_TOTAL, maximumChunksFetched: 15 },
+    limits: { requestMs: 15000, httpWorkMs: 150000, bodyBytes: MAX_BODY, clientBodyBytes: MAX_CLIENT_BODY, totalReceivedBodyBudget: MAX_TOTAL, maximumChunksFetched: 15 },
     requests: [], retainedBodies: [], matchedAsset: null, passed: false, error: null,
     proofLimits: ['Anonymous HTTP only; no hosted browser, IndexedDB/import/query, model or account proof.', 'A matching public bundle proves the reviewed UI strings are served, not byte equivalence of all assets or a deployment-to-Git attestation.', 'Headers are explicitly sanitized JSON only; cookie/auth values are never retained. No cookie jar, Authorization, redirects, retries or protection bypass.', 'Body hashes cover observed HTTP representation bytes. Incomplete prefixes and missing terminal/socket events remain failures. HTTP work uses Connection: close.'] };
   const safeNames = new Set(['content-type', 'content-length', 'content-encoding', 'cache-control', 'date', 'age', 'etag', 'last-modified', 'server', 'x-vercel-cache']);
@@ -143,7 +143,7 @@ if (process.argv[2] === '--emit') {
     for (const route of candidates.slice(0, 15)) {
       const available = MAX_TOTAL - observedBytes - MAX_BODY - 65536;
       if (available <= 0) break;
-      const chunk = await request(`chunk-${report.chunksFetched + 1}`, route, 'GET', Math.min(MAX_BODY, available)); report.chunksFetched++;
+      const chunk = await request(`chunk-${report.chunksFetched + 1}`, route, 'GET', Math.min(MAX_CLIENT_BODY, available)); report.chunksFetched++;
       success(chunk, 200, /^(?:application|text)\/(?:javascript|x-javascript|ecmascript)(?:;|$)/i);
       const text = new TextDecoder('utf-8', { fatal: true }).decode(chunk.bytes);
       const strings = ['Choose a folder', 'Import selected', 'Choose a data folder'];

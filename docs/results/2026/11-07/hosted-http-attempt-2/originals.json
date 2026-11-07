@@ -1,0 +1,43 @@
+{
+  "checkerSource": "3cf55c7a7251fef7d311a1a5996b4b9d75412c52",
+  "ownerSuppliedRuntimeSource": "3b06822cf61ad5a18c0029004366f000a5f9db7f",
+  "runId": 42410827641,
+  "jobId": 128518387247,
+  "passed": false,
+  "files": [
+    {
+      "name": "home.html",
+      "bytes": 7313,
+      "sha256": "3b2d4d0ad806a5747dacb69f5befc4d79b57f4dee55de03d6a920ab0b03120d1"
+    },
+    {
+      "name": "hosted-http.json",
+      "bytes": 12827,
+      "sha256": "7447ba7c8c11aa3584e3b072ef631a99d3a2a2fd1dcba506a568cd0df99106ca"
+    },
+    {
+      "name": "source-after.json.gz",
+      "bytes": 10861,
+      "sha256": "48b5056585dae9fd323b7ca5140c9b8c5a583aee021e5b82fbd5a88a4ceda9fd",
+      "uncompressedName": "source-after.json",
+      "uncompressedBytes": 55937,
+      "uncompressedSha256": "f81ad9872db7a5b6414541e281cf90a833daefa14c59672b5b6a4a1a70d34823"
+    },
+    {
+      "name": "source-before.json.gz",
+      "bytes": 10861,
+      "sha256": "48b5056585dae9fd323b7ca5140c9b8c5a583aee021e5b82fbd5a88a4ceda9fd",
+      "uncompressedName": "source-before.json",
+      "uncompressedBytes": 55937,
+      "uncompressedSha256": "f81ad9872db7a5b6414541e281cf90a833daefa14c59672b5b6a4a1a70d34823"
+    },
+    {
+      "name": "job.log.gz",
+      "bytes": 22918,
+      "sha256": "3ab68fe421a3c00466de4a928441c638ab07a10d15687ca31a66b1cd7967c139",
+      "uncompressedName": "job.log",
+      "uncompressedBytes": 61320,
+      "uncompressedSha256": "72508aadf50f6ec109917e40b946287c90ee6accbc890528b3aba2672b9dba44"
+    }
+  ]
+}

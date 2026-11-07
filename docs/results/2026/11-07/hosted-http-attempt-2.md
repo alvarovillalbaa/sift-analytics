@@ -1,0 +1,9 @@
+# Hosted HTTP observation — attempt 2 refused a large bundle
+
+[Run 42410827641](https://github.com/alvarovillalbaa/sift-analytics/actions/runs/42410827641), job `128518387247`, checked `3cf55c7a7251fef7d311a1a5996b4b9d75412c52`. The packet stays **failed**.
+
+The anonymous homepage and five client chunks returned 200 with complete end/message/request/socket closure. None of those five complete bundles contained all target UI strings. Chunk six, `/_next/static/immutable/chunks/19y-yzcbfbh-e.js`, returned 200 JavaScript with declared Content-Length 3,547,889. The checker's 1 MiB body cap intentionally destroyed the request: observed 1,053,805 bytes, retained in memory at most 1,048,576, `body_size_bound`, incomplete. No full-body hash or server-abort cause is established. No matched client, worker, WASM or session result was reached.
+
+The correction admits up to 4 MiB only for client JavaScript, with an 8 MiB aggregate body/proof budget. Homepage/worker remain 1 MiB, session 64 KiB, WASM HEAD zero body. URL, privacy, status, exact full completion and time gates remain intact. The packer permits 4 MiB only for the matched client; other individual files remain capped at 2 MiB. This changes a bounded observation capacity, not the prior verdict.
+
+Both complete 155-file source manifests are byte-identical, 55,937 bytes, SHA-256 `f81ad9872db7a5b6414541e281cf90a833daefa14c59672b5b6a4a1a70d34823`. The [originals manifest](hosted-http-attempt-2/originals.json) binds four decoded captures and the full lossless log. Original log: 61,320 bytes, SHA-256 `72508aadf50f6ec109917e40b946287c90ee6accbc890528b3aba2672b9dba44`. The report records the incomplete prefix; it is not retained as a complete public asset. [Attempt 1](hosted-http-attempt-1.md) remains separate. No authentication retry, bypass, model, account, database or hosted-browser check occurred.

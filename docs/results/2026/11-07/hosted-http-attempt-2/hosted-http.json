@@ -1,0 +1,340 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "3cf55c7a7251fef7d311a1a5996b4b9d75412c52",
+  "origin": "https://sift-analytics.vercel.app",
+  "startedAt": "2026-11-07T20:23:34.470Z",
+  "ownerSuppliedDeploymentContext": {
+    "deployment": "dpl_J5ZPhyWokYaNF9gYzRE13LqH2L3R",
+    "source": "3b06822cf61ad5a18c0029004366f000a5f9db7f",
+    "independentlyReattestedHere": false
+  },
+  "limits": {
+    "requestMs": 15000,
+    "httpWorkMs": 150000,
+    "bodyBytes": 1048576,
+    "totalReceivedBodyBudget": 6291456,
+    "maximumChunksFetched": 15
+  },
+  "requests": [
+    {
+      "label": "homepage",
+      "url": "https://sift-analytics.vercel.app/",
+      "method": "GET",
+      "startedAt": "2026-11-07T20:23:34.471Z",
+      "status": 200,
+      "headers": {
+        "label": "sanitized parsed headers; whitelist only, never raw header values",
+        "totalFieldCount": 18,
+        "sensitiveFieldsWithheld": 0,
+        "redirectLocationPresent": false,
+        "safe": {
+          "content-type": "text/html; charset=utf-8",
+          "content-length": "7313",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "date": "Sat, 07 Nov 2026 20:23:34 GMT",
+          "age": "335",
+          "etag": "\"a56f012c53ae37d84d4979d0ef83fc5e\"",
+          "server": "Vercel",
+          "x-vercel-cache": "HIT"
+        }
+      },
+      "observedBytes": 7313,
+      "bytes": 7313,
+      "sha256": "3b2d4d0ad806a5747dacb69f5befc4d79b57f4dee55de03d6a920ab0b03120d1",
+      "complete": true,
+      "responseEnd": true,
+      "responseClose": true,
+      "responseMessageComplete": true,
+      "requestClose": true,
+      "socketClose": true,
+      "error": null,
+      "bodyRetained": "home.html",
+      "deadlineAt": "2026-11-07T20:23:49.471Z",
+      "observedSha256": "3b2d4d0ad806a5747dacb69f5befc4d79b57f4dee55de03d6a920ab0b03120d1",
+      "finishedAt": "2026-11-07T20:23:34.744Z"
+    },
+    {
+      "label": "chunk-1",
+      "url": "https://sift-analytics.vercel.app/_next/static/immutable/chunks/0skflbwy4yw-u.js",
+      "method": "GET",
+      "startedAt": "2026-11-07T20:23:34.745Z",
+      "status": 200,
+      "headers": {
+        "label": "sanitized parsed headers; whitelist only, never raw header values",
+        "totalFieldCount": 16,
+        "sensitiveFieldsWithheld": 0,
+        "redirectLocationPresent": false,
+        "safe": {
+          "content-type": "application/javascript; charset=utf-8",
+          "content-length": "181602",
+          "cache-control": "public,max-age=31536000,immutable",
+          "date": "Sat, 07 Nov 2026 20:23:35 GMT",
+          "age": "0",
+          "etag": "\"_next/static/immutable/chunks/0skflbwy4yw-u.js\"",
+          "last-modified": "Sat, 07 Nov 2026 20:23:35 GMT",
+          "server": "Vercel",
+          "x-vercel-cache": "MISS"
+        }
+      },
+      "observedBytes": 181602,
+      "bytes": 181602,
+      "sha256": "fb45d905d572cc0b3e79d612859bd4e14dc1ca4e2da04b5a6facf4f6f4d6eb61",
+      "complete": true,
+      "responseEnd": true,
+      "responseClose": true,
+      "responseMessageComplete": true,
+      "requestClose": true,
+      "socketClose": true,
+      "error": null,
+      "bodyRetained": null,
+      "deadlineAt": "2026-11-07T20:23:49.745Z",
+      "observedSha256": "fb45d905d572cc0b3e79d612859bd4e14dc1ca4e2da04b5a6facf4f6f4d6eb61",
+      "finishedAt": "2026-11-07T20:23:35.044Z",
+      "uiStringOffsets": {
+        "Choose a folder": -1,
+        "Import selected": -1,
+        "Choose a data folder": -1
+      }
+    },
+    {
+      "label": "chunk-2",
+      "url": "https://sift-analytics.vercel.app/_next/static/immutable/chunks/15fgk1sol-0bq.js",
+      "method": "GET",
+      "startedAt": "2026-11-07T20:23:35.045Z",
+      "status": 200,
+      "headers": {
+        "label": "sanitized parsed headers; whitelist only, never raw header values",
+        "totalFieldCount": 16,
+        "sensitiveFieldsWithheld": 0,
+        "redirectLocationPresent": false,
+        "safe": {
+          "content-type": "application/javascript; charset=utf-8",
+          "content-length": "230307",
+          "cache-control": "public,max-age=31536000,immutable",
+          "date": "Sat, 07 Nov 2026 20:23:35 GMT",
+          "age": "0",
+          "etag": "\"_next/static/immutable/chunks/15fgk1sol-0bq.js\"",
+          "last-modified": "Sat, 07 Nov 2026 20:23:35 GMT",
+          "server": "Vercel",
+          "x-vercel-cache": "MISS"
+        }
+      },
+      "observedBytes": 230307,
+      "bytes": 230307,
+      "sha256": "fae90c44508d86c9c6f62f4e38c5cf76c3b90002dfcb3d507b389e9baa1deffb",
+      "complete": true,
+      "responseEnd": true,
+      "responseClose": true,
+      "responseMessageComplete": true,
+      "requestClose": true,
+      "socketClose": true,
+      "error": null,
+      "bodyRetained": null,
+      "deadlineAt": "2026-11-07T20:23:50.045Z",
+      "observedSha256": "fae90c44508d86c9c6f62f4e38c5cf76c3b90002dfcb3d507b389e9baa1deffb",
+      "finishedAt": "2026-11-07T20:23:35.360Z",
+      "uiStringOffsets": {
+        "Choose a folder": -1,
+        "Import selected": -1,
+        "Choose a data folder": -1
+      }
+    },
+    {
+      "label": "chunk-3",
+      "url": "https://sift-analytics.vercel.app/_next/static/immutable/chunks/turbopack-1byz1flvc-bu1.js",
+      "method": "GET",
+      "startedAt": "2026-11-07T20:23:35.360Z",
+      "status": 200,
+      "headers": {
+        "label": "sanitized parsed headers; whitelist only, never raw header values",
+        "totalFieldCount": 16,
+        "sensitiveFieldsWithheld": 0,
+        "redirectLocationPresent": false,
+        "safe": {
+          "content-type": "application/javascript; charset=utf-8",
+          "content-length": "11255",
+          "cache-control": "public,max-age=31536000,immutable",
+          "date": "Sat, 07 Nov 2026 20:23:35 GMT",
+          "age": "0",
+          "etag": "\"_next/static/immutable/chunks/turbopack-1byz1flvc-bu1.js\"",
+          "last-modified": "Sat, 07 Nov 2026 20:23:35 GMT",
+          "server": "Vercel",
+          "x-vercel-cache": "MISS"
+        }
+      },
+      "observedBytes": 11255,
+      "bytes": 11255,
+      "sha256": "b5f9b5199b99ab6c141f4540f0b7d0fe803c4ecf6956849ecb6e59d3d439272e",
+      "complete": true,
+      "responseEnd": true,
+      "responseClose": true,
+      "responseMessageComplete": true,
+      "requestClose": true,
+      "socketClose": true,
+      "error": null,
+      "bodyRetained": null,
+      "deadlineAt": "2026-11-07T20:23:50.360Z",
+      "observedSha256": "b5f9b5199b99ab6c141f4540f0b7d0fe803c4ecf6956849ecb6e59d3d439272e",
+      "finishedAt": "2026-11-07T20:23:35.558Z",
+      "uiStringOffsets": {
+        "Choose a folder": -1,
+        "Import selected": -1,
+        "Choose a data folder": -1
+      }
+    },
+    {
+      "label": "chunk-4",
+      "url": "https://sift-analytics.vercel.app/_next/static/immutable/chunks/00z4pmesk2f4f.js",
+      "method": "GET",
+      "startedAt": "2026-11-07T20:23:35.558Z",
+      "status": 200,
+      "headers": {
+        "label": "sanitized parsed headers; whitelist only, never raw header values",
+        "totalFieldCount": 16,
+        "sensitiveFieldsWithheld": 0,
+        "redirectLocationPresent": false,
+        "safe": {
+          "content-type": "application/javascript; charset=utf-8",
+          "content-length": "13822",
+          "cache-control": "public,max-age=31536000,immutable",
+          "date": "Sat, 07 Nov 2026 20:23:35 GMT",
+          "age": "0",
+          "etag": "\"_next/static/immutable/chunks/00z4pmesk2f4f.js\"",
+          "last-modified": "Sat, 07 Nov 2026 20:23:35 GMT",
+          "server": "Vercel",
+          "x-vercel-cache": "MISS"
+        }
+      },
+      "observedBytes": 13822,
+      "bytes": 13822,
+      "sha256": "c410d0f2543e080768fc14f73b2bd1fdf103e26956e9730390b5e41c4fb5ff8b",
+      "complete": true,
+      "responseEnd": true,
+      "responseClose": true,
+      "responseMessageComplete": true,
+      "requestClose": true,
+      "socketClose": true,
+      "error": null,
+      "bodyRetained": null,
+      "deadlineAt": "2026-11-07T20:23:50.558Z",
+      "observedSha256": "c410d0f2543e080768fc14f73b2bd1fdf103e26956e9730390b5e41c4fb5ff8b",
+      "finishedAt": "2026-11-07T20:23:35.733Z",
+      "uiStringOffsets": {
+        "Choose a folder": -1,
+        "Import selected": -1,
+        "Choose a data folder": -1
+      }
+    },
+    {
+      "label": "chunk-5",
+      "url": "https://sift-analytics.vercel.app/_next/static/immutable/chunks/2-iz8ielu4-bz.js",
+      "method": "GET",
+      "startedAt": "2026-11-07T20:23:35.733Z",
+      "status": 200,
+      "headers": {
+        "label": "sanitized parsed headers; whitelist only, never raw header values",
+        "totalFieldCount": 16,
+        "sensitiveFieldsWithheld": 0,
+        "redirectLocationPresent": false,
+        "safe": {
+          "content-type": "application/javascript; charset=utf-8",
+          "content-length": "333",
+          "cache-control": "public,max-age=31536000,immutable",
+          "date": "Sat, 07 Nov 2026 20:23:36 GMT",
+          "age": "0",
+          "etag": "\"_next/static/immutable/chunks/2-iz8ielu4-bz.js\"",
+          "last-modified": "Sat, 07 Nov 2026 20:23:36 GMT",
+          "server": "Vercel",
+          "x-vercel-cache": "MISS"
+        }
+      },
+      "observedBytes": 333,
+      "bytes": 333,
+      "sha256": "4a6711ebf2447c45880139739e8834fa6b644766e0c256b60be533547f8df0db",
+      "complete": true,
+      "responseEnd": true,
+      "responseClose": true,
+      "responseMessageComplete": true,
+      "requestClose": true,
+      "socketClose": true,
+      "error": null,
+      "bodyRetained": null,
+      "deadlineAt": "2026-11-07T20:23:50.733Z",
+      "observedSha256": "4a6711ebf2447c45880139739e8834fa6b644766e0c256b60be533547f8df0db",
+      "finishedAt": "2026-11-07T20:23:36.010Z",
+      "uiStringOffsets": {
+        "Choose a folder": -1,
+        "Import selected": -1,
+        "Choose a data folder": -1
+      }
+    },
+    {
+      "label": "chunk-6",
+      "url": "https://sift-analytics.vercel.app/_next/static/immutable/chunks/19y-yzcbfbh-e.js",
+      "method": "GET",
+      "startedAt": "2026-11-07T20:23:36.010Z",
+      "status": 200,
+      "headers": {
+        "label": "sanitized parsed headers; whitelist only, never raw header values",
+        "totalFieldCount": 16,
+        "sensitiveFieldsWithheld": 0,
+        "redirectLocationPresent": false,
+        "safe": {
+          "content-type": "application/javascript; charset=utf-8",
+          "content-length": "3547889",
+          "cache-control": "public,max-age=31536000,immutable",
+          "date": "Sat, 07 Nov 2026 20:23:36 GMT",
+          "age": "0",
+          "etag": "\"_next/static/immutable/chunks/19y-yzcbfbh-e.js\"",
+          "last-modified": "Sat, 07 Nov 2026 20:23:36 GMT",
+          "server": "Vercel",
+          "x-vercel-cache": "MISS"
+        }
+      },
+      "observedBytes": 1053805,
+      "bytes": 1048576,
+      "sha256": "267f81a27131497f285a7c8cd3be50bd5e5dda81d6ea0579b3b9f4d6c316bd19",
+      "complete": false,
+      "responseEnd": false,
+      "responseClose": true,
+      "responseMessageComplete": false,
+      "requestClose": true,
+      "socketClose": true,
+      "error": "body_size_bound",
+      "bodyRetained": null,
+      "deadlineAt": "2026-11-07T20:23:51.010Z",
+      "observedSha256": "30159188a4329b538c3e14a72054f9e97f1d1d98c573452a12d838244c1a2146",
+      "finishedAt": "2026-11-07T20:23:36.342Z"
+    }
+  ],
+  "retainedBodies": [
+    {
+      "name": "home.html",
+      "bytes": 7313,
+      "sha256": "3b2d4d0ad806a5747dacb69f5befc4d79b57f4dee55de03d6a920ab0b03120d1",
+      "complete": true
+    }
+  ],
+  "matchedAsset": null,
+  "passed": false,
+  "error": "incomplete_chunk-6",
+  "proofLimits": [
+    "Anonymous HTTP only; no hosted browser, IndexedDB/import/query, model or account proof.",
+    "A matching public bundle proves the reviewed UI strings are served, not byte equivalence of all assets or a deployment-to-Git attestation.",
+    "Headers are explicitly sanitized JSON only; cookie/auth values are never retained. No cookie jar, Authorization, redirects, retries or protection bypass.",
+    "Body hashes cover observed HTTP representation bytes. Incomplete prefixes and missing terminal/socket events remain failures. HTTP work uses Connection: close."
+  ],
+  "chunkCandidates": [
+    "/_next/static/immutable/chunks/0skflbwy4yw-u.js",
+    "/_next/static/immutable/chunks/15fgk1sol-0bq.js",
+    "/_next/static/immutable/chunks/turbopack-1byz1flvc-bu1.js",
+    "/_next/static/immutable/chunks/00z4pmesk2f4f.js",
+    "/_next/static/immutable/chunks/2-iz8ielu4-bz.js",
+    "/_next/static/immutable/chunks/19y-yzcbfbh-e.js",
+    "/_next/static/immutable/chunks/0c0hxoamwjsbw.js",
+    "/_next/static/immutable/chunks/1wb2qzc39lff_.js"
+  ],
+  "chunksFetched": 6,
+  "observedBodyBytes": 1498437,
+  "finishedAt": "2026-11-07T20:23:36.342Z"
+}
