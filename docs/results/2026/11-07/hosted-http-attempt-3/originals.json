@@ -1,0 +1,64 @@
+{
+  "checkerSource": "dad28070a9d0d4ebd40767d390cb53b32958643b",
+  "ownerSuppliedRuntimeSource": "3b06822cf61ad5a18c0029004366f000a5f9db7f",
+  "runId": 42411324573,
+  "jobId": 128519917116,
+  "passed": true,
+  "files": [
+    {
+      "name": "home.html",
+      "bytes": 7313,
+      "sha256": "3b2d4d0ad806a5747dacb69f5befc4d79b57f4dee55de03d6a920ab0b03120d1"
+    },
+    {
+      "name": "hosted-http.json",
+      "bytes": 17908,
+      "sha256": "7d95e0bca4452ef927f93d93a7c8fb6e88b2a321c66062cdf1a4ec19c427955e"
+    },
+    {
+      "name": "matched-client.js.gz",
+      "bytes": 827681,
+      "sha256": "707272b1c5d4f3e95fa6d4f74d850a27c7053c74f4f185d2daf07751180fd753",
+      "uncompressedName": "matched-client.js",
+      "uncompressedBytes": 3547889,
+      "uncompressedSha256": "f33a8f8882e739ad00624be7148fd7ded3f5f6bf6699300a237935ce2a7f3654"
+    },
+    {
+      "name": "session-error.json",
+      "bytes": 87,
+      "sha256": "004aba35acc1d074a2e8d858411fe48eadab01189ad77858e89e330ac9a343f2"
+    },
+    {
+      "name": "source-after.json.gz",
+      "bytes": 11242,
+      "sha256": "d6a9cad498185b9f00173d6253593709e310db6e68d37a130fd81a204f0deb6f",
+      "uncompressedName": "source-after.json",
+      "uncompressedBytes": 58560,
+      "uncompressedSha256": "b75f0974d6a3eab574c5c8d6e1b6f52060f8d6e87dd02b24b4c0d2b3c6fa4246"
+    },
+    {
+      "name": "source-before.json.gz",
+      "bytes": 11242,
+      "sha256": "d6a9cad498185b9f00173d6253593709e310db6e68d37a130fd81a204f0deb6f",
+      "uncompressedName": "source-before.json",
+      "uncompressedBytes": 58560,
+      "uncompressedSha256": "b75f0974d6a3eab574c5c8d6e1b6f52060f8d6e87dd02b24b4c0d2b3c6fa4246"
+    },
+    {
+      "name": "worker.js.gz",
+      "bytes": 193871,
+      "sha256": "7037f1c8cb70abdce07bde20a0af9a91f38acc0c31084e188f11be799795af94",
+      "uncompressedName": "worker.js",
+      "uncompressedBytes": 839642,
+      "uncompressedSha256": "964f678d3bfa5a23deb154e0a7950634a4d1415e571040ab2d47815dc3f13582"
+    },
+    {
+      "name": "job.log.gz",
+      "bytes": 1056432,
+      "sha256": "fadf133bad2fd0aa244f9d6a0ee142caee956e5055cfac55959e4c04a0bab939",
+      "uncompressedName": "job.log",
+      "uncompressedBytes": 1472018,
+      "uncompressedSha256": "75a8c64697ba196052729dfc3f5f03176a257f38576f6b883abc47301badda48"
+    }
+  ]
+}

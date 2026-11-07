@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-07 20:35:07 UTC",
+  "deploymentObservedAt": "2026-11-07 20:33 UTC",
+  "project": "prj_y8cXMQAAIQIIqbvsBlrlwGNfekum",
+  "deployment": "dpl_J5ZPhyWokYaNF9gYzRE13LqH2L3R",
+  "target": "production",
+  "state": "READY",
+  "aliases": [
+    "sift-analytics.vercel.app",
+    "sift-analytics-my-team-4f230354.vercel.app",
+    "sift-analytics-git-3b06822cf61ad5a18c00-06b56f-my-team-4f230354.vercel.app"
+  ],
+  "runtimeSource": "3b06822cf61ad5a18c0029004366f000a5f9db7f",
+  "browserSource": "3b06822cf61ad5a18c0029004366f000a5f9db7f",
+  "browserRun": 42408226622,
+  "httpCheckerSource": "dad28070a9d0d4ebd40767d390cb53b32958643b",
+  "httpRun": 42411324573,
+  "scope": "Separate provider metadata readback and anonymous HTTP observations; no per-asset Git attestation or hosted-browser claim."
+}
