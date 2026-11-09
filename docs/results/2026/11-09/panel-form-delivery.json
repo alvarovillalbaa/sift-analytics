@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "profile": "dated-provider-build-and-native-source-acceptance",
+  "observedAt": "2026-11-09T11:59:49Z",
+  "observedAtAppliesTo": "production build/source/alias observation only",
+  "runtimeSource": "37d49a6ac1bd060afc679230037e068afe757bb1",
+  "runtimeTree": "532fb38281a8b799f96d0c424d7f7d5e90f415c4",
+  "sourceParent": "53b687cb71c4c34a218aaa90e56b9ae012d85a5e",
+  "sourceBookmark": "qa/sift-panel-form-20261109",
+  "sourceFiles": 184,
+  "sourceBytes": 5847741,
+  "runtimeAcceptedBeforeMetadataDocuments": true,
+  "production": {
+    "projectId": "prj_y8cXMQAAIQIIqbvsBlrlwGNfekum",
+    "deploymentId": "dpl_5UadduHm42fwUySaCqqqgjBf3kJ9",
+    "state": "READY",
+    "source": "37d49a6ac1bd060afc679230037e068afe757bb1",
+    "canonicalUrl": "https://sift-analytics.vercel.app",
+    "canonicalAliasIndependentlyMatchedAtObservation": true,
+    "laterAutomaticAliasStateEstablished": false
+  },
+  "build": {
+    "installCommand": "npm ci",
+    "buildCommand": "npm run build",
+    "requestedNode": "24.x",
+    "buildNodeSelectionReported": "26.x",
+    "nitroRuntimeReported": "nodejs24.x",
+    "nodeSelectionReason": "Unchanged package engines >=24 overrides requested project Node24 for build selection.",
+    "nextVersion": "16.4.2",
+    "compilationPassed": true,
+    "typescriptPassed": true,
+    "generatedPages": 6,
+    "providerBuildSeconds": 42,
+    "buildingToReadyMilliseconds": 48684
+  },
+  "events": {
+    "initialCappedObservation": {
+      "entries": 99,
+      "retainedSeparately": true,
+      "completeness": "capped"
+    },
+    "uncappedWindowCounts": [
+      39,
+      27,
+      71
+    ],
+    "rawWindowEntries": 137,
+    "uniqueEventObjects": 131,
+    "duplicateEntries": 6,
+    "deduplication": "exact event objects with canonicalized object key order"
+  },
+  "warnings": {
+    "sourceConfigurationUnchanged": true,
+    "reportsPreserved": [
+      "Unchanged engines >=24 may select later Node major versions.",
+      "npm unknown cache-dir environment configuration.",
+      "Unchanged install reports two untriaged vulnerabilities: one moderate, one high."
+    ],
+    "vulnerabilities": {
+      "moderate": 1,
+      "high": 1,
+      "triageOrRemediationEstablished": false
+    }
+  },
+  "nativeAcceptance": {
+    "temporalRelation": "after the production observation and before these metadata documents",
+    "exactAcceptanceTimestampEstablished": false,
+    "githubMainAccepted": true,
+    "headMainOriginExactAtAcceptance": true,
+    "nativeWorktreeCleanAtAcceptance": true,
+    "failedCombinedSymrefTransaction": {
+      "exitCode": 128,
+      "exitAndTextEvidence": "root-witnessed transcription",
+      "originalFailureStreamRecoveredAndHashVerified": false,
+      "refsUnchangedInPostFailureReadbacks": true,
+      "retainedOldSource": "53b687cb71c4c34a218aaa90e56b9ae012d85a5e"
+    },
+    "correctedTwoExplicitRefTransaction": {
+      "exitCode": 0,
+      "oldShaLeases": true,
+      "actualToolWrapperRetained": true,
+      "transactionStartPrepareCommitReportedOk": true,
+      "headMainOriginAfter": [
+        "37d49a6ac1bd060afc679230037e068afe757bb1",
+        "37d49a6ac1bd060afc679230037e068afe757bb1",
+        "37d49a6ac1bd060afc679230037e068afe757bb1"
+      ],
+      "statusReadbackEmpty": true
+    }
+  },
+  "checkedApplicationAndTestSources": [
+    {
+      "path": "components/SiftApp.tsx",
+      "bytes": 39018,
+      "sha256": "a0d68930c7b77e75703fb4bf8430786b8f1b294c2422d0a40f6c10af11e25156"
+    },
+    {
+      "path": "lib/panel-form.ts",
+      "bytes": 1295,
+      "sha256": "06c418af5fd957f1600a99b5669843dbbd3718def5762b8977e83a25348d0598"
+    },
+    {
+      "path": "tests/unit/panel-form.test.ts",
+      "bytes": 9926,
+      "sha256": "96dcb8b22869be99bd5e6eaafb7080d49251d68bf36fbaaf483ca464c3bcefec"
+    }
+  ],
+  "sourceUnchangedAfterChecks": true,
+  "separateT1Receipt": "panel-form.json",
+  "earlierTwelveCaseSuiteRerun": false,
+  "olderImportHttpBrowserChecksReplayed": false,
+  "originals": {
+    "file": "provider-build-originals.json",
+    "bytes": 70985,
+    "sha256": "3fc84660cda784fb0405c890fac945185787fc93bf4888bd0c2d222c1ed692b0",
+    "privateRetained": true,
+    "rawEventOrLocalPathPublication": false,
+    "note": "The provider-original JSON binding is not an original-byte digest for the root-witnessed native failure text."
+  },
+  "sessionSecretConfiguration": "owner-deferred",
+  "modelProviderAccountDatabaseDependencyOrPaidPlanChange": false,
+  "finalMetadataOnlySource": null,
+  "limits": [
+    "Build/READY/source/alias proof does not establish browser form timing, React/DuckDB/provider behavior or physical-device acceptance.",
+    "No older import/browser/HTTP or twelve-case panel-result suite replay.",
+    "Session secret remains owner-deferred; no model, database, account, dependency or paid-plan change.",
+    "Build selection Node26.x and Nitro runtime nodejs24.x are distinct reported values.",
+    "The 42-second provider summary and 48,684 ms lifecycle interval describe different timings.",
+    "The initial exit128 native result is root-witnessed; actual later ref/status tool wrappers independently bind the final state.",
+    "No original failure-stream digest, raw provider event copy or private local path is published.",
+    "No final metadata-only source or later automatic alias state is identified by this dated receipt."
+  ]
+}
