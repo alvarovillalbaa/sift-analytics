@@ -32,6 +32,10 @@ request ordering for overlapping executions of the same query. Previous
 import/HTTP/browser receipts retain their original sources and were not rerun.
 Provider build and delivery observations, if obtained, are separate evidence.
 
+The [delivery record](../results/2026/11-09/panel-results-delivery.json) records
+the successful Next/TypeScript build and READY production source `cd602ac1`.
+Its canonical alias matches; anonymous HTTP and browser behavior remain unverified.
+
 Reproduce the focused checks with the existing compatible tools:
 
 ```sh

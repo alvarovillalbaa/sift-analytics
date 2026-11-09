@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "runtimeSource": "cd602ac100d62ec17a01bbdf98d19c97e475aa8e",
+  "runtimeTree": "2a5043e9999f023efeedc3e3b49ab1d1c36a4938",
+  "sourceParent": "cc105a943b4b1982ad584196e1495897de8b2161",
+  "sourceBookmark": "qa/sift-panel-results-20261109",
+  "project": "prj_y8cXMQAAIQIIqbvsBlrlwGNfekum",
+  "deployment": "dpl_ByhJ2g16y4ZMeVjCdpebuQsGqrTi",
+  "deploymentUrl": "https://sift-analytics-aue2ltw13-my-team-4f230354.vercel.app",
+  "canonicalUrl": "https://sift-analytics.vercel.app",
+  "target": "production",
+  "state": "READY",
+  "canonicalAliasIndependentlyMatched": true,
+  "build": {
+    "installCommand": "npm ci",
+    "buildCommand": "npm run build",
+    "requestedNode": "24.x",
+    "observedNodeMajor": "26.x",
+    "nodeSelectionReason": "The unchanged package engines >=24 takes precedence over requested project Node24.",
+    "nextVersion": "16.4.2",
+    "compilationPassed": true,
+    "typescriptPassed": true,
+    "generatedPages": 6,
+    "deploymentCompletedObserved": true,
+    "uncappedEventWindows": 8,
+    "rawEventDictionaries": 140,
+    "uniqueEventDictionaries": 135,
+    "firstEventResponseTruncated": true,
+    "originals": {
+      "retention": "Whole private provider responses, including the truncated first response and all eight later uncapped windows.",
+      "bytes": 93201,
+      "sha256": "c2023075f79c3729b7fe0c5592397fc0363873a57e13cb1373f6176deecda597"
+    },
+    "warnings": [
+      "The engines range automatically selects newer Node majors.",
+      "npm reports an unknown cache-dir environment configuration.",
+      "The unchanged dependency install reports two untriaged vulnerabilities: one moderate and one high."
+    ]
+  },
+  "focusedChecks": "panel-results.json",
+  "scope": "Two runtime source paths change: query settlement integration and its new pure helper. The focused twelve-case receipt and provider build are separate evidence.",
+  "anonymousDelivery": {
+    "status": "unverified",
+    "observation": "The anonymous web tool could not access the canonical URL. No response status, body or asset equivalence was established."
+  },
+  "browserInteraction": "unverified for this repair; supported controls were unavailable",
+  "remainingLimits": [
+    "No actual drag/resize during an in-flight browser query was executed for this source.",
+    "No newest-request ordering guarantee for identical overlapping queries.",
+    "Existing import/browser/HTTP results retain their previous source identities.",
+    "Session-secret configuration remains owner-deferred; no model, PostgreSQL, account, Auth or paid-plan change."
+  ]
+}
