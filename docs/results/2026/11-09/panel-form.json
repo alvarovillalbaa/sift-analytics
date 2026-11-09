@@ -1,0 +1,284 @@
+{
+  "schemaVersion": 1,
+  "baseCommit": "53b687cb71c4c34a218aaa90e56b9ae012d85a5e",
+  "profile": "actual-panel-form-coordinator-tier1",
+  "node": "26.8.2",
+  "typescript": "7.0.2",
+  "uniqueCaseCount": 8,
+  "sources": [
+    {
+      "path": "components/SiftApp.tsx",
+      "bytes": 39018,
+      "sha256": "a0d68930c7b77e75703fb4bf8430786b8f1b294c2422d0a40f6c10af11e25156"
+    },
+    {
+      "path": "lib/panel-form.ts",
+      "bytes": 1295,
+      "sha256": "06c418af5fd957f1600a99b5669843dbbd3718def5762b8977e83a25348d0598"
+    },
+    {
+      "path": "tests/unit/panel-form.test.ts",
+      "bytes": 9926,
+      "sha256": "96dcb8b22869be99bd5e6eaafb7080d49251d68bf36fbaaf483ca464c3bcefec"
+    }
+  ],
+  "componentCoverage": "independent source/wiring review only; the component is not included in the narrow type check or executed by these cases",
+  "attempts": [
+    {
+      "attempt": 1,
+      "unit": {
+        "ids": [
+          "PF01",
+          "PF02",
+          "PF03",
+          "PF04",
+          "PF05",
+          "PF06",
+          "PF07",
+          "PF08"
+        ],
+        "counts": {
+          "tests": 8,
+          "pass": 8,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "reporterDurationMs": 172.896209,
+        "typelessPackageWarningPreserved": true
+      },
+      "typeCheck": {
+        "exitCode": 1,
+        "files": [
+          "lib/panel-form.ts",
+          "tests/unit/panel-form.test.ts"
+        ],
+        "strict": true,
+        "skipLibCheck": false,
+        "errorCode": "TS2345"
+      },
+      "sourceSnapshot": [
+        {
+          "path": "components/SiftApp.tsx",
+          "bytes": 39018,
+          "sha256": "a0d68930c7b77e75703fb4bf8430786b8f1b294c2422d0a40f6c10af11e25156"
+        },
+        {
+          "path": "lib/panel-form.ts",
+          "bytes": 1295,
+          "sha256": "06c418af5fd957f1600a99b5669843dbbd3718def5762b8977e83a25348d0598"
+        },
+        {
+          "path": "tests/unit/panel-form.test.ts",
+          "bytes": 9914,
+          "sha256": "2a2e400dc7c90262093a9e9db3d63314b8c5a73a27f271b34e80233849b9811e"
+        }
+      ],
+      "originalSnapshotRetained": true
+    },
+    {
+      "attempt": 2,
+      "unit": {
+        "ids": [
+          "PF01",
+          "PF02",
+          "PF03",
+          "PF04",
+          "PF05",
+          "PF06",
+          "PF07",
+          "PF08"
+        ],
+        "counts": {
+          "tests": 8,
+          "pass": 8,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "reporterDurationMs": 172.630542,
+        "typelessPackageWarningPreserved": true
+      },
+      "typeCheck": {
+        "exitCode": 0,
+        "files": [
+          "lib/panel-form.ts",
+          "tests/unit/panel-form.test.ts"
+        ],
+        "strict": true,
+        "skipLibCheck": false,
+        "errorCode": null
+      },
+      "sourceSnapshot": [
+        {
+          "path": "components/SiftApp.tsx",
+          "bytes": 39018,
+          "sha256": "a0d68930c7b77e75703fb4bf8430786b8f1b294c2422d0a40f6c10af11e25156"
+        },
+        {
+          "path": "lib/panel-form.ts",
+          "bytes": 1295,
+          "sha256": "06c418af5fd957f1600a99b5669843dbbd3718def5762b8977e83a25348d0598"
+        },
+        {
+          "path": "tests/unit/panel-form.test.ts",
+          "bytes": 9926,
+          "sha256": "96dcb8b22869be99bd5e6eaafb7080d49251d68bf36fbaaf483ca464c3bcefec"
+        }
+      ],
+      "originalSnapshotRetained": true
+    }
+  ],
+  "commands": [
+    {
+      "attempt": 1,
+      "label": "unit",
+      "command": "node --test tests/unit/panel-form.test.ts",
+      "commandDescription": "existing Node test runner; actual pure coordinator only",
+      "startedAt": "2026-11-09T11:49:42.702802+00:00",
+      "completedAt": "2026-11-09T11:49:43.102992+00:00",
+      "exitCode": 0,
+      "wallTimeSeconds": 0.39982587506528944
+    },
+    {
+      "attempt": 1,
+      "label": "types",
+      "command": "node node_modules/typescript/bin/tsc --ignoreConfig --noEmit --strict --target ES2022 --module ESNext --moduleResolution bundler --allowImportingTsExtensions --esModuleInterop --types node --skipLibCheck false lib/panel-form.ts tests/unit/panel-form.test.ts",
+      "commandDescription": "existing TypeScript compiler; helper/test files only, strict mode and library checking enabled",
+      "startedAt": "2026-11-09T11:49:43.103590+00:00",
+      "completedAt": "2026-11-09T11:49:43.647864+00:00",
+      "exitCode": 1,
+      "wallTimeSeconds": 0.5442760409787297
+    },
+    {
+      "attempt": 2,
+      "label": "unit-attempt-2",
+      "command": "node --test tests/unit/panel-form.test.ts",
+      "commandDescription": "existing Node test runner; actual pure coordinator only",
+      "startedAt": "2026-11-09T11:51:51.699872+00:00",
+      "completedAt": "2026-11-09T11:51:52.100213+00:00",
+      "exitCode": 0,
+      "wallTimeSeconds": 0.40010158298537135
+    },
+    {
+      "attempt": 2,
+      "label": "types-attempt-2",
+      "command": "node node_modules/typescript/bin/tsc --ignoreConfig --noEmit --strict --target ES2022 --module ESNext --moduleResolution bundler --allowImportingTsExtensions --esModuleInterop --types node --skipLibCheck false lib/panel-form.ts tests/unit/panel-form.test.ts",
+      "commandDescription": "existing TypeScript compiler; helper/test files only, strict mode and library checking enabled",
+      "startedAt": "2026-11-09T11:51:52.100839+00:00",
+      "completedAt": "2026-11-09T11:51:52.607169+00:00",
+      "exitCode": 0,
+      "wallTimeSeconds": 0.50633204204496
+    }
+  ],
+  "originals": [
+    {
+      "attempt": 1,
+      "commandLabel": "unit",
+      "channel": "stdout",
+      "file": "unit.stdout.txt",
+      "bytes": 1468,
+      "sha256": "3fb542b57673ff9115af7f32ca3d1080b255f35a3b3677ec715b71780270ee84",
+      "privateRetained": true,
+      "publicRawCopy": false
+    },
+    {
+      "attempt": 1,
+      "commandLabel": "unit",
+      "channel": "stderr",
+      "file": "unit.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "privateRetained": true,
+      "publicRawCopy": false
+    },
+    {
+      "attempt": 1,
+      "commandLabel": "types",
+      "channel": "stdout",
+      "file": "types.stdout.txt",
+      "bytes": 127,
+      "sha256": "55dab0f50999bd0a48982a54d0afd60a114d47b0841225dd46275678db17c7e5",
+      "privateRetained": true,
+      "publicRawCopy": false
+    },
+    {
+      "attempt": 1,
+      "commandLabel": "types",
+      "channel": "stderr",
+      "file": "types.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "privateRetained": true,
+      "publicRawCopy": false
+    },
+    {
+      "attempt": 2,
+      "commandLabel": "unit-attempt-2",
+      "channel": "stdout",
+      "file": "unit-attempt-2.stdout.txt",
+      "bytes": 1470,
+      "sha256": "5a82b4564fe3d78d425063e09c3f3782bdc004397305ba36b19375d7387b2c14",
+      "privateRetained": true,
+      "publicRawCopy": false
+    },
+    {
+      "attempt": 2,
+      "commandLabel": "unit-attempt-2",
+      "channel": "stderr",
+      "file": "unit-attempt-2.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "privateRetained": true,
+      "publicRawCopy": false
+    },
+    {
+      "attempt": 2,
+      "commandLabel": "types-attempt-2",
+      "channel": "stdout",
+      "file": "types-attempt-2.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "privateRetained": true,
+      "publicRawCopy": false
+    },
+    {
+      "attempt": 2,
+      "commandLabel": "types-attempt-2",
+      "channel": "stderr",
+      "file": "types-attempt-2.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "privateRetained": true,
+      "publicRawCopy": false
+    }
+  ],
+  "correction": {
+    "scope": "one erased TypeScript assertion annotation in PF08",
+    "before": "assert.deepEqual(committed, []);",
+    "after": "assert.deepEqual(committed, [] as string[]);",
+    "reason": "assert typings otherwise narrowed committed to never[] before the retry callback",
+    "firstTypeFailurePreserved": true,
+    "runtimeValuesCaseIdsAndFlowUnchanged": true,
+    "inverseReproducesFirstCheckedTest": true
+  },
+  "originalRetention": "Raw original outputs contain private local paths and remain in private task notes; only safe command descriptions, counts, bytes and SHA256 are published.",
+  "sourceUnchangedAfterCorrectedChecks": true,
+  "packageConfigurationChangedForWarning": false,
+  "singleSixteenCaseInvocation": false,
+  "earlierTwelveCasesRerun": false,
+  "separateEarlierResult": "panel-results.json",
+  "implementationNote": "../../../fixes/panel-form-settlement.md",
+  "publicationStatus": "pending-separate-result",
+  "productionStatus": "pending-separate-result",
+  "limits": [
+    "Actual pure submission coordinator and authored deferred values only; no live query result.",
+    "No React, DuckDB, agent, application build or browser execution is established.",
+    "Narrow type checking covers the helper and its test file, not the app component.",
+    "The two eight-case invocations remain separate; no single sixteen-case run and no old twelve-case rerun.",
+    "Private raw outputs were not copied into the public repository; the module-type warning and first type failure remain retained.",
+    "Publication, hosted acceptance and production observations remain separate."
+  ]
+}

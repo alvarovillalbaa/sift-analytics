@@ -1,6 +1,6 @@
 # Architecture
 
-Last updated: 2026-11-07
+Last updated: 2026-11-09
 
 Sift is a self-hostable Next.js application with Vercel eve for conversational planning, DuckDB WASM for browser-local analysis, and an authenticated PostgreSQL adapter for approved server-side reporting datasets.
 
@@ -32,6 +32,7 @@ flowchart LR
 | Deterministic demo dataset, metric definitions and initial view | [`lib/demo.ts`](../lib/demo.ts) |
 | Server-configured PostgreSQL connection and execution | [`lib/postgres.ts`](../lib/postgres.ts) and [`app/api/postgres/route.ts`](../app/api/postgres/route.ts) |
 | Workspace actions, data exposure settings and conversation UI | [`components/SiftApp.tsx`](../components/SiftApp.tsx) |
+| Manual Add-panel request, form reset and component-lifetime ownership | [`lib/panel-form.ts`](../lib/panel-form.ts) |
 | Local file/folder preview, selection and sequential import outcomes | [`components/LocalImport.tsx`](../components/LocalImport.tsx) and [`lib/local-import.ts`](../lib/local-import.ts) |
 | Chart/table rendering and responsive panel layout | [`components/PanelCard.tsx`](../components/PanelCard.tsx) and [`components/DashboardGrid.tsx`](../components/DashboardGrid.tsx) |
 | Portable connector acceptance helper | [`scripts/check-connector.ts`](../scripts/check-connector.ts) |
@@ -68,6 +69,15 @@ receive the earlier query's result. An interrupted AI plan marks only its own
 still-matching, unexecuted panels as needing refresh; panels added later remain
 untouched. This merge does not establish a newest-request ordering policy for
 overlapping executions of the same query.
+
+Manual Add-panel settlement uses [`lib/panel-form.ts`](../lib/panel-form.ts) to
+separate the submitted result from the current dialog. The valid result appends
+to the captured view in current workspace state. A changed or replaced form is
+preserved; only the unchanged submitting form may close and clear its title.
+Only one manual submission can be active at a time, and component disposal
+prevents an old completion from writing through a later lifetime. Modal,
+inspector, draft and view transitions invalidate reset ownership without newly
+cancelling shared query controllers. See the [form repair](fixes/panel-form-settlement.md).
 
 ## PostgreSQL execution
 
