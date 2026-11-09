@@ -8,6 +8,7 @@ import LocalImport from './LocalImport';
 import { defaultWorkspace } from '@/lib/demo';
 import { initEngine, query, deleteDataset, getRestoreErrors, getRestoreFailures } from '@/lib/engine';
 import { loadWorkspace, saveWorkspace } from '@/lib/storage';
+import { applyPanelResults } from '@/lib/panel-results';
 import type { Dataset, Panel, QueryResult, View, Workspace } from '@/lib/types';
 
 type Modal = 'sources' | 'settings' | 'metrics' | 'panel' | 'new-view' | null;
@@ -124,8 +125,8 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
     runningViews.current.delete(viewId);
     setExecuting(runningViews.current.size > 0);
   }
-  function savePanelResults(viewId: string, panels: Panel[]) {
-    update(w => ({ ...w, views: w.views.map(v => v.id === viewId ? { ...v, panels: v.panels.map(panel => panels.find(result => result.id === panel.id) ?? { ...panel, error: 'Query not run. Refresh this view to continue.' }) } : v) }));
+  function savePanelResults(view: View, panels: Panel[]) {
+    update(w => ({ ...w, views: w.views.map(v => v.id === view.id ? { ...v, panels: applyPanelResults(v.panels, panels, view.panels) } : v) }));
   }
   function resetConversation() {
     if (busy || executing || loading) return;
@@ -163,7 +164,7 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
   }
   async function refresh(view: View) {
     const panels = await evaluate(view.panels);
-    update(w => ({ ...w, views: w.views.map(v => v.id === view.id ? { ...v, panels: v.panels.map(p => ({ ...p, ...panels.find(r => r.id === p.id) })) } : v) }));
+    update(w => ({ ...w, views: w.views.map(v => v.id === view.id ? { ...v, panels: applyPanelResults(v.panels, panels) } : v) }));
   }
   useEffect(() => {
     if (activeView?.panels.some(p => !p.result && !p.error) && !runningViews.current.has(activeView.id)) void refresh(activeView);
@@ -197,7 +198,7 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
         startPlan(view, part.toolCallId);
         void (async () => {
           const panels = await evaluate(view.panels);
-          savePanelResults(view.id, panels);
+          savePanelResults(view, panels);
           notify(`Created “${view.name}” with ${view.panels.length} panels.`);
         })().catch(error => notify(errorText(error))).finally(() => finishPlan(view.id));
       }
@@ -223,7 +224,7 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
               panels.push({ ...panel, error: errorText(error) });
             }
           }
-          savePanelResults(view.id, panels);
+          savePanelResults(view, panels);
           if (!controller.signal.aborted && workspaceRef.current.shareResults && sessionId) {
             const previous = pendingSummary.current?.sessionId === sessionId ? pendingSummary.current.results : [];
             pendingSummary.current = { sessionId, results: [...previous, ...results.map(r => 'rows' in r ? { ...r, rows: r.rows.slice(0, 50), modelRowsLimited: r.rows.length > 50 } : r)] };

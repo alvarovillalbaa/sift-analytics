@@ -60,6 +60,15 @@ IndexedDB stores file bytes, chosen sheets, stable dataset IDs, and import times
 
 AI tool plans add a stable view ID and an applied-call receipt in the same workspace update. Reloading cannot retain a receipt without its view: pending panels rerun, and durable tool replay does not duplicate the view. Concurrent plans retain separate cancellation controllers. Conversation reset waits for local work, clears queued explanations, and cannot receive an old session's results; remounting cancels the old component's local work.
 
+Query settlement in [`lib/panel-results.ts`](../lib/panel-results.ts) updates only
+result/error fields on the current panel with matching ID, SQL and ordered
+dataset IDs. A move, resize, reordering or presentation edit made while a query
+runs is retained. Removed panels are not restored, and a changed query does not
+receive the earlier query's result. An interrupted AI plan marks only its own
+still-matching, unexecuted panels as needing refresh; panels added later remain
+untouched. This merge does not establish a newest-request ordering policy for
+overlapping executions of the same query.
+
 ## PostgreSQL execution
 
 The administrator supplies connection URLs and schema-qualified table allowlists through server environment variables. Credentials are never accepted as a public request parameter. Discovery and query routes require the deployment Bearer token when configured. Dataset IDs are resolved against server configuration before execution; one query can use tables from one configured connection.

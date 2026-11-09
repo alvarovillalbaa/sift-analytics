@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "baseCommit": "cc105a943b4b1982ad584196e1495897de8b2161",
+  "node": "26.8.2",
+  "typescript": "7.0.2",
+  "sources": [
+    {
+      "path": "components/SiftApp.tsx",
+      "bytes": 38113,
+      "sha256": "f6803382dae306ea4379d546df97d33fa0cd6070fa7f934f6055f047b2615b5f"
+    },
+    {
+      "path": "lib/panel-results.ts",
+      "bytes": 924,
+      "sha256": "f5afc4ef2175ebd179bb32f55e445e444dba1fa28b454b6428e74fa449cce3c7"
+    },
+    {
+      "path": "tests/unit/panel-results.test.ts",
+      "bytes": 7111,
+      "sha256": "109a373726960fb202a5512c3dc75802c6f14f91019a79d8b43ed0cea7d5e5e1"
+    },
+    {
+      "path": "docs/architecture.md",
+      "bytes": 12342,
+      "sha256": "13512c4f0e72e082689e03ce7c49d2cc9d801146ae67659518ea21da1be46f51"
+    }
+  ],
+  "unit": {
+    "tests": 12,
+    "passed": 12,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "scope": "actual pure panel reconciliation only; no React/engine/agent/browser execution"
+  },
+  "commands": [
+    {
+      "command": "node --test tests/unit/panel-results.test.ts",
+      "startedAt": "2026-11-09 06:52:22 UTC",
+      "completedAt": "2026-11-09 06:52:23 UTC",
+      "exitCode": 0,
+      "wallTimeSeconds": 0.196592417
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --noEmit --strict --target ES2022 --module ESNext --moduleResolution bundler --allowImportingTsExtensions --esModuleInterop --types node --skipLibCheck false lib/panel-results.ts tests/unit/panel-results.test.ts",
+      "startedAt": "2026-11-09 06:52:55 UTC",
+      "completedAt": "2026-11-09 06:52:56 UTC",
+      "exitCode": 1,
+      "wallTimeSeconds": 0.126642667
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --ignoreConfig --noEmit --strict --target ES2022 --module ESNext --moduleResolution bundler --allowImportingTsExtensions --esModuleInterop --types node --skipLibCheck false lib/panel-results.ts tests/unit/panel-results.test.ts",
+      "startedAt": "2026-11-09 06:53:21 UTC",
+      "completedAt": "2026-11-09 06:53:21 UTC",
+      "exitCode": 0,
+      "wallTimeSeconds": 0.361760583
+    }
+  ],
+  "originals": [
+    {
+      "file": "unit.stdout.txt",
+      "bytes": 1785,
+      "sha256": "00e76747873fefb92fed572f15457538b6a5d0091f25adfbc019692349fe098a"
+    },
+    {
+      "file": "unit.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "types.stdout.txt",
+      "bytes": 142,
+      "sha256": "5b766b55df5bc15c215149742c8fe88d72a584cb45f5422c7edca1594b6d0cb5"
+    },
+    {
+      "file": "types.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "types-attempt-2.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "types-attempt-2.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "originalRetention": "Private task originals include local paths and were not copied into the public repository.",
+  "sourceUnchangedAfterChecks": true,
+  "limits": [
+    "No app build or browser behavior was checked by this receipt.",
+    "No newest-request ordering guarantee for identical overlapping queries.",
+    "Existing import/browser/HTTP receipts were not rerun."
+  ]
+}
