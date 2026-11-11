@@ -47,3 +47,10 @@ browser launch: Ubuntu apt mirror DNS failed and system-dependency setup timed
 out. Attempt2 downloads the pinned browser without rerunning optional apt/font
 setup; actual browser launch still has to establish that the runner's existing
 libraries suffice. Complete tool-install output is now retained in the packet.
+
+Attempt2 launched Chromium and passed C03. C01/C02/C04 stopped because the
+observer searched for tick text under the axis-line group. Screenshots show
+the labels; installed Recharts3.10.1 CartesianAxis renders them in the separate
+`recharts-xAxis-tick-labels` group. Attempt3 corrects that selector, scrolls each
+chart into view, and retains its latest geometry before assertions. The nonempty
+and exact-label checks remain mandatory. Application/dependency bytes stay exact.
