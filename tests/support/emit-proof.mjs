@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { gzipSync } from 'node:zlib';
 import path from 'node:path';
 const root = process.env.SIFT_IMPORT_PROOF_DIR; assert.ok(root);
-const allowed = /^(source-(?:before|after)\.json|(?:fixture|unit)-tests\.tap|(?:install|build|server\.stdout|server\.stderr|browser\.stdout|browser\.stderr)\.log|browser\.json|run\.json|fixture-manifest\.json|tools-lock\.json|(?:desktop|narrow|commit-race|workbook|panel-form-F0[1-6]|panel-chart-C0[1-4])\.png)$/;
+const allowed = /^(source-(?:before|after)\.json|(?:fixture|unit)-tests\.tap|(?:install|tools-install|build|server\.stdout|server\.stderr|browser\.stdout|browser\.stderr)\.log|browser\.json|run\.json|fixture-manifest\.json|tools-lock\.json|(?:desktop|narrow|commit-race|workbook|panel-form-F0[1-6]|panel-chart-C0[1-4])\.png)$/;
 let total = 0;
 for (const name of (await readdir(root)).sort()) {
   assert.ok(allowed.test(name), 'Unexpected proof file'); const file = path.join(root, name); const info = await lstat(file);

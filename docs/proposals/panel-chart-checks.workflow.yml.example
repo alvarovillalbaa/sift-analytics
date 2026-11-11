@@ -5,7 +5,7 @@ permissions:
   contents: read
 jobs:
   panel-chart:
-    if: github.repository == 'alvarovillalbaa/sift-analytics' && github.event.repository.private == false && github.event.ref_type == 'branch' && github.event.ref == 'qa/sift-panel-chart-20261111-1'
+    if: github.repository == 'alvarovillalbaa/sift-analytics' && github.event.repository.private == false && github.event.ref_type == 'branch' && github.event.ref == 'qa/sift-panel-chart-20261111-2'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
@@ -65,7 +65,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          npm install --prefix "$SIFT_IMPORT_PLAYWRIGHT_DIR" --ignore-scripts --omit=optional --no-audit --no-fund playwright@1.65.0
+          npm install --prefix "$SIFT_IMPORT_PLAYWRIGHT_DIR" --ignore-scripts --omit=optional --no-audit --no-fund playwright@1.65.0 2>&1 | tee "$SIFT_IMPORT_PROOF_DIR/tools-install.log"
           node --input-type=module <<'JS'
           import { readFile, writeFile } from 'node:fs/promises';
           const raw = await readFile(`${process.env.SIFT_IMPORT_PLAYWRIGHT_DIR}/package-lock.json`);
@@ -80,7 +80,7 @@ jobs:
           }
           await writeFile(`${process.env.SIFT_IMPORT_PROOF_DIR}/tools-lock.json`, raw, { flag: 'wx' });
           JS
-          "$SIFT_IMPORT_PLAYWRIGHT_DIR/node_modules/.bin/playwright" install --with-deps chromium
+          "$SIFT_IMPORT_PLAYWRIGHT_DIR/node_modules/.bin/playwright" install chromium 2>&1 | tee -a "$SIFT_IMPORT_PROOF_DIR/tools-install.log"
       - name: Four native chart-rendering journeys
         timeout-minutes: 7
         shell: bash

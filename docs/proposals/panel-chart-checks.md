@@ -22,6 +22,11 @@ retained with DOM geometry and inspector checks. App result rows are not injecte
 into storage: only the real UI creates views/panels. Storage snapshots must omit
 result/error rows and preserve the sample's datasets, original view and metrics.
 
+The stability sample includes clip-rectangle dimensions and line stroke-dasharray,
+not just path bounds: installed and locked Recharts3.10.1 reveals initial areas
+and lines with clipping/strokes while their full path bounds can already exist.
+Keep those animation observations in the original geometry record.
+
 One public Ubuntu24.04 CI job, maximum20minutes, uses the existing frozen app
 lock, Node24.22.2 and separately pinned Playwright1.65.0. An ephemeral signing
 secret exists only in the owned Next server's child environment. Finite loopback
@@ -36,3 +41,9 @@ runtime/dependencies unchanged unless an actual failure establishes a defect.
 No paid plan, new account, model call, production data/configuration or database
 is needed. Storage Guard failed4.9/34GiB locally; no local install/build/browser.
 Standing all-work/check/temporary-CI approval applies to this named scope.
+
+Attempt1 passed the production build and exact source guards but stopped before
+browser launch: Ubuntu apt mirror DNS failed and system-dependency setup timed
+out. Attempt2 downloads the pinned browser without rerunning optional apt/font
+setup; actual browser launch still has to establish that the runner's existing
+libraries suffice. Complete tool-install output is now retained in the packet.

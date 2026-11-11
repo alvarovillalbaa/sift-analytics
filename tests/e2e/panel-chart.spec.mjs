@@ -155,12 +155,15 @@ async function geometry(state, value, stage) {
   const selectors = { bar: 'path.recharts-rectangle', line: 'path.recharts-line-curve', area: 'path.recharts-area-area', donut: 'path.recharts-sector' };
   const image = value.card.locator('.panel-chart[role="img"]'); await expect(image).toBeVisible();
   const selector = selectors[value.type];
-  let previous = '', stableSince = 0, latest;
+  let previous = '', stableSince = 0, latest, samples = 0;
   await expect.poll(async () => {
+    samples++;
     latest = await image.evaluate((element, shape) => ({ label: element.getAttribute('aria-label'),
       box: { width: element.getBoundingClientRect().width, height: element.getBoundingClientRect().height,
         left: element.getBoundingClientRect().left, right: element.getBoundingClientRect().right, viewport: innerWidth },
       ticks: [...element.querySelectorAll('.recharts-xAxis .recharts-cartesian-axis-tick-value')].map(node => node.textContent),
+      reveal: [...element.querySelectorAll('clipPath rect, path.recharts-line-curve, path.recharts-area-area')].map(node =>
+        Object.fromEntries(['d', 'x', 'y', 'width', 'height', 'stroke-dasharray', 'style', 'transform', 'opacity'].map(name => [name, node.getAttribute(name)]))),
       shapes: [...element.querySelectorAll(shape)].map(node => {
         const box = node.getBBox(); return { d: node.getAttribute('d'), x: box.x, y: box.y, width: box.width, height: box.height };
       }) }), selector);
@@ -181,7 +184,7 @@ async function geometry(state, value, stage) {
     await expect(value.card.locator('.donut-legend strong')).toHaveText(['12.5', '25', '37.5']);
     await expect(value.card.locator('.donut-center strong')).toHaveText('3');
   }
-  state.result.geometry.push({ stage, title: value.title, ...latest }); return latest;
+  state.result.geometry.push({ stage, title: value.title, samples, stableForMs: performance.now() - stableSince, ...latest }); return latest;
 }
 const SQL = "SELECT plan AS category, CAST(CASE plan WHEN 'Starter' THEN 12.5 WHEN 'Growth' THEN 25.0 ELSE 37.5 END AS DOUBLE) AS amount FROM demo_revenue GROUP BY plan ORDER BY amount";
 const CELLS = ['Starter', '12.5', 'Growth', '25', 'Enterprise', '37.5'];
