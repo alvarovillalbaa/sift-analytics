@@ -42,3 +42,14 @@ timing frequency, physical-device behavior, live models or PostgreSQL. The older
 unit/import/hosted receipts are separate and are not rerun by this packet.
 
 [Playwright response forwarding](https://playwright.dev/docs/api/class-route#route-fetch)
+
+The [first run](https://github.com/alvarovillalbaa/sift-analytics/actions/runs/43006691449)
+passed the frozen build but all six cases stopped at the exact Visualization
+label lookup before submitting any query. Actual desktop/narrow screenshots
+show the native dropdown present. The corrected selector matches the existing
+import-check pattern: one non-multiple select and one multiple select within the
+panel dialog, with explicit uniqueness assertions. No application code, timing,
+case expectation or result is changed. [Original packet](../results/2026/11-11/panel-form-attempt-1/checksums.json)
+retains all raw files. Both source manifests match all 189 source inputs; all
+contexts/pages and response bodies closed, both child groups were absent and no
+marked process remained. The browser exit-one/supervisor failure stays recorded.

@@ -1,0 +1,122 @@
+{
+  "source": "b45da1f3334de9b653b82dacbef37fbc42c288e7",
+  "run": 43006691449,
+  "sourceFiles": 189,
+  "artifactFiles": [
+    {
+      "file": "browser.json",
+      "bytes": 75910,
+      "sha256": "66ca08f73b2d2dd7f7948d15e2153125e3bed78d9738a37cc73f382ee27eff8f"
+    },
+    {
+      "file": "browser.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "storedFile": "browser.stderr.log.gz",
+      "compression": "gzip",
+      "storedBytes": 20,
+      "storedSha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "file": "browser.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "storedFile": "browser.stdout.log.gz",
+      "compression": "gzip",
+      "storedBytes": 20,
+      "storedSha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "file": "build.log",
+      "bytes": 8134,
+      "sha256": "20b4060f44a2a6be779f2e0491435f79bd49cbb98e27dde87ab8639992e86bcc",
+      "storedFile": "build.log.gz",
+      "compression": "gzip",
+      "storedBytes": 1383,
+      "storedSha256": "dd67c2ff43442a7787004910edec2f3de79399f2aaf2b15ffbf4da15beba600e"
+    },
+    {
+      "file": "install.log",
+      "bytes": 27,
+      "sha256": "eda7e9953a831eb10fb72bb406b58dde6ce4ddea4c2bb52fb46b102bfbe49257",
+      "storedFile": "install.log.gz",
+      "compression": "gzip",
+      "storedBytes": 47,
+      "storedSha256": "bf72aa23b0249f054347a566ae6f0a471dbd15773b1058a86f8b5cbc07cbd641"
+    },
+    {
+      "file": "panel-form-F01.png",
+      "bytes": 251682,
+      "sha256": "7d5b6c507643480058fe0eaffbdce20c9b6be7fb4f6c79dec8d2625d59b3e7ff"
+    },
+    {
+      "file": "panel-form-F02.png",
+      "bytes": 251916,
+      "sha256": "97088f2c6ccf24fc47e31807b0fd4bfc9d80a33340e75e59aa7ccbcfbf2ed6c6"
+    },
+    {
+      "file": "panel-form-F03.png",
+      "bytes": 118208,
+      "sha256": "a7d5eaf0b38283eae2e0eece9129e71cd452ee30cb10cd004004d68ed2ca26e8"
+    },
+    {
+      "file": "panel-form-F04.png",
+      "bytes": 259528,
+      "sha256": "d29352dcfe442f959171b613dbd15bb39c975132edac3ef50fa0b60bb665d980"
+    },
+    {
+      "file": "panel-form-F05.png",
+      "bytes": 252115,
+      "sha256": "81dbbdef266bb396e152179177704edff0c100eb19454939f1b138529017e06b"
+    },
+    {
+      "file": "panel-form-F06.png",
+      "bytes": 118333,
+      "sha256": "c913a9970cb08fbc695e2a4c0819dcf9a02025cf3cb1d147f51fa6123e6767e8"
+    },
+    {
+      "file": "run.json",
+      "bytes": 5106,
+      "sha256": "d09284b2a2eaa5fab599c9834e5bb7fe0d0c7dba6ce2bc8bc03d142db6c25f3d"
+    },
+    {
+      "file": "server.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "storedFile": "server.stderr.log.gz",
+      "compression": "gzip",
+      "storedBytes": 20,
+      "storedSha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "file": "server.stdout.log",
+      "bytes": 205,
+      "sha256": "459cce2f4d74b8284aab2f9529214100e6d00cc06d74a147746814ce3786e8f9",
+      "storedFile": "server.stdout.log.gz",
+      "compression": "gzip",
+      "storedBytes": 163,
+      "storedSha256": "a63da7cfa6bcd388db8712047904efbe3340245d0e12aa6d54b4bf0d0da64df9"
+    },
+    {
+      "file": "source-after.json",
+      "bytes": 68352,
+      "sha256": "0e72a44e7be9eb86e89c98661f8d4a478c1b4d422e3f071cfb00d2aa6bc6852f"
+    },
+    {
+      "file": "source-before.json",
+      "bytes": 68352,
+      "sha256": "0e72a44e7be9eb86e89c98661f8d4a478c1b4d422e3f071cfb00d2aa6bc6852f"
+    },
+    {
+      "file": "tools-lock.json",
+      "bytes": 1064,
+      "sha256": "2fa84b8293c8e0da7953f61ce00ae75c27f19081d3f3f5e5017b077f053377ad"
+    }
+  ],
+  "totalBytes": 1478932,
+  "status": "six-selector-failures-before-query",
+  "ownedGroupsAbsent": true,
+  "networkDrained": true,
+  "supervisorExitGate": "failed-browser-exit-1",
+  "storage": "Logs use lossless gzip; original names, byte lengths and digests remain authoritative."
+}

@@ -5,7 +5,7 @@ permissions:
   contents: read
 jobs:
   panel-form:
-    if: github.repository == 'alvarovillalbaa/sift-analytics' && github.event.repository.private == false && github.event.ref_type == 'branch' && github.event.ref == 'qa/sift-panel-form-20261111-1'
+    if: github.repository == 'alvarovillalbaa/sift-analytics' && github.event.repository.private == false && github.event.ref_type == 'branch' && github.event.ref == 'qa/sift-panel-form-20261111-2'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:

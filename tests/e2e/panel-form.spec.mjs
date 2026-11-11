@@ -204,8 +204,11 @@ async function panel(state, title, marker, type = 'table', count = 432) {
   const sql = count === 432 ? `SELECT '${marker}' AS authored_marker, COUNT(*) AS authored_count FROM demo_revenue`
     : `SELECT '${marker}' AS authored_marker, ${count} AS authored_count FROM demo_revenue LIMIT 1`;
   await dialog.getByLabel('Title', { exact: true }).fill(title);
-  await dialog.getByLabel('Visualization', { exact: true }).selectOption(type);
-  await dialog.getByLabel('Approved datasets', { exact: true }).selectOption(state.baseline.datasets[0].id);
+  const visualization = dialog.locator('select:not([multiple])');
+  const datasets = dialog.locator('select[multiple]');
+  await expect(visualization).toHaveCount(1); await expect(datasets).toHaveCount(1);
+  await visualization.selectOption(type);
+  await datasets.selectOption(state.baseline.datasets[0].id);
   await dialog.getByLabel('Read-only SQL', { exact: true }).fill(sql);
   return { dialog, sql, title, marker, type, count };
 }
@@ -291,7 +294,7 @@ async function replacementPanel(result) {
   await release(state);
   await expect(draft.dialog).toBeVisible(); await expect(draft.dialog.getByLabel('Title', { exact: true })).toHaveValue(draft.title);
   await expect(draft.dialog.getByLabel('Read-only SQL', { exact: true })).toHaveValue(draft.sql);
-  await expect(draft.dialog.getByLabel('Visualization', { exact: true })).toHaveValue('bar');
+  await expect(draft.dialog.locator('select:not([multiple])')).toHaveValue('bar');
   await persisted(state, (w) => w.views.flatMap((v) => v.panels).filter((p) => p.title === old.title).length === 1);
   await snapshot(state, 'replacement-preserved'); await screenshot(state);
   await submit(state, draft); await inspect(state, old); await inspect(state, draft);
@@ -332,7 +335,7 @@ async function editedDraft(result) {
   const draft = { ...old, title: 'Authored edited draft', marker: 'SIFT_PANEL_FORM_F05_EDITED', type: 'bar', count: 7 };
   draft.sql = `SELECT '${draft.marker}' AS authored_marker, 7 AS authored_count FROM demo_revenue LIMIT 1`;
   await draft.dialog.getByLabel('Title', { exact: true }).fill(draft.title);
-  await draft.dialog.getByLabel('Visualization', { exact: true }).selectOption('bar');
+  await draft.dialog.locator('select:not([multiple])').selectOption('bar');
   await draft.dialog.getByLabel('Read-only SQL', { exact: true }).fill(draft.sql);
   await release(state); await expect(draft.dialog).toBeVisible(); await expect(draft.dialog.getByLabel('Title', { exact: true })).toHaveValue(draft.title);
   await expect(draft.dialog.getByLabel('Read-only SQL', { exact: true })).toHaveValue(draft.sql);

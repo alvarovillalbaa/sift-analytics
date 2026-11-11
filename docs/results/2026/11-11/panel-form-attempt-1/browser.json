@@ -1,0 +1,2140 @@
+{
+  "schemaVersion": 1,
+  "tier": "T2",
+  "scope": "panel-form",
+  "sourceCommit": "b45da1f3334de9b653b82dacbef37fbc42c288e7",
+  "node": "v24.22.2",
+  "browser": "158.0.8127.18",
+  "cases": [
+    {
+      "id": "F01",
+      "title": "normal submit, real aggregate and reload",
+      "status": "failed",
+      "profile": "desktop",
+      "snapshots": [
+        {
+          "stage": "startup",
+          "workspace": {
+            "datasets": [
+              {
+                "id": "demo-revenue",
+                "name": "SaaS revenue · sample",
+                "table": "demo_revenue",
+                "sourceId": "demo",
+                "kind": "demo",
+                "rowCount": 432,
+                "updatedAt": "2026-01-01T00:00:00.000Z",
+                "columns": [
+                  {
+                    "name": "month",
+                    "type": "DATE"
+                  },
+                  {
+                    "name": "channel",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "plan",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "region",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "customers",
+                    "type": "BIGINT"
+                  },
+                  {
+                    "name": "revenue",
+                    "type": "BIGINT"
+                  },
+                  {
+                    "name": "new_customers",
+                    "type": "BIGINT"
+                  }
+                ]
+              }
+            ],
+            "views": [
+              {
+                "id": "overview",
+                "name": "Revenue overview",
+                "description": "The big picture, down to the details.",
+                "panels": [
+                  {
+                    "id": "total-revenue",
+                    "title": "Annual revenue",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT SUM(revenue) AS revenue FROM demo_revenue",
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Recognized subscription revenue, Jan–Dec 2025. USD; no refunds or tax in this sample.",
+                    "layout": {
+                      "i": "total-revenue",
+                      "x": 0,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "active-customers",
+                    "title": "Active customers",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT SUM(customers) AS customers FROM demo_revenue WHERE month = '2025-12-01'",
+                    "format": "number",
+                    "description": "Paying subscriptions at December 2025 month end; summed across mutually exclusive segments.",
+                    "layout": {
+                      "i": "active-customers",
+                      "x": 4,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "revenue-growth",
+                    "title": "Revenue growth",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT ROUND(100.0 * (SUM(CASE WHEN month = '2025-12-01' THEN revenue ELSE 0 END) / NULLIF(SUM(CASE WHEN month = '2025-11-01' THEN revenue ELSE 0 END), 0) - 1), 1) AS growth FROM demo_revenue",
+                    "format": "percent",
+                    "description": "December revenue compared with November; percentage points expressed as a percentage.",
+                    "layout": {
+                      "i": "revenue-growth",
+                      "x": 8,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "revenue-trend",
+                    "title": "Revenue over time",
+                    "type": "area",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT month, SUM(revenue) AS revenue FROM demo_revenue GROUP BY month ORDER BY month",
+                    "xKey": "month",
+                    "yKeys": [
+                      "revenue"
+                    ],
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Monthly recognized revenue · USD",
+                    "layout": {
+                      "i": "revenue-trend",
+                      "x": 0,
+                      "y": 3,
+                      "w": 8,
+                      "h": 5
+                    }
+                  },
+                  {
+                    "id": "acquisition-channels",
+                    "title": "Acquisition mix",
+                    "type": "donut",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT channel, SUM(new_customers) AS customers FROM demo_revenue GROUP BY channel ORDER BY customers DESC",
+                    "xKey": "channel",
+                    "yKeys": [
+                      "customers"
+                    ],
+                    "format": "number",
+                    "description": "New paying subscriptions acquired during 2025",
+                    "layout": {
+                      "i": "acquisition-channels",
+                      "x": 8,
+                      "y": 3,
+                      "w": 4,
+                      "h": 5
+                    }
+                  },
+                  {
+                    "id": "plan-breakdown",
+                    "title": "Performance by plan",
+                    "type": "table",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT plan, SUM(revenue) AS revenue, SUM(new_customers) AS new_customers, ROUND(SUM(revenue) * 1.0 / NULLIF(SUM(customers), 0), 2) AS monthly_revenue_per_customer FROM demo_revenue GROUP BY plan ORDER BY revenue DESC",
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Annual totals and weighted monthly revenue per paying subscription · USD",
+                    "layout": {
+                      "i": "plan-breakdown",
+                      "x": 0,
+                      "y": 8,
+                      "w": 12,
+                      "h": 5
+                    }
+                  }
+                ]
+              }
+            ],
+            "activeViewId": "overview",
+            "metrics": [
+              {
+                "id": "recognized-revenue",
+                "name": "Recognized revenue",
+                "definition": "Sum of subscription revenue in USD for the selected period. Sample data excludes refunds and tax.",
+                "sql": "SELECT SUM(revenue) AS revenue FROM demo_revenue",
+                "datasetIds": [
+                  "demo-revenue"
+                ]
+              },
+              {
+                "id": "active-subscriptions",
+                "name": "Active customers",
+                "definition": "Sum of active paying subscriptions for the latest available month. Monthly snapshots must not be summed across time.",
+                "sql": "SELECT SUM(customers) AS customers FROM demo_revenue WHERE month = (SELECT MAX(month) FROM demo_revenue)",
+                "datasetIds": [
+                  "demo-revenue"
+                ]
+              }
+            ],
+            "shareResults": true,
+            "shareSchema": true
+          },
+          "gate": {
+            "armed": null,
+            "held": false,
+            "mounts": 1,
+            "ledger": []
+          }
+        }
+      ],
+      "boundary": {
+        "requests": [
+          {
+            "ordinal": 1,
+            "method": "GET",
+            "path": "/",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 2,
+            "method": "GET",
+            "path": "/_next/static/chunks/3mbimo4o28f0x.css",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 3,
+            "method": "GET",
+            "path": "/_next/static/chunks/3333gs1h_w689.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 4,
+            "method": "GET",
+            "path": "/_next/static/chunks/3xmius13vdsx2.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 5,
+            "method": "GET",
+            "path": "/_next/static/chunks/2khxl0v1q4i6n.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 6,
+            "method": "GET",
+            "path": "/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 7,
+            "method": "GET",
+            "path": "/_next/static/chunks/0umf92h1sb77c.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 8,
+            "method": "GET",
+            "path": "/_next/static/chunks/0j67kanh3xhu8.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 9,
+            "method": "GET",
+            "path": "/_next/static/chunks/2c-2wdb55tahi.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 10,
+            "method": "POST",
+            "path": "/api/session",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true,
+            "bodySha256": "d5e1cff097261004319398c9d4f3009316fe92d02268fdff95dac64f12cd259b"
+          },
+          {
+            "ordinal": 11,
+            "method": "GET",
+            "path": "/_next/static/chunks/41_02ne0xksvf.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 12,
+            "method": "GET",
+            "path": "/duckdb/duckdb-browser-mvp.worker.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 13,
+            "method": "GET",
+            "path": "/duckdb/duckdb-mvp.wasm",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          }
+        ],
+        "violations": [],
+        "sessions": [
+          {
+            "status": 200,
+            "bytes": 73,
+            "sha256": "d5e1cff097261004319398c9d4f3009316fe92d02268fdff95dac64f12cd259b",
+            "held": false,
+            "forwarded": true
+          }
+        ],
+        "console": [],
+        "pageErrors": [],
+        "websockets": 0,
+        "pagesCreated": 1
+      },
+      "cleanup": {
+        "contextClosed": true,
+        "pageClosed": true,
+        "networkDrained": true
+      },
+      "error": "locator.selectOption: Timeout 10000ms exceeded.\nCall log:\n  - waiting for getByRole('dialog', { name: 'panel', exact: true }).getByLabel('Visualization', { exact: true })\n\n    at panel (/home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:207:61)\n    at async ordinary (/home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:283:17)\n    at async file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:382:11",
+      "screenshot": "panel-form-F01.png"
+    },
+    {
+      "id": "F02",
+      "title": "older query preserves replacement panel draft",
+      "status": "failed",
+      "profile": "desktop",
+      "snapshots": [
+        {
+          "stage": "startup",
+          "workspace": {
+            "datasets": [
+              {
+                "id": "demo-revenue",
+                "name": "SaaS revenue · sample",
+                "table": "demo_revenue",
+                "sourceId": "demo",
+                "kind": "demo",
+                "rowCount": 432,
+                "updatedAt": "2026-01-01T00:00:00.000Z",
+                "columns": [
+                  {
+                    "name": "month",
+                    "type": "DATE"
+                  },
+                  {
+                    "name": "channel",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "plan",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "region",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "customers",
+                    "type": "BIGINT"
+                  },
+                  {
+                    "name": "revenue",
+                    "type": "BIGINT"
+                  },
+                  {
+                    "name": "new_customers",
+                    "type": "BIGINT"
+                  }
+                ]
+              }
+            ],
+            "views": [
+              {
+                "id": "overview",
+                "name": "Revenue overview",
+                "description": "The big picture, down to the details.",
+                "panels": [
+                  {
+                    "id": "total-revenue",
+                    "title": "Annual revenue",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT SUM(revenue) AS revenue FROM demo_revenue",
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Recognized subscription revenue, Jan–Dec 2025. USD; no refunds or tax in this sample.",
+                    "layout": {
+                      "i": "total-revenue",
+                      "x": 0,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "active-customers",
+                    "title": "Active customers",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT SUM(customers) AS customers FROM demo_revenue WHERE month = '2025-12-01'",
+                    "format": "number",
+                    "description": "Paying subscriptions at December 2025 month end; summed across mutually exclusive segments.",
+                    "layout": {
+                      "i": "active-customers",
+                      "x": 4,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "revenue-growth",
+                    "title": "Revenue growth",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT ROUND(100.0 * (SUM(CASE WHEN month = '2025-12-01' THEN revenue ELSE 0 END) / NULLIF(SUM(CASE WHEN month = '2025-11-01' THEN revenue ELSE 0 END), 0) - 1), 1) AS growth FROM demo_revenue",
+                    "format": "percent",
+                    "description": "December revenue compared with November; percentage points expressed as a percentage.",
+                    "layout": {
+                      "i": "revenue-growth",
+                      "x": 8,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "revenue-trend",
+                    "title": "Revenue over time",
+                    "type": "area",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT month, SUM(revenue) AS revenue FROM demo_revenue GROUP BY month ORDER BY month",
+                    "xKey": "month",
+                    "yKeys": [
+                      "revenue"
+                    ],
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Monthly recognized revenue · USD",
+                    "layout": {
+                      "i": "revenue-trend",
+                      "x": 0,
+                      "y": 3,
+                      "w": 8,
+                      "h": 5
+                    }
+                  },
+                  {
+                    "id": "acquisition-channels",
+                    "title": "Acquisition mix",
+                    "type": "donut",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT channel, SUM(new_customers) AS customers FROM demo_revenue GROUP BY channel ORDER BY customers DESC",
+                    "xKey": "channel",
+                    "yKeys": [
+                      "customers"
+                    ],
+                    "format": "number",
+                    "description": "New paying subscriptions acquired during 2025",
+                    "layout": {
+                      "i": "acquisition-channels",
+                      "x": 8,
+                      "y": 3,
+                      "w": 4,
+                      "h": 5
+                    }
+                  },
+                  {
+                    "id": "plan-breakdown",
+                    "title": "Performance by plan",
+                    "type": "table",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT plan, SUM(revenue) AS revenue, SUM(new_customers) AS new_customers, ROUND(SUM(revenue) * 1.0 / NULLIF(SUM(customers), 0), 2) AS monthly_revenue_per_customer FROM demo_revenue GROUP BY plan ORDER BY revenue DESC",
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Annual totals and weighted monthly revenue per paying subscription · USD",
+                    "layout": {
+                      "i": "plan-breakdown",
+                      "x": 0,
+                      "y": 8,
+                      "w": 12,
+                      "h": 5
+                    }
+                  }
+                ]
+              }
+            ],
+            "activeViewId": "overview",
+            "metrics": [
+              {
+                "id": "recognized-revenue",
+                "name": "Recognized revenue",
+                "definition": "Sum of subscription revenue in USD for the selected period. Sample data excludes refunds and tax.",
+                "sql": "SELECT SUM(revenue) AS revenue FROM demo_revenue",
+                "datasetIds": [
+                  "demo-revenue"
+                ]
+              },
+              {
+                "id": "active-subscriptions",
+                "name": "Active customers",
+                "definition": "Sum of active paying subscriptions for the latest available month. Monthly snapshots must not be summed across time.",
+                "sql": "SELECT SUM(customers) AS customers FROM demo_revenue WHERE month = (SELECT MAX(month) FROM demo_revenue)",
+                "datasetIds": [
+                  "demo-revenue"
+                ]
+              }
+            ],
+            "shareResults": true,
+            "shareSchema": true
+          },
+          "gate": {
+            "armed": null,
+            "held": false,
+            "mounts": 1,
+            "ledger": []
+          }
+        }
+      ],
+      "boundary": {
+        "requests": [
+          {
+            "ordinal": 1,
+            "method": "GET",
+            "path": "/",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 2,
+            "method": "GET",
+            "path": "/_next/static/chunks/3mbimo4o28f0x.css",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 3,
+            "method": "GET",
+            "path": "/_next/static/chunks/3333gs1h_w689.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 4,
+            "method": "GET",
+            "path": "/_next/static/chunks/3xmius13vdsx2.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 5,
+            "method": "GET",
+            "path": "/_next/static/chunks/2khxl0v1q4i6n.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 6,
+            "method": "GET",
+            "path": "/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 7,
+            "method": "GET",
+            "path": "/_next/static/chunks/0umf92h1sb77c.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 8,
+            "method": "GET",
+            "path": "/_next/static/chunks/0j67kanh3xhu8.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 9,
+            "method": "GET",
+            "path": "/_next/static/chunks/2c-2wdb55tahi.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 10,
+            "method": "POST",
+            "path": "/api/session",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true,
+            "bodySha256": "5f5c8710b4cfb2d69c4e53f856d74557c821153aff9ecfdeca3f9d3f9ac6eb8c"
+          },
+          {
+            "ordinal": 11,
+            "method": "GET",
+            "path": "/_next/static/chunks/41_02ne0xksvf.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 12,
+            "method": "GET",
+            "path": "/duckdb/duckdb-browser-mvp.worker.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 13,
+            "method": "GET",
+            "path": "/duckdb/duckdb-mvp.wasm",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          }
+        ],
+        "violations": [],
+        "sessions": [
+          {
+            "status": 200,
+            "bytes": 73,
+            "sha256": "5f5c8710b4cfb2d69c4e53f856d74557c821153aff9ecfdeca3f9d3f9ac6eb8c",
+            "held": false,
+            "forwarded": true
+          }
+        ],
+        "console": [],
+        "pageErrors": [],
+        "websockets": 0,
+        "pagesCreated": 1
+      },
+      "cleanup": {
+        "contextClosed": true,
+        "pageClosed": true,
+        "networkDrained": true
+      },
+      "error": "locator.selectOption: Timeout 10000ms exceeded.\nCall log:\n  - waiting for getByRole('dialog', { name: 'panel', exact: true }).getByLabel('Visualization', { exact: true })\n\n    at panel (/home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:207:61)\n    at async replacementPanel (/home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:288:15)\n    at async file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:382:11",
+      "screenshot": "panel-form-F02.png"
+    },
+    {
+      "id": "F03",
+      "title": "narrow touch preserves replacement view draft",
+      "status": "failed",
+      "profile": "narrow",
+      "snapshots": [
+        {
+          "stage": "startup",
+          "workspace": {
+            "datasets": [
+              {
+                "id": "demo-revenue",
+                "name": "SaaS revenue · sample",
+                "table": "demo_revenue",
+                "sourceId": "demo",
+                "kind": "demo",
+                "rowCount": 432,
+                "updatedAt": "2026-01-01T00:00:00.000Z",
+                "columns": [
+                  {
+                    "name": "month",
+                    "type": "DATE"
+                  },
+                  {
+                    "name": "channel",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "plan",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "region",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "customers",
+                    "type": "BIGINT"
+                  },
+                  {
+                    "name": "revenue",
+                    "type": "BIGINT"
+                  },
+                  {
+                    "name": "new_customers",
+                    "type": "BIGINT"
+                  }
+                ]
+              }
+            ],
+            "views": [
+              {
+                "id": "overview",
+                "name": "Revenue overview",
+                "description": "The big picture, down to the details.",
+                "panels": [
+                  {
+                    "id": "total-revenue",
+                    "title": "Annual revenue",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT SUM(revenue) AS revenue FROM demo_revenue",
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Recognized subscription revenue, Jan–Dec 2025. USD; no refunds or tax in this sample.",
+                    "layout": {
+                      "i": "total-revenue",
+                      "x": 0,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "active-customers",
+                    "title": "Active customers",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT SUM(customers) AS customers FROM demo_revenue WHERE month = '2025-12-01'",
+                    "format": "number",
+                    "description": "Paying subscriptions at December 2025 month end; summed across mutually exclusive segments.",
+                    "layout": {
+                      "i": "active-customers",
+                      "x": 4,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "revenue-growth",
+                    "title": "Revenue growth",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT ROUND(100.0 * (SUM(CASE WHEN month = '2025-12-01' THEN revenue ELSE 0 END) / NULLIF(SUM(CASE WHEN month = '2025-11-01' THEN revenue ELSE 0 END), 0) - 1), 1) AS growth FROM demo_revenue",
+                    "format": "percent",
+                    "description": "December revenue compared with November; percentage points expressed as a percentage.",
+                    "layout": {
+                      "i": "revenue-growth",
+                      "x": 8,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "revenue-trend",
+                    "title": "Revenue over time",
+                    "type": "area",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT month, SUM(revenue) AS revenue FROM demo_revenue GROUP BY month ORDER BY month",
+                    "xKey": "month",
+                    "yKeys": [
+                      "revenue"
+                    ],
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Monthly recognized revenue · USD",
+                    "layout": {
+                      "i": "revenue-trend",
+                      "x": 0,
+                      "y": 3,
+                      "w": 8,
+                      "h": 5
+                    }
+                  },
+                  {
+                    "id": "acquisition-channels",
+                    "title": "Acquisition mix",
+                    "type": "donut",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT channel, SUM(new_customers) AS customers FROM demo_revenue GROUP BY channel ORDER BY customers DESC",
+                    "xKey": "channel",
+                    "yKeys": [
+                      "customers"
+                    ],
+                    "format": "number",
+                    "description": "New paying subscriptions acquired during 2025",
+                    "layout": {
+                      "i": "acquisition-channels",
+                      "x": 8,
+                      "y": 3,
+                      "w": 4,
+                      "h": 5
+                    }
+                  },
+                  {
+                    "id": "plan-breakdown",
+                    "title": "Performance by plan",
+                    "type": "table",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT plan, SUM(revenue) AS revenue, SUM(new_customers) AS new_customers, ROUND(SUM(revenue) * 1.0 / NULLIF(SUM(customers), 0), 2) AS monthly_revenue_per_customer FROM demo_revenue GROUP BY plan ORDER BY revenue DESC",
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Annual totals and weighted monthly revenue per paying subscription · USD",
+                    "layout": {
+                      "i": "plan-breakdown",
+                      "x": 0,
+                      "y": 8,
+                      "w": 12,
+                      "h": 5
+                    }
+                  }
+                ]
+              }
+            ],
+            "activeViewId": "overview",
+            "metrics": [
+              {
+                "id": "recognized-revenue",
+                "name": "Recognized revenue",
+                "definition": "Sum of subscription revenue in USD for the selected period. Sample data excludes refunds and tax.",
+                "sql": "SELECT SUM(revenue) AS revenue FROM demo_revenue",
+                "datasetIds": [
+                  "demo-revenue"
+                ]
+              },
+              {
+                "id": "active-subscriptions",
+                "name": "Active customers",
+                "definition": "Sum of active paying subscriptions for the latest available month. Monthly snapshots must not be summed across time.",
+                "sql": "SELECT SUM(customers) AS customers FROM demo_revenue WHERE month = (SELECT MAX(month) FROM demo_revenue)",
+                "datasetIds": [
+                  "demo-revenue"
+                ]
+              }
+            ],
+            "shareResults": true,
+            "shareSchema": true
+          },
+          "gate": {
+            "armed": null,
+            "held": false,
+            "mounts": 1,
+            "ledger": []
+          }
+        }
+      ],
+      "boundary": {
+        "requests": [
+          {
+            "ordinal": 1,
+            "method": "GET",
+            "path": "/",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 2,
+            "method": "GET",
+            "path": "/_next/static/chunks/3mbimo4o28f0x.css",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 3,
+            "method": "GET",
+            "path": "/_next/static/chunks/3333gs1h_w689.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 4,
+            "method": "GET",
+            "path": "/_next/static/chunks/3xmius13vdsx2.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 5,
+            "method": "GET",
+            "path": "/_next/static/chunks/2khxl0v1q4i6n.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 6,
+            "method": "GET",
+            "path": "/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 7,
+            "method": "GET",
+            "path": "/_next/static/chunks/0umf92h1sb77c.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 8,
+            "method": "GET",
+            "path": "/_next/static/chunks/0j67kanh3xhu8.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 9,
+            "method": "GET",
+            "path": "/_next/static/chunks/2c-2wdb55tahi.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 10,
+            "method": "POST",
+            "path": "/api/session",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true,
+            "bodySha256": "6f17aa28053c0578ac5081b8764305dd35753360b4137b7533071d0448b214e2"
+          },
+          {
+            "ordinal": 11,
+            "method": "GET",
+            "path": "/_next/static/chunks/41_02ne0xksvf.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 12,
+            "method": "GET",
+            "path": "/duckdb/duckdb-browser-mvp.worker.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 13,
+            "method": "GET",
+            "path": "/duckdb/duckdb-mvp.wasm",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          }
+        ],
+        "violations": [],
+        "sessions": [
+          {
+            "status": 200,
+            "bytes": 73,
+            "sha256": "6f17aa28053c0578ac5081b8764305dd35753360b4137b7533071d0448b214e2",
+            "held": false,
+            "forwarded": true
+          }
+        ],
+        "console": [],
+        "pageErrors": [],
+        "websockets": 0,
+        "pagesCreated": 1
+      },
+      "cleanup": {
+        "contextClosed": true,
+        "pageClosed": true,
+        "networkDrained": true
+      },
+      "error": "locator.selectOption: Timeout 10000ms exceeded.\nCall log:\n  - waiting for getByRole('dialog', { name: 'panel', exact: true }).getByLabel('Visualization', { exact: true })\n\n    at panel (/home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:207:61)\n    at async replacementView (/home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:302:15)\n    at async file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:382:11",
+      "screenshot": "panel-form-F03.png"
+    },
+    {
+      "id": "F04",
+      "title": "deleted destination is not recreated",
+      "status": "failed",
+      "profile": "desktop",
+      "snapshots": [
+        {
+          "stage": "startup",
+          "workspace": {
+            "datasets": [
+              {
+                "id": "demo-revenue",
+                "name": "SaaS revenue · sample",
+                "table": "demo_revenue",
+                "sourceId": "demo",
+                "kind": "demo",
+                "rowCount": 432,
+                "updatedAt": "2026-01-01T00:00:00.000Z",
+                "columns": [
+                  {
+                    "name": "month",
+                    "type": "DATE"
+                  },
+                  {
+                    "name": "channel",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "plan",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "region",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "customers",
+                    "type": "BIGINT"
+                  },
+                  {
+                    "name": "revenue",
+                    "type": "BIGINT"
+                  },
+                  {
+                    "name": "new_customers",
+                    "type": "BIGINT"
+                  }
+                ]
+              }
+            ],
+            "views": [
+              {
+                "id": "overview",
+                "name": "Revenue overview",
+                "description": "The big picture, down to the details.",
+                "panels": [
+                  {
+                    "id": "total-revenue",
+                    "title": "Annual revenue",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT SUM(revenue) AS revenue FROM demo_revenue",
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Recognized subscription revenue, Jan–Dec 2025. USD; no refunds or tax in this sample.",
+                    "layout": {
+                      "i": "total-revenue",
+                      "x": 0,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "active-customers",
+                    "title": "Active customers",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT SUM(customers) AS customers FROM demo_revenue WHERE month = '2025-12-01'",
+                    "format": "number",
+                    "description": "Paying subscriptions at December 2025 month end; summed across mutually exclusive segments.",
+                    "layout": {
+                      "i": "active-customers",
+                      "x": 4,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "revenue-growth",
+                    "title": "Revenue growth",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT ROUND(100.0 * (SUM(CASE WHEN month = '2025-12-01' THEN revenue ELSE 0 END) / NULLIF(SUM(CASE WHEN month = '2025-11-01' THEN revenue ELSE 0 END), 0) - 1), 1) AS growth FROM demo_revenue",
+                    "format": "percent",
+                    "description": "December revenue compared with November; percentage points expressed as a percentage.",
+                    "layout": {
+                      "i": "revenue-growth",
+                      "x": 8,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "revenue-trend",
+                    "title": "Revenue over time",
+                    "type": "area",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT month, SUM(revenue) AS revenue FROM demo_revenue GROUP BY month ORDER BY month",
+                    "xKey": "month",
+                    "yKeys": [
+                      "revenue"
+                    ],
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Monthly recognized revenue · USD",
+                    "layout": {
+                      "i": "revenue-trend",
+                      "x": 0,
+                      "y": 3,
+                      "w": 8,
+                      "h": 5
+                    }
+                  },
+                  {
+                    "id": "acquisition-channels",
+                    "title": "Acquisition mix",
+                    "type": "donut",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT channel, SUM(new_customers) AS customers FROM demo_revenue GROUP BY channel ORDER BY customers DESC",
+                    "xKey": "channel",
+                    "yKeys": [
+                      "customers"
+                    ],
+                    "format": "number",
+                    "description": "New paying subscriptions acquired during 2025",
+                    "layout": {
+                      "i": "acquisition-channels",
+                      "x": 8,
+                      "y": 3,
+                      "w": 4,
+                      "h": 5
+                    }
+                  },
+                  {
+                    "id": "plan-breakdown",
+                    "title": "Performance by plan",
+                    "type": "table",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT plan, SUM(revenue) AS revenue, SUM(new_customers) AS new_customers, ROUND(SUM(revenue) * 1.0 / NULLIF(SUM(customers), 0), 2) AS monthly_revenue_per_customer FROM demo_revenue GROUP BY plan ORDER BY revenue DESC",
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Annual totals and weighted monthly revenue per paying subscription · USD",
+                    "layout": {
+                      "i": "plan-breakdown",
+                      "x": 0,
+                      "y": 8,
+                      "w": 12,
+                      "h": 5
+                    }
+                  }
+                ]
+              }
+            ],
+            "activeViewId": "overview",
+            "metrics": [
+              {
+                "id": "recognized-revenue",
+                "name": "Recognized revenue",
+                "definition": "Sum of subscription revenue in USD for the selected period. Sample data excludes refunds and tax.",
+                "sql": "SELECT SUM(revenue) AS revenue FROM demo_revenue",
+                "datasetIds": [
+                  "demo-revenue"
+                ]
+              },
+              {
+                "id": "active-subscriptions",
+                "name": "Active customers",
+                "definition": "Sum of active paying subscriptions for the latest available month. Monthly snapshots must not be summed across time.",
+                "sql": "SELECT SUM(customers) AS customers FROM demo_revenue WHERE month = (SELECT MAX(month) FROM demo_revenue)",
+                "datasetIds": [
+                  "demo-revenue"
+                ]
+              }
+            ],
+            "shareResults": true,
+            "shareSchema": true
+          },
+          "gate": {
+            "armed": null,
+            "held": false,
+            "mounts": 1,
+            "ledger": []
+          }
+        }
+      ],
+      "boundary": {
+        "requests": [
+          {
+            "ordinal": 1,
+            "method": "GET",
+            "path": "/",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 2,
+            "method": "GET",
+            "path": "/_next/static/chunks/3mbimo4o28f0x.css",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 3,
+            "method": "GET",
+            "path": "/_next/static/chunks/3333gs1h_w689.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 4,
+            "method": "GET",
+            "path": "/_next/static/chunks/3xmius13vdsx2.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 5,
+            "method": "GET",
+            "path": "/_next/static/chunks/2khxl0v1q4i6n.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 6,
+            "method": "GET",
+            "path": "/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 7,
+            "method": "GET",
+            "path": "/_next/static/chunks/0umf92h1sb77c.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 8,
+            "method": "GET",
+            "path": "/_next/static/chunks/0j67kanh3xhu8.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 9,
+            "method": "GET",
+            "path": "/_next/static/chunks/2c-2wdb55tahi.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 10,
+            "method": "POST",
+            "path": "/api/session",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true,
+            "bodySha256": "11dcbc7893b718ae014ff4cac56cb5ce80f923b3a874a1ec6fd1d595feac88e6"
+          },
+          {
+            "ordinal": 11,
+            "method": "GET",
+            "path": "/_next/static/chunks/41_02ne0xksvf.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 12,
+            "method": "GET",
+            "path": "/duckdb/duckdb-browser-mvp.worker.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 13,
+            "method": "GET",
+            "path": "/duckdb/duckdb-mvp.wasm",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          }
+        ],
+        "violations": [],
+        "sessions": [
+          {
+            "status": 200,
+            "bytes": 73,
+            "sha256": "11dcbc7893b718ae014ff4cac56cb5ce80f923b3a874a1ec6fd1d595feac88e6",
+            "held": false,
+            "forwarded": true
+          }
+        ],
+        "console": [],
+        "pageErrors": [],
+        "websockets": 0,
+        "pagesCreated": 1
+      },
+      "cleanup": {
+        "contextClosed": true,
+        "pageClosed": true,
+        "networkDrained": true
+      },
+      "error": "locator.selectOption: Timeout 10000ms exceeded.\nCall log:\n  - waiting for getByRole('dialog', { name: 'panel', exact: true }).getByLabel('Visualization', { exact: true })\n\n    at panel (/home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:207:61)\n    at async deletedDestination (/home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:317:15)\n    at async file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:382:11",
+      "screenshot": "panel-form-F04.png"
+    },
+    {
+      "id": "F05",
+      "title": "in-place edits survive submitted snapshot",
+      "status": "failed",
+      "profile": "desktop",
+      "snapshots": [
+        {
+          "stage": "startup",
+          "workspace": {
+            "datasets": [
+              {
+                "id": "demo-revenue",
+                "name": "SaaS revenue · sample",
+                "table": "demo_revenue",
+                "sourceId": "demo",
+                "kind": "demo",
+                "rowCount": 432,
+                "updatedAt": "2026-01-01T00:00:00.000Z",
+                "columns": [
+                  {
+                    "name": "month",
+                    "type": "DATE"
+                  },
+                  {
+                    "name": "channel",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "plan",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "region",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "customers",
+                    "type": "BIGINT"
+                  },
+                  {
+                    "name": "revenue",
+                    "type": "BIGINT"
+                  },
+                  {
+                    "name": "new_customers",
+                    "type": "BIGINT"
+                  }
+                ]
+              }
+            ],
+            "views": [
+              {
+                "id": "overview",
+                "name": "Revenue overview",
+                "description": "The big picture, down to the details.",
+                "panels": [
+                  {
+                    "id": "total-revenue",
+                    "title": "Annual revenue",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT SUM(revenue) AS revenue FROM demo_revenue",
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Recognized subscription revenue, Jan–Dec 2025. USD; no refunds or tax in this sample.",
+                    "layout": {
+                      "i": "total-revenue",
+                      "x": 0,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "active-customers",
+                    "title": "Active customers",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT SUM(customers) AS customers FROM demo_revenue WHERE month = '2025-12-01'",
+                    "format": "number",
+                    "description": "Paying subscriptions at December 2025 month end; summed across mutually exclusive segments.",
+                    "layout": {
+                      "i": "active-customers",
+                      "x": 4,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "revenue-growth",
+                    "title": "Revenue growth",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT ROUND(100.0 * (SUM(CASE WHEN month = '2025-12-01' THEN revenue ELSE 0 END) / NULLIF(SUM(CASE WHEN month = '2025-11-01' THEN revenue ELSE 0 END), 0) - 1), 1) AS growth FROM demo_revenue",
+                    "format": "percent",
+                    "description": "December revenue compared with November; percentage points expressed as a percentage.",
+                    "layout": {
+                      "i": "revenue-growth",
+                      "x": 8,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "revenue-trend",
+                    "title": "Revenue over time",
+                    "type": "area",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT month, SUM(revenue) AS revenue FROM demo_revenue GROUP BY month ORDER BY month",
+                    "xKey": "month",
+                    "yKeys": [
+                      "revenue"
+                    ],
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Monthly recognized revenue · USD",
+                    "layout": {
+                      "i": "revenue-trend",
+                      "x": 0,
+                      "y": 3,
+                      "w": 8,
+                      "h": 5
+                    }
+                  },
+                  {
+                    "id": "acquisition-channels",
+                    "title": "Acquisition mix",
+                    "type": "donut",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT channel, SUM(new_customers) AS customers FROM demo_revenue GROUP BY channel ORDER BY customers DESC",
+                    "xKey": "channel",
+                    "yKeys": [
+                      "customers"
+                    ],
+                    "format": "number",
+                    "description": "New paying subscriptions acquired during 2025",
+                    "layout": {
+                      "i": "acquisition-channels",
+                      "x": 8,
+                      "y": 3,
+                      "w": 4,
+                      "h": 5
+                    }
+                  },
+                  {
+                    "id": "plan-breakdown",
+                    "title": "Performance by plan",
+                    "type": "table",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT plan, SUM(revenue) AS revenue, SUM(new_customers) AS new_customers, ROUND(SUM(revenue) * 1.0 / NULLIF(SUM(customers), 0), 2) AS monthly_revenue_per_customer FROM demo_revenue GROUP BY plan ORDER BY revenue DESC",
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Annual totals and weighted monthly revenue per paying subscription · USD",
+                    "layout": {
+                      "i": "plan-breakdown",
+                      "x": 0,
+                      "y": 8,
+                      "w": 12,
+                      "h": 5
+                    }
+                  }
+                ]
+              }
+            ],
+            "activeViewId": "overview",
+            "metrics": [
+              {
+                "id": "recognized-revenue",
+                "name": "Recognized revenue",
+                "definition": "Sum of subscription revenue in USD for the selected period. Sample data excludes refunds and tax.",
+                "sql": "SELECT SUM(revenue) AS revenue FROM demo_revenue",
+                "datasetIds": [
+                  "demo-revenue"
+                ]
+              },
+              {
+                "id": "active-subscriptions",
+                "name": "Active customers",
+                "definition": "Sum of active paying subscriptions for the latest available month. Monthly snapshots must not be summed across time.",
+                "sql": "SELECT SUM(customers) AS customers FROM demo_revenue WHERE month = (SELECT MAX(month) FROM demo_revenue)",
+                "datasetIds": [
+                  "demo-revenue"
+                ]
+              }
+            ],
+            "shareResults": true,
+            "shareSchema": true
+          },
+          "gate": {
+            "armed": null,
+            "held": false,
+            "mounts": 1,
+            "ledger": []
+          }
+        }
+      ],
+      "boundary": {
+        "requests": [
+          {
+            "ordinal": 1,
+            "method": "GET",
+            "path": "/",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 2,
+            "method": "GET",
+            "path": "/_next/static/chunks/3mbimo4o28f0x.css",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 3,
+            "method": "GET",
+            "path": "/_next/static/chunks/3333gs1h_w689.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 4,
+            "method": "GET",
+            "path": "/_next/static/chunks/3xmius13vdsx2.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 5,
+            "method": "GET",
+            "path": "/_next/static/chunks/2khxl0v1q4i6n.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 6,
+            "method": "GET",
+            "path": "/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 7,
+            "method": "GET",
+            "path": "/_next/static/chunks/0umf92h1sb77c.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 8,
+            "method": "GET",
+            "path": "/_next/static/chunks/0j67kanh3xhu8.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 9,
+            "method": "GET",
+            "path": "/_next/static/chunks/2c-2wdb55tahi.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 10,
+            "method": "POST",
+            "path": "/api/session",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true,
+            "bodySha256": "1c58880bf833549e0a772076b05622a26d078f5d786c9063fbd6eed4fe0f9c8b"
+          },
+          {
+            "ordinal": 11,
+            "method": "GET",
+            "path": "/_next/static/chunks/41_02ne0xksvf.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 12,
+            "method": "GET",
+            "path": "/duckdb/duckdb-browser-mvp.worker.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 13,
+            "method": "GET",
+            "path": "/duckdb/duckdb-mvp.wasm",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          }
+        ],
+        "violations": [],
+        "sessions": [
+          {
+            "status": 200,
+            "bytes": 73,
+            "sha256": "1c58880bf833549e0a772076b05622a26d078f5d786c9063fbd6eed4fe0f9c8b",
+            "held": false,
+            "forwarded": true
+          }
+        ],
+        "console": [],
+        "pageErrors": [],
+        "websockets": 0,
+        "pagesCreated": 1
+      },
+      "cleanup": {
+        "contextClosed": true,
+        "pageClosed": true,
+        "networkDrained": true
+      },
+      "error": "locator.selectOption: Timeout 10000ms exceeded.\nCall log:\n  - waiting for getByRole('dialog', { name: 'panel', exact: true }).getByLabel('Visualization', { exact: true })\n\n    at panel (/home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:207:61)\n    at async editedDraft (/home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:330:15)\n    at async file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:382:11",
+      "screenshot": "panel-form-F05.png"
+    },
+    {
+      "id": "F06",
+      "title": "narrow auth remount disposes old request",
+      "status": "failed",
+      "profile": "narrow",
+      "snapshots": [
+        {
+          "stage": "startup",
+          "workspace": {
+            "datasets": [
+              {
+                "id": "demo-revenue",
+                "name": "SaaS revenue · sample",
+                "table": "demo_revenue",
+                "sourceId": "demo",
+                "kind": "demo",
+                "rowCount": 432,
+                "updatedAt": "2026-01-01T00:00:00.000Z",
+                "columns": [
+                  {
+                    "name": "month",
+                    "type": "DATE"
+                  },
+                  {
+                    "name": "channel",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "plan",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "region",
+                    "type": "VARCHAR"
+                  },
+                  {
+                    "name": "customers",
+                    "type": "BIGINT"
+                  },
+                  {
+                    "name": "revenue",
+                    "type": "BIGINT"
+                  },
+                  {
+                    "name": "new_customers",
+                    "type": "BIGINT"
+                  }
+                ]
+              }
+            ],
+            "views": [
+              {
+                "id": "overview",
+                "name": "Revenue overview",
+                "description": "The big picture, down to the details.",
+                "panels": [
+                  {
+                    "id": "total-revenue",
+                    "title": "Annual revenue",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT SUM(revenue) AS revenue FROM demo_revenue",
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Recognized subscription revenue, Jan–Dec 2025. USD; no refunds or tax in this sample.",
+                    "layout": {
+                      "i": "total-revenue",
+                      "x": 0,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "active-customers",
+                    "title": "Active customers",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT SUM(customers) AS customers FROM demo_revenue WHERE month = '2025-12-01'",
+                    "format": "number",
+                    "description": "Paying subscriptions at December 2025 month end; summed across mutually exclusive segments.",
+                    "layout": {
+                      "i": "active-customers",
+                      "x": 4,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "revenue-growth",
+                    "title": "Revenue growth",
+                    "type": "metric",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT ROUND(100.0 * (SUM(CASE WHEN month = '2025-12-01' THEN revenue ELSE 0 END) / NULLIF(SUM(CASE WHEN month = '2025-11-01' THEN revenue ELSE 0 END), 0) - 1), 1) AS growth FROM demo_revenue",
+                    "format": "percent",
+                    "description": "December revenue compared with November; percentage points expressed as a percentage.",
+                    "layout": {
+                      "i": "revenue-growth",
+                      "x": 8,
+                      "y": 0,
+                      "w": 4,
+                      "h": 3
+                    }
+                  },
+                  {
+                    "id": "revenue-trend",
+                    "title": "Revenue over time",
+                    "type": "area",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT month, SUM(revenue) AS revenue FROM demo_revenue GROUP BY month ORDER BY month",
+                    "xKey": "month",
+                    "yKeys": [
+                      "revenue"
+                    ],
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Monthly recognized revenue · USD",
+                    "layout": {
+                      "i": "revenue-trend",
+                      "x": 0,
+                      "y": 3,
+                      "w": 8,
+                      "h": 5
+                    }
+                  },
+                  {
+                    "id": "acquisition-channels",
+                    "title": "Acquisition mix",
+                    "type": "donut",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT channel, SUM(new_customers) AS customers FROM demo_revenue GROUP BY channel ORDER BY customers DESC",
+                    "xKey": "channel",
+                    "yKeys": [
+                      "customers"
+                    ],
+                    "format": "number",
+                    "description": "New paying subscriptions acquired during 2025",
+                    "layout": {
+                      "i": "acquisition-channels",
+                      "x": 8,
+                      "y": 3,
+                      "w": 4,
+                      "h": 5
+                    }
+                  },
+                  {
+                    "id": "plan-breakdown",
+                    "title": "Performance by plan",
+                    "type": "table",
+                    "datasetIds": [
+                      "demo-revenue"
+                    ],
+                    "sql": "SELECT plan, SUM(revenue) AS revenue, SUM(new_customers) AS new_customers, ROUND(SUM(revenue) * 1.0 / NULLIF(SUM(customers), 0), 2) AS monthly_revenue_per_customer FROM demo_revenue GROUP BY plan ORDER BY revenue DESC",
+                    "format": "currency",
+                    "currency": "USD",
+                    "description": "Annual totals and weighted monthly revenue per paying subscription · USD",
+                    "layout": {
+                      "i": "plan-breakdown",
+                      "x": 0,
+                      "y": 8,
+                      "w": 12,
+                      "h": 5
+                    }
+                  }
+                ]
+              }
+            ],
+            "activeViewId": "overview",
+            "metrics": [
+              {
+                "id": "recognized-revenue",
+                "name": "Recognized revenue",
+                "definition": "Sum of subscription revenue in USD for the selected period. Sample data excludes refunds and tax.",
+                "sql": "SELECT SUM(revenue) AS revenue FROM demo_revenue",
+                "datasetIds": [
+                  "demo-revenue"
+                ]
+              },
+              {
+                "id": "active-subscriptions",
+                "name": "Active customers",
+                "definition": "Sum of active paying subscriptions for the latest available month. Monthly snapshots must not be summed across time.",
+                "sql": "SELECT SUM(customers) AS customers FROM demo_revenue WHERE month = (SELECT MAX(month) FROM demo_revenue)",
+                "datasetIds": [
+                  "demo-revenue"
+                ]
+              }
+            ],
+            "shareResults": true,
+            "shareSchema": true
+          },
+          "gate": {
+            "armed": null,
+            "held": false,
+            "mounts": 1,
+            "ledger": []
+          }
+        }
+      ],
+      "boundary": {
+        "requests": [
+          {
+            "ordinal": 1,
+            "method": "GET",
+            "path": "/",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 2,
+            "method": "GET",
+            "path": "/_next/static/chunks/3mbimo4o28f0x.css",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 3,
+            "method": "GET",
+            "path": "/_next/static/chunks/3333gs1h_w689.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 4,
+            "method": "GET",
+            "path": "/_next/static/chunks/3xmius13vdsx2.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 5,
+            "method": "GET",
+            "path": "/_next/static/chunks/2khxl0v1q4i6n.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 6,
+            "method": "GET",
+            "path": "/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 7,
+            "method": "GET",
+            "path": "/_next/static/chunks/0umf92h1sb77c.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 8,
+            "method": "GET",
+            "path": "/_next/static/chunks/0j67kanh3xhu8.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 9,
+            "method": "GET",
+            "path": "/_next/static/chunks/2c-2wdb55tahi.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 10,
+            "method": "POST",
+            "path": "/api/session",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true,
+            "bodySha256": "efb994b2ea45ff64490db7b2c52dde267e66c601850101dd52c44294b9a4f133"
+          },
+          {
+            "ordinal": 11,
+            "method": "GET",
+            "path": "/_next/static/chunks/41_02ne0xksvf.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 12,
+            "method": "GET",
+            "path": "/duckdb/duckdb-browser-mvp.worker.js",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          },
+          {
+            "ordinal": 13,
+            "method": "GET",
+            "path": "/duckdb/duckdb-mvp.wasm",
+            "status": 200,
+            "finished": true,
+            "failed": false,
+            "bodyFinished": true
+          }
+        ],
+        "violations": [],
+        "sessions": [
+          {
+            "status": 200,
+            "bytes": 73,
+            "sha256": "efb994b2ea45ff64490db7b2c52dde267e66c601850101dd52c44294b9a4f133",
+            "held": true,
+            "forwarded": true
+          }
+        ],
+        "console": [],
+        "pageErrors": [],
+        "websockets": 0,
+        "pagesCreated": 1
+      },
+      "cleanup": {
+        "contextClosed": true,
+        "pageClosed": true,
+        "networkDrained": true
+      },
+      "error": "locator.selectOption: Timeout 10000ms exceeded.\nCall log:\n  - waiting for getByRole('dialog', { name: 'panel', exact: true }).getByLabel('Visualization', { exact: true })\n\n    at panel (/home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:207:61)\n    at async remount (/home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:346:15)\n    at async file:///home/runner/work/sift-analytics/sift-analytics/tests/e2e/panel-form.spec.mjs:382:11",
+      "screenshot": "panel-form-F06.png"
+    }
+  ],
+  "passed": false,
+  "proofLimits": [
+    "Controlled worker/session delivery with real production components and native query values; no timing-frequency claim.",
+    "Disposable sample data and loopback signing secret only. No agent/model, PostgreSQL, hosted or physical-device acceptance."
+  ],
+  "globalFailures": []
+}
