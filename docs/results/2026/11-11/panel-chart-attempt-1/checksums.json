@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "sift-chart-originals-v1",
+  "run": 43060125760,
+  "source": "45135cb4f2168f0ebdfdc0835bcf973756bb099b",
+  "status": "failed_before_browser",
+  "browserCasesRun": 0,
+  "sourceBeforeAfterEqual": true,
+  "independentSourceInputsMatched": 230,
+  "buildPassed": true,
+  "cleanupVerified": false,
+  "cleanupLimit": "No browser supervisor ran; runner disposal or task process absence was not observed.",
+  "files": [
+    {
+      "original": "source-before.json",
+      "originalBytes": 83735,
+      "originalSha256": "85af74b909db0efc7bd1717c38bffd1312850683a0f65b979f66624daa348918",
+      "retained": "source-before.json",
+      "retainedBytes": 83735,
+      "retainedSha256": "85af74b909db0efc7bd1717c38bffd1312850683a0f65b979f66624daa348918",
+      "origin": "original Actions artifact member"
+    },
+    {
+      "original": "source-after.json",
+      "originalBytes": 83735,
+      "originalSha256": "85af74b909db0efc7bd1717c38bffd1312850683a0f65b979f66624daa348918",
+      "retained": "source-after.json",
+      "retainedBytes": 83735,
+      "retainedSha256": "85af74b909db0efc7bd1717c38bffd1312850683a0f65b979f66624daa348918",
+      "origin": "original Actions artifact member"
+    },
+    {
+      "original": "tools-lock.json",
+      "originalBytes": 1064,
+      "originalSha256": "2fa84b8293c8e0da7953f61ce00ae75c27f19081d3f3f5e5017b077f053377ad",
+      "retained": "tools-lock.json",
+      "retainedBytes": 1064,
+      "retainedSha256": "2fa84b8293c8e0da7953f61ce00ae75c27f19081d3f3f5e5017b077f053377ad",
+      "origin": "original Actions artifact member"
+    },
+    {
+      "original": "install.log",
+      "originalBytes": 27,
+      "originalSha256": "eda7e9953a831eb10fb72bb406b58dde6ce4ddea4c2bb52fb46b102bfbe49257",
+      "retained": "install.log.gz",
+      "retainedBytes": 47,
+      "retainedSha256": "bf72aa23b0249f054347a566ae6f0a471dbd15773b1058a86f8b5cbc07cbd641",
+      "origin": "original Actions artifact member"
+    },
+    {
+      "original": "build.log",
+      "originalBytes": 8134,
+      "originalSha256": "8bb7bba4fce2c700ce2891dd1f265f810ab1e37450e3e46b8913eaee0154663d",
+      "retained": "build.log.gz",
+      "retainedBytes": 1381,
+      "retainedSha256": "21bc222f81d009a9bddf200e4440ec4aaccb97920e3bf2924e207a2026bd4448",
+      "origin": "original Actions artifact member"
+    },
+    {
+      "original": "chromium-setup.failed-step.gh.log",
+      "originalBytes": 8807,
+      "originalSha256": "015d12b102787e4d56a70b5adebc84205f71c03d958e7deeb25311dbec296a3d",
+      "retained": "chromium-setup.failed-step.gh.log.gz",
+      "retainedBytes": 1857,
+      "retainedSha256": "50d35dca2e3006f73ad7d4e1ade37839aa72ba2640e498070ef990dd1ae0667a",
+      "origin": "separate gh failed-step export"
+    }
+  ]
+}

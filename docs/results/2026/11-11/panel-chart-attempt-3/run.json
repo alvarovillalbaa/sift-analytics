@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "scope": "panel-chart",
+  "sourceCommit": "68888959c821ae8acba1108b32216dd8addeaff1",
+  "startedAt": "2026-11-11T16:55:06.318Z",
+  "commands": [
+    {
+      "label": "server",
+      "args": [
+        "node_modules/next/dist/bin/next",
+        "start",
+        "--hostname",
+        "127.0.0.1",
+        "--port",
+        "4173"
+      ],
+      "pid": 3038,
+      "identity": {
+        "pid": 3038,
+        "uid": 1001,
+        "ppid": 3027,
+        "pgid": 3038,
+        "startTime": "9741",
+        "state": "R"
+      },
+      "exitCode": 143,
+      "signal": null,
+      "closeObserved": true,
+      "streams": {
+        "stdout": {
+          "bytes": 205,
+          "retainedBytes": 205,
+          "sha256": "028dd0f858d9dd458567d16791ebcbb6464bca81d0e8d49bed2ed29a83c7faa9",
+          "eof": true,
+          "descriptorClosed": true,
+          "overflow": false
+        },
+        "stderr": {
+          "bytes": 0,
+          "retainedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "eof": true,
+          "descriptorClosed": true,
+          "overflow": false
+        }
+      },
+      "signalsSent": [
+        "SIGTERM"
+      ],
+      "originalGroupAbsent": true
+    },
+    {
+      "label": "browser",
+      "args": [
+        "tests/e2e/panel-chart.spec.mjs"
+      ],
+      "pid": 3082,
+      "identity": {
+        "pid": 3082,
+        "uid": 1001,
+        "ppid": 3027,
+        "pgid": 3082,
+        "startTime": "9867",
+        "state": "R"
+      },
+      "exitCode": 0,
+      "signal": null,
+      "closeObserved": true,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "retainedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "eof": true,
+          "descriptorClosed": true,
+          "overflow": false
+        },
+        "stderr": {
+          "bytes": 0,
+          "retainedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "eof": true,
+          "descriptorClosed": true,
+          "overflow": false
+        }
+      },
+      "signalsSent": [],
+      "originalGroupAbsent": true
+    }
+  ],
+  "cleanup": {
+    "baselineProcessesSkipped": [
+      {
+        "pid": 1325,
+        "uid": 1001,
+        "ppid": 1,
+        "pgid": 1325,
+        "startTime": "1200",
+        "state": "S"
+      },
+      {
+        "pid": 1367,
+        "uid": 1001,
+        "ppid": 1325,
+        "pgid": 1325,
+        "startTime": "1211",
+        "state": "S"
+      }
+    ],
+    "baselineProcessesSkippedCount": 2,
+    "scanErrors": [],
+    "ownedMarkedProcessesRemaining": [],
+    "failures": []
+  },
+  "passed": true,
+  "proofLimits": [
+    "Owned child groups and terminal pipes are observed; an external job kill remains an infrastructure boundary.",
+    "Only exact unchanged same-UID baseline identities born before the recorded task-start cutoff are excluded from the later marker scan; task-created build/tool residue remains in scope. This is not a host-wide absence check."
+  ],
+  "processBaseline": {
+    "limit": 2048,
+    "taskStartTicks": "1833",
+    "exclusionScope": "exact_unchanged_pre_task_identities_only",
+    "complete": true,
+    "identities": [
+      {
+        "pid": 1325,
+        "uid": 1001,
+        "ppid": 1,
+        "pgid": 1325,
+        "startTime": "1200",
+        "state": "S"
+      },
+      {
+        "pid": 1367,
+        "uid": 1001,
+        "ppid": 1325,
+        "pgid": 1325,
+        "startTime": "1211",
+        "state": "S"
+      },
+      {
+        "pid": 2103,
+        "uid": 1001,
+        "ppid": 1,
+        "pgid": 2103,
+        "startTime": "1460",
+        "state": "S"
+      },
+      {
+        "pid": 2133,
+        "uid": 1001,
+        "ppid": 2103,
+        "pgid": 2103,
+        "startTime": "1515",
+        "state": "S"
+      },
+      {
+        "pid": 2160,
+        "uid": 1001,
+        "ppid": 2133,
+        "pgid": 2103,
+        "startTime": "1692",
+        "state": "S"
+      },
+      {
+        "pid": 3026,
+        "uid": 1001,
+        "ppid": 2160,
+        "pgid": 2103,
+        "startTime": "9733",
+        "state": "S"
+      },
+      {
+        "pid": 3027,
+        "uid": 1001,
+        "ppid": 3026,
+        "pgid": 2103,
+        "startTime": "9733",
+        "state": "S"
+      }
+    ]
+  },
+  "browserBudgetMs": 300000,
+  "finishedAt": "2026-11-11T16:56:10.476Z"
+}

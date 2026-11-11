@@ -70,6 +70,12 @@ and a real authentication-driven React remount cancels the old request without
 blocking a new submission. These controlled loopback cases keep live model,
 PostgreSQL, hosted and physical-device acceptance separate.
 
+The [four rendered-panel journeys](docs/results/2026/11-11/panel-chart-checks.md)
+verify table, metric, bar, line, area and donut results through the real production
+UI and native DuckDB on desktop and narrow Chromium. Inspector values, chart
+geometry, refresh/reload, exact-number refusals and empty-result recovery pass.
+These loopback results preserve the separate hosted/provider/device limits.
+
 ## License
 
 MIT. See [LICENSE](LICENSE).

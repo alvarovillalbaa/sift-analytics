@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 1,
+  "scope": "panel-chart",
+  "sourceCommit": "24ebf11a85b97e578d409a4a68035171f481c33c",
+  "startedAt": "2026-11-11T16:50:14.138Z",
+  "commands": [
+    {
+      "label": "server",
+      "args": [
+        "node_modules/next/dist/bin/next",
+        "start",
+        "--hostname",
+        "127.0.0.1",
+        "--port",
+        "4173"
+      ],
+      "pid": 2950,
+      "identity": {
+        "pid": 2950,
+        "uid": 1001,
+        "ppid": 2939,
+        "pgid": 2950,
+        "startTime": "9271",
+        "state": "R"
+      },
+      "exitCode": 143,
+      "signal": null,
+      "closeObserved": true,
+      "streams": {
+        "stdout": {
+          "bytes": 205,
+          "retainedBytes": 205,
+          "sha256": "7243662da23caef370a6e3d3efe03eb7333146e4b660a663bcb5e480dbb3b324",
+          "eof": true,
+          "descriptorClosed": true,
+          "overflow": false
+        },
+        "stderr": {
+          "bytes": 0,
+          "retainedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "eof": true,
+          "descriptorClosed": true,
+          "overflow": false
+        }
+      },
+      "signalsSent": [
+        "SIGTERM"
+      ],
+      "originalGroupAbsent": true
+    },
+    {
+      "label": "browser",
+      "args": [
+        "tests/e2e/panel-chart.spec.mjs"
+      ],
+      "pid": 2994,
+      "identity": {
+        "pid": 2994,
+        "uid": 1001,
+        "ppid": 2939,
+        "pgid": 2994,
+        "startTime": "9383",
+        "state": "R"
+      },
+      "exitCode": 1,
+      "signal": null,
+      "closeObserved": true,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "retainedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "eof": true,
+          "descriptorClosed": true,
+          "overflow": false
+        },
+        "stderr": {
+          "bytes": 0,
+          "retainedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "eof": true,
+          "descriptorClosed": true,
+          "overflow": false
+        }
+      },
+      "signalsSent": [],
+      "originalGroupAbsent": true
+    }
+  ],
+  "cleanup": {
+    "baselineProcessesSkipped": [
+      {
+        "pid": 1116,
+        "uid": 1001,
+        "ppid": 1,
+        "pgid": 1116,
+        "startTime": "939",
+        "state": "S"
+      },
+      {
+        "pid": 1149,
+        "uid": 1001,
+        "ppid": 1116,
+        "pgid": 1116,
+        "startTime": "947",
+        "state": "S"
+      }
+    ],
+    "baselineProcessesSkippedCount": 2,
+    "scanErrors": [],
+    "ownedMarkedProcessesRemaining": [],
+    "failures": [
+      "browser:The expression evaluated to a falsy value:\n\n  assert.ok(tracked.row.exitCode === 0 && tracked.row.signal === null && tracked.row.signalsSent.length === 0)\n"
+    ]
+  },
+  "passed": false,
+  "proofLimits": [
+    "Owned child groups and terminal pipes are observed; an external job kill remains an infrastructure boundary.",
+    "Only exact unchanged same-UID baseline identities born before the recorded task-start cutoff are excluded from the later marker scan; task-created build/tool residue remains in scope. This is not a host-wide absence check."
+  ],
+  "processBaseline": {
+    "limit": 2048,
+    "taskStartTicks": "1901",
+    "exclusionScope": "exact_unchanged_pre_task_identities_only",
+    "complete": true,
+    "identities": [
+      {
+        "pid": 1116,
+        "uid": 1001,
+        "ppid": 1,
+        "pgid": 1116,
+        "startTime": "939",
+        "state": "S"
+      },
+      {
+        "pid": 1149,
+        "uid": 1001,
+        "ppid": 1116,
+        "pgid": 1116,
+        "startTime": "947",
+        "state": "S"
+      },
+      {
+        "pid": 2026,
+        "uid": 1001,
+        "ppid": 1,
+        "pgid": 2026,
+        "startTime": "1494",
+        "state": "S"
+      },
+      {
+        "pid": 2055,
+        "uid": 1001,
+        "ppid": 2026,
+        "pgid": 2026,
+        "startTime": "1572",
+        "state": "S"
+      },
+      {
+        "pid": 2076,
+        "uid": 1001,
+        "ppid": 2055,
+        "pgid": 2026,
+        "startTime": "1761",
+        "state": "S"
+      },
+      {
+        "pid": 2938,
+        "uid": 1001,
+        "ppid": 2076,
+        "pgid": 2026,
+        "startTime": "9264",
+        "state": "S"
+      },
+      {
+        "pid": 2939,
+        "uid": 1001,
+        "ppid": 2938,
+        "pgid": 2026,
+        "startTime": "9264",
+        "state": "S"
+      }
+    ]
+  },
+  "browserBudgetMs": 300000,
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(tracked.row.exitCode === 0 && tracked.row.signal === null && tracked.row.signalsSent.length === 0)\n\n    at stop (file:///home/runner/work/sift-analytics/sift-analytics/tests/support/run-browser.mjs:94:31)\n    at async file:///home/runner/work/sift-analytics/sift-analytics/tests/support/run-browser.mjs:121:3",
+  "finishedAt": "2026-11-11T16:50:44.012Z"
+}

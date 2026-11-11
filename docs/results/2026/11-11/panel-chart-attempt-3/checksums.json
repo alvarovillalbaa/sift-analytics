@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "sift-chart-originals-v1",
+  "run": 43062782878,
+  "job": 130669531899,
+  "source": "68888959c821ae8acba1108b32216dd8addeaff1",
+  "overallPassed": true,
+  "distinctCases": 4,
+  "cases": {
+    "C01": "passed",
+    "C02": "passed",
+    "C03": "passed",
+    "C04": "passed"
+  },
+  "sourceBeforeAfterEqual": true,
+  "independentSourceInputsMatched": 230,
+  "sourceBytes": 8959193,
+  "buildPassed": true,
+  "completeRuntimeStreams": 4,
+  "ownedProcessGroupsAbsent": true,
+  "markedProcessesRemaining": 0,
+  "supervisorOverallPassed": true,
+  "geometryObservations": 27,
+  "geometryStableForMsMinimum": 318.5626919999995,
+  "nativeRunQueryObservationsIncludingStartup": 118,
+  "allNativeQueryObservationsMatchedResults": true,
+  "allFourScreenshotsViewed": true,
+  "imageCacheDockerAndRunnerDisposalVerified": false,
+  "files": [
+    {
+      "original": "browser.json",
+      "originalBytes": 523932,
+      "originalSha256": "e40937968d6830a117bd991b44386dda7a6061bf77a84a27ea35b530814496a3",
+      "retained": "browser.json",
+      "retainedBytes": 523932,
+      "retainedSha256": "e40937968d6830a117bd991b44386dda7a6061bf77a84a27ea35b530814496a3"
+    },
+    {
+      "original": "browser.stderr.log",
+      "originalBytes": 0,
+      "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained": "browser.stderr.log.gz",
+      "retainedBytes": 20,
+      "retainedSha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "original": "browser.stdout.log",
+      "originalBytes": 0,
+      "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained": "browser.stdout.log.gz",
+      "retainedBytes": 20,
+      "retainedSha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "original": "build.log",
+      "originalBytes": 8134,
+      "originalSha256": "54c9ddbaeb2aa07cd84ae8e59dfbfb1a7455a98aa53275b8dab4a3c135fdd7d0",
+      "retained": "build.log.gz",
+      "retainedBytes": 1383,
+      "retainedSha256": "3aab4d885272aa445436154277808d855c0f167891b59406a3f553635ce7b17b"
+    },
+    {
+      "original": "install.log",
+      "originalBytes": 27,
+      "originalSha256": "1fed77385a5ac3e9a2ab4b8716f5e1157512f1299bf4c0a44067daa3655e5672",
+      "retained": "install.log.gz",
+      "retainedBytes": 47,
+      "retainedSha256": "7758e0c9dfdd66409126292a65658fcf061809c8931aafb402b54b0d1ffff541"
+    },
+    {
+      "original": "panel-chart-C01.png",
+      "originalBytes": 174887,
+      "originalSha256": "aebe619a9d6a6563db6389f381a3f63d4c5ec20ba1cd146eb715ce6aee4e674d",
+      "retained": "panel-chart-C01.png",
+      "retainedBytes": 174887,
+      "retainedSha256": "aebe619a9d6a6563db6389f381a3f63d4c5ec20ba1cd146eb715ce6aee4e674d"
+    },
+    {
+      "original": "panel-chart-C02.png",
+      "originalBytes": 116628,
+      "originalSha256": "4d6b735ae26a9f0504383b718e1cab8e63ea60d6684abedfca26b87b8a7d5c82",
+      "retained": "panel-chart-C02.png",
+      "retainedBytes": 116628,
+      "retainedSha256": "4d6b735ae26a9f0504383b718e1cab8e63ea60d6684abedfca26b87b8a7d5c82"
+    },
+    {
+      "original": "panel-chart-C03.png",
+      "originalBytes": 144734,
+      "originalSha256": "b7f773ff3ec31682eddda300fc25b877acf3d511fcdf79c280b2885773bef845",
+      "retained": "panel-chart-C03.png",
+      "retainedBytes": 144734,
+      "retainedSha256": "b7f773ff3ec31682eddda300fc25b877acf3d511fcdf79c280b2885773bef845"
+    },
+    {
+      "original": "panel-chart-C04.png",
+      "originalBytes": 54792,
+      "originalSha256": "203d9051a1e73e52eaaa5e26b03395cdaaec29e2719bdb415c72836aeb379010",
+      "retained": "panel-chart-C04.png",
+      "retainedBytes": 54792,
+      "retainedSha256": "203d9051a1e73e52eaaa5e26b03395cdaaec29e2719bdb415c72836aeb379010"
+    },
+    {
+      "original": "run.json",
+      "originalBytes": 4427,
+      "originalSha256": "f9368730641d0b994ee1d731f60dbcb25951b9ce71ca3878caa7169237cf514b",
+      "retained": "run.json",
+      "retainedBytes": 4427,
+      "retainedSha256": "f9368730641d0b994ee1d731f60dbcb25951b9ce71ca3878caa7169237cf514b"
+    },
+    {
+      "original": "server.stderr.log",
+      "originalBytes": 0,
+      "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained": "server.stderr.log.gz",
+      "retainedBytes": 20,
+      "retainedSha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "original": "server.stdout.log",
+      "originalBytes": 205,
+      "originalSha256": "028dd0f858d9dd458567d16791ebcbb6464bca81d0e8d49bed2ed29a83c7faa9",
+      "retained": "server.stdout.log.gz",
+      "retainedBytes": 164,
+      "retainedSha256": "cb182faf3628ae1283c910450c07148a0616243cbd39ac8287e338e29d1dca63"
+    },
+    {
+      "original": "source-after.json",
+      "originalBytes": 83735,
+      "originalSha256": "1cbe5ae8b4514692e2ee890e1a6e0c557684a9d9be1bd2eaefc6f81c0e354abc",
+      "retained": "source-after.json",
+      "retainedBytes": 83735,
+      "retainedSha256": "1cbe5ae8b4514692e2ee890e1a6e0c557684a9d9be1bd2eaefc6f81c0e354abc"
+    },
+    {
+      "original": "source-before.json",
+      "originalBytes": 83735,
+      "originalSha256": "1cbe5ae8b4514692e2ee890e1a6e0c557684a9d9be1bd2eaefc6f81c0e354abc",
+      "retained": "source-before.json",
+      "retainedBytes": 83735,
+      "retainedSha256": "1cbe5ae8b4514692e2ee890e1a6e0c557684a9d9be1bd2eaefc6f81c0e354abc"
+    },
+    {
+      "original": "tools-install.log",
+      "originalBytes": 6907,
+      "originalSha256": "3e692ec6753e24fbbd00ffacc140ec161bb1bf8883757282b140036fa3523b48",
+      "retained": "tools-install.log.gz",
+      "retainedBytes": 550,
+      "retainedSha256": "398b13d3e1457421ff71f1bf1e581bc0e48d46b3ee18637a11284b83f5e19ae2"
+    },
+    {
+      "original": "tools-lock.json",
+      "originalBytes": 1064,
+      "originalSha256": "2fa84b8293c8e0da7953f61ce00ae75c27f19081d3f3f5e5017b077f053377ad",
+      "retained": "tools-lock.json",
+      "retainedBytes": 1064,
+      "retainedSha256": "2fa84b8293c8e0da7953f61ce00ae75c27f19081d3f3f5e5017b077f053377ad"
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "schemaVersion": "sift-chart-originals-v1",
+  "run": 43061194188,
+  "source": "24ebf11a85b97e578d409a4a68035171f481c33c",
+  "overallPassed": false,
+  "cases": {
+    "C01": "failed",
+    "C02": "failed",
+    "C03": "passed",
+    "C04": "failed"
+  },
+  "sourceBeforeAfterEqual": true,
+  "independentSourceInputsMatched": 230,
+  "buildPassed": true,
+  "completeRuntimeStreams": 4,
+  "ownedProcessGroupsAbsent": true,
+  "markedProcessesRemaining": 0,
+  "supervisorOverallPassed": false,
+  "imageCacheDockerAndRunnerDisposalVerified": false,
+  "files": [
+    {
+      "original": "browser.json",
+      "originalBytes": 255460,
+      "originalSha256": "265df483d2e711c266965cc329cdd3d9460125881ba68a541067ae8958ae0597",
+      "retained": "browser.json",
+      "retainedBytes": 255460,
+      "retainedSha256": "265df483d2e711c266965cc329cdd3d9460125881ba68a541067ae8958ae0597"
+    },
+    {
+      "original": "browser.stderr.log",
+      "originalBytes": 0,
+      "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained": "browser.stderr.log.gz",
+      "retainedBytes": 20,
+      "retainedSha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "original": "browser.stdout.log",
+      "originalBytes": 0,
+      "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained": "browser.stdout.log.gz",
+      "retainedBytes": 20,
+      "retainedSha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "original": "build.log",
+      "originalBytes": 8134,
+      "originalSha256": "ec4b956603a982c1db8d9ecf688eb2e5bae30a041ba34e7d63deb1298aaff140",
+      "retained": "build.log.gz",
+      "retainedBytes": 1381,
+      "retainedSha256": "d930c26fabcbf2638c78c35380348db5ea2377842be38a4e39693e0d54eac438"
+    },
+    {
+      "original": "install.log",
+      "originalBytes": 27,
+      "originalSha256": "e924b24e85491289d1db2cf06a1018b651294e15237fdceacede9a2aff65ad8e",
+      "retained": "install.log.gz",
+      "retainedBytes": 47,
+      "retainedSha256": "26aa66fb79333daf45a0e69b300a9ae7ecc1a4ab935c649f6e08e363caa79bf3"
+    },
+    {
+      "original": "panel-chart-C01.png",
+      "originalBytes": 171879,
+      "originalSha256": "058ef1afd842ee82310955bc8d1ab11c563c0730684d0e62053c31ed07818112",
+      "retained": "panel-chart-C01.png",
+      "retainedBytes": 171879,
+      "retainedSha256": "058ef1afd842ee82310955bc8d1ab11c563c0730684d0e62053c31ed07818112"
+    },
+    {
+      "original": "panel-chart-C02.png",
+      "originalBytes": 116784,
+      "originalSha256": "44ce587fefe850592c6eebbe6d2a32991f33ff537c62f8e34801bb22446c4418",
+      "retained": "panel-chart-C02.png",
+      "retainedBytes": 116784,
+      "retainedSha256": "44ce587fefe850592c6eebbe6d2a32991f33ff537c62f8e34801bb22446c4418"
+    },
+    {
+      "original": "panel-chart-C03.png",
+      "originalBytes": 144657,
+      "originalSha256": "a6d3407c87f9a667a20e092932aed1ac917b88e263b488fb29bc25a735a709dd",
+      "retained": "panel-chart-C03.png",
+      "retainedBytes": 144657,
+      "retainedSha256": "a6d3407c87f9a667a20e092932aed1ac917b88e263b488fb29bc25a735a709dd"
+    },
+    {
+      "original": "panel-chart-C04.png",
+      "originalBytes": 66755,
+      "originalSha256": "91914a2eae4a61ba479a21dddd494cd7d4f82bcb037b33c8071cf0ccff14b230",
+      "retained": "panel-chart-C04.png",
+      "retainedBytes": 66755,
+      "retainedSha256": "91914a2eae4a61ba479a21dddd494cd7d4f82bcb037b33c8071cf0ccff14b230"
+    },
+    {
+      "original": "run.json",
+      "originalBytes": 5020,
+      "originalSha256": "8d1e0ded99d55c60b1d14d67f85e91a645164b9e1fe38993b6d7b5f90ad33e25",
+      "retained": "run.json",
+      "retainedBytes": 5020,
+      "retainedSha256": "8d1e0ded99d55c60b1d14d67f85e91a645164b9e1fe38993b6d7b5f90ad33e25"
+    },
+    {
+      "original": "server.stderr.log",
+      "originalBytes": 0,
+      "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained": "server.stderr.log.gz",
+      "retainedBytes": 20,
+      "retainedSha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "original": "server.stdout.log",
+      "originalBytes": 205,
+      "originalSha256": "7243662da23caef370a6e3d3efe03eb7333146e4b660a663bcb5e480dbb3b324",
+      "retained": "server.stdout.log.gz",
+      "retainedBytes": 164,
+      "retainedSha256": "e7f324fce69454565fd581114d2898c64620e64dbd96a85d28eba704b4ce17ef"
+    },
+    {
+      "original": "source-after.json",
+      "originalBytes": 83735,
+      "originalSha256": "c82ad6f4cc50a7694cc0508ab1c08afee94e3e8ed8e3bf47d2a0d896ba3162fa",
+      "retained": "source-after.json",
+      "retainedBytes": 83735,
+      "retainedSha256": "c82ad6f4cc50a7694cc0508ab1c08afee94e3e8ed8e3bf47d2a0d896ba3162fa"
+    },
+    {
+      "original": "source-before.json",
+      "originalBytes": 83735,
+      "originalSha256": "c82ad6f4cc50a7694cc0508ab1c08afee94e3e8ed8e3bf47d2a0d896ba3162fa",
+      "retained": "source-before.json",
+      "retainedBytes": 83735,
+      "retainedSha256": "c82ad6f4cc50a7694cc0508ab1c08afee94e3e8ed8e3bf47d2a0d896ba3162fa"
+    },
+    {
+      "original": "tools-install.log",
+      "originalBytes": 6907,
+      "originalSha256": "7be6486e36d78f554f085169a1c8d1432dc2f308c1c1646bb799692f7db8ff26",
+      "retained": "tools-install.log.gz",
+      "retainedBytes": 550,
+      "retainedSha256": "63f44f6b39c5aa17c84f65ec1c7f0856f1961b92a688d0a9180e8d60f16b3316"
+    },
+    {
+      "original": "tools-lock.json",
+      "originalBytes": 1064,
+      "originalSha256": "2fa84b8293c8e0da7953f61ce00ae75c27f19081d3f3f5e5017b077f053377ad",
+      "retained": "tools-lock.json",
+      "retainedBytes": 1064,
+      "retainedSha256": "2fa84b8293c8e0da7953f61ce00ae75c27f19081d3f3f5e5017b077f053377ad"
+    }
+  ]
+}
