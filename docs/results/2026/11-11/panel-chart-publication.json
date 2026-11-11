@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "sift-chart-publication-v1",
+  "observedAtUtc": "2026-11-11T17:05:52Z",
+  "baselineMain": "52e999da576b053f77abcf85e043fe23ab75d644",
+  "acceptedSource": "68888959c821ae8acba1108b32216dd8addeaff1",
+  "acceptedTree": "57e5d109215c9ad1560328ff7f57030cfe01dcc3",
+  "acceptedInputs": 230,
+  "acceptedInputBytes": 8959193,
+  "sourceReceipt": "57ed3e94504e5415fb82961a7d238adc52d96a09",
+  "sourceReceiptTree": "69bb42b0590190b3aeacf94b2d7191f7da02ac8f",
+  "sourceReceiptFileCount": 274,
+  "sourceReceiptBytes": 11275586,
+  "checkedReceiptChangesOnlyDocumentation": true,
+  "acceptedInputFilesUnchangedExceptReadme": true,
+  "ci": {
+    "run": 43062782878,
+    "job": 130669531899,
+    "distinctCases": 4,
+    "allPassed": true,
+    "normalBuildPassed": true,
+    "nativeRunQueryObservationsIncludingStartup": 118,
+    "stableGeometryObservations": 27,
+    "minimumObservedStableMs": 318.5626919999995,
+    "completeRuntimeStreams": 4,
+    "allFourPngsViewed": true,
+    "originalAttemptsRetained": [
+      43060125760,
+      43061194188,
+      43062782878
+    ]
+  },
+  "sourceReadback": {
+    "all274PathsModesBlobIdsAndSizesMatched": true,
+    "resultPathsUploaded": 45,
+    "uniqueResultBlobsUploaded": 35,
+    "gitContentAddressesMatched": true,
+    "sourceAndAfterManifestEqual": true
+  },
+  "controls": {
+    "workflowId": 414910762,
+    "workflowState": "disabled_manually",
+    "qaRefs": [
+      {
+        "branch": "qa/sift-panel-chart-20261111-1",
+        "sha": "5410c2429cdf3177119b6d2bc8fa2c77eaa99f75",
+        "absenceReadback": "NOT_FOUND"
+      },
+      {
+        "branch": "qa/sift-panel-chart-20261111-2",
+        "sha": "ce8e048f6fedf3b7c2fc27beb94285c767968a6f",
+        "absenceReadback": "NOT_FOUND"
+      },
+      {
+        "branch": "qa/sift-panel-chart-20261111-3",
+        "sha": "e7a73cd5322ec708c2872d01158471e5365c098d",
+        "absenceReadback": "NOT_FOUND"
+      }
+    ],
+    "temporaryWorkflowInMain": false
+  },
+  "cleanup": {
+    "acceptedOwnedGroupsAbsent": true,
+    "acceptedMarkedProcessesRemaining": 0,
+    "acceptedContextPagesClosed": true,
+    "acceptedNetworkBodiesDrained": true,
+    "acceptedOriginalContextStorageRestored": true,
+    "firstRunCleanupUnverified": true,
+    "secondRunOverallAndExitGateRemainFalse": true,
+    "eveBuildDockerTemplateImageCleanupIndependentlyVerified": false,
+    "runnerDisposalAndImageCachesIndependentlyVerified": false,
+    "hostWideProcessAbsenceClaimed": false
+  },
+  "production": {
+    "alias": "https://sift-analytics.vercel.app",
+    "deploymentId": "dpl_5UadduHm42fwUySaCqqqgjBf3kJ9",
+    "state": "READY",
+    "githubCommitSha": "37d49a6ac1bd060afc679230037e068afe757bb1",
+    "sourceUrl": "sift-analytics-m35ke8xzn-my-team-4f230354.vercel.app",
+    "productionInputsEqualAcceptedSource": true,
+    "comparisonDifferencesOnlyDocsAndTests": 50,
+    "newRuntimeDeploymentRequired": false,
+    "latestMetadataCommitDeploymentClaimed": false,
+    "hostedBrowserRerun": false
+  },
+  "limits": {
+    "pixelPerfectAppearanceVerified": false,
+    "screenReaderVerified": false,
+    "physicalDeviceVerified": false,
+    "realModelProviderVerified": false,
+    "postgresVerified": false,
+    "hostedSessionSetupVerified": false,
+    "sessionSecretSetup": "owner-deferred",
+    "newPaidPlan": false,
+    "newAccount": false,
+    "productionDataOrConfigurationChanged": false,
+    "localHeavyEnvironmentCreated": false,
+    "fullProductAcceptance": false,
+    "portfolioGoalStatus": "active"
+  }
+}
