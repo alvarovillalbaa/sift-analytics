@@ -26,3 +26,11 @@ All eight pass with the existing Node installation, and the narrow helper/test
 type check passes after a retained test-only type annotation correction. See
 the [actual result](../results/2026/11-09/panel-form.md). These T1 checks do not
 establish React, DuckDB, browser, provider or physical-device behavior.
+
+On 11 November, [six production-browser cases](../results/2026/11-11/panel-form-browser-checks.md)
+passed with actual React dialogs, native DuckDB results, persistence/reload,
+deleted destinations and an authentication-driven remount. The browser hook
+controls delivery of one authored query or session response; it supplies no
+query result. The earlier eight coordinator cases remain separate. This closes
+the exercised browser-integration gap while retaining provider, hosted and
+physical-device limits.

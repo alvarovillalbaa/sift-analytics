@@ -53,3 +53,11 @@ case expectation or result is changed. [Original packet](../results/2026/11-11/p
 retains all raw files. Both source manifests match all 189 source inputs; all
 contexts/pages and response bodies closed, both child groups were absent and no
 marked process remained. The browser exit-one/supervisor failure stays recorded.
+
+The [second run](https://github.com/alvarovillalbaa/sift-analytics/actions/runs/43007822894)
+passed all six cases at `3e830c04112809afb1bb1be6332051612ede07f5`, with the
+application and dependencies unchanged. Both 207-file source manifests, all
+four complete runtime streams, context/network/process cleanup and pinned tools
+were verified. The [result and original packet](../results/2026/11-11/panel-form-browser-checks.md)
+retain the first failure and six actual reviewed screenshots. The temporary
+active workflow is omitted from the final publication; this example remains.

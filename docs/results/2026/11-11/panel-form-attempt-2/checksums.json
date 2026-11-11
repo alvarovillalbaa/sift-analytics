@@ -1,0 +1,119 @@
+{
+  "source": "3e830c04112809afb1bb1be6332051612ede07f5",
+  "run": 43007822894,
+  "sourceFiles": 207,
+  "status": "six-passed",
+  "totalArtifactBytes": 1554227,
+  "artifactFiles": [
+    {
+      "file": "browser.json",
+      "bytes": 233794,
+      "sha256": "bb5ccb17e74506a805fe41069e1de53b37daf6645838e408e1f1902186abd64c"
+    },
+    {
+      "file": "browser.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "storedFile": "browser.stderr.log.gz",
+      "compression": "gzip",
+      "storedBytes": 20,
+      "storedSha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "file": "browser.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "storedFile": "browser.stdout.log.gz",
+      "compression": "gzip",
+      "storedBytes": 20,
+      "storedSha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "file": "build.log",
+      "bytes": 8134,
+      "sha256": "6f0cb7d9def26ce4369aac42f7638576c5c093c0b79f5b0fa458000214cbe2fc",
+      "storedFile": "build.log.gz",
+      "compression": "gzip",
+      "storedBytes": 1381,
+      "storedSha256": "330837a7de28ecd42ad7cd14bcc69e7def96b9976dfecfe82ac037e6ff85222b"
+    },
+    {
+      "file": "install.log",
+      "bytes": 27,
+      "sha256": "1fed77385a5ac3e9a2ab4b8716f5e1157512f1299bf4c0a44067daa3655e5672",
+      "storedFile": "install.log.gz",
+      "compression": "gzip",
+      "storedBytes": 47,
+      "storedSha256": "7758e0c9dfdd66409126292a65658fcf061809c8931aafb402b54b0d1ffff541"
+    },
+    {
+      "file": "panel-form-F01.png",
+      "bytes": 193323,
+      "sha256": "eca358d8dfa3887869aa9975c157d051914e2013fe8effaaa7250229869c576c"
+    },
+    {
+      "file": "panel-form-F02.png",
+      "bytes": 253688,
+      "sha256": "1a22f78d5c6fe1c9ee6f5d36b413c227c4d89c17c00ce87e1544f8b2b7f2d682"
+    },
+    {
+      "file": "panel-form-F03.png",
+      "bytes": 147573,
+      "sha256": "6cfb5d7d17f4af609c8f93d9161fd8eeef0df9e2155a22bcabe6cf1f23e70aaf"
+    },
+    {
+      "file": "panel-form-F04.png",
+      "bytes": 158977,
+      "sha256": "62f687bd9cc16950728180573548fa457be17f40ccc0013a5cd561a9f580789f"
+    },
+    {
+      "file": "panel-form-F05.png",
+      "bytes": 253005,
+      "sha256": "5d1b39f8b3d4ca9ad7020a32e7e68fd55765e4f6cbbe9e94240efed4a1bbacc3"
+    },
+    {
+      "file": "panel-form-F06.png",
+      "bytes": 149732,
+      "sha256": "3c76cc60bde434313f3561bb0ea4adfb555ae62ea73716cf33eda36b14c46914"
+    },
+    {
+      "file": "run.json",
+      "bytes": 4429,
+      "sha256": "8e9292d2b38f261fc6127b9b2eba138f53e31eaccf569cf63b652b04a150f7f1"
+    },
+    {
+      "file": "server.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "storedFile": "server.stderr.log.gz",
+      "compression": "gzip",
+      "storedBytes": 20,
+      "storedSha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "file": "server.stdout.log",
+      "bytes": 205,
+      "sha256": "fc0bab2a46df23b6359f911d675ee241d4b190766ad1dca22ca5cba497addecd",
+      "storedFile": "server.stdout.log.gz",
+      "compression": "gzip",
+      "storedBytes": 164,
+      "storedSha256": "4c601adc5656467819cabb329979c97cb38bc5c5f57e354fda0fa4d0985624b2"
+    },
+    {
+      "file": "source-after.json",
+      "bytes": 75138,
+      "sha256": "58e94fe9b3442cb8e50d67454ae33ddf2fc9907edb357c2f0452f58ce447fd18"
+    },
+    {
+      "file": "source-before.json",
+      "bytes": 75138,
+      "sha256": "58e94fe9b3442cb8e50d67454ae33ddf2fc9907edb357c2f0452f58ce447fd18"
+    },
+    {
+      "file": "tools-lock.json",
+      "bytes": 1064,
+      "sha256": "2fa84b8293c8e0da7953f61ce00ae75c27f19081d3f3f5e5017b077f053377ad"
+    }
+  ],
+  "storage": "Logs use lossless gzip; original byte counts and digests remain authoritative."
+}

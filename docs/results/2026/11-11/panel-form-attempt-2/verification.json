@@ -1,0 +1,102 @@
+{
+  "source": "3e830c04112809afb1bb1be6332051612ede07f5",
+  "run": 43007822894,
+  "sourceFiles": 207,
+  "passedCases": [
+    "F01",
+    "F02",
+    "F03",
+    "F04",
+    "F05",
+    "F06"
+  ],
+  "browser": "158.0.8127.18",
+  "requests": 158,
+  "heldQueries": [
+    {
+      "id": "F02",
+      "heldMs": 255.5,
+      "responseBytes": 706
+    },
+    {
+      "id": "F03",
+      "heldMs": 399.8000000000029,
+      "responseBytes": 706
+    },
+    {
+      "id": "F04",
+      "heldMs": 294.6000000000058,
+      "responseBytes": 706
+    },
+    {
+      "id": "F05",
+      "heldMs": 32.89999999999418,
+      "responseBytes": 706
+    }
+  ],
+  "images": [
+    {
+      "file": "panel-form-F01.png",
+      "bytes": 193323,
+      "sha256": "eca358d8dfa3887869aa9975c157d051914e2013fe8effaaa7250229869c576c",
+      "dimensions": [
+        1440,
+        1679
+      ]
+    },
+    {
+      "file": "panel-form-F02.png",
+      "bytes": 253688,
+      "sha256": "1a22f78d5c6fe1c9ee6f5d36b413c227c4d89c17c00ce87e1544f8b2b7f2d682",
+      "dimensions": [
+        1440,
+        1679
+      ]
+    },
+    {
+      "file": "panel-form-F03.png",
+      "bytes": 147573,
+      "sha256": "6cfb5d7d17f4af609c8f93d9161fd8eeef0df9e2155a22bcabe6cf1f23e70aaf",
+      "dimensions": [
+        390,
+        2462
+      ]
+    },
+    {
+      "file": "panel-form-F04.png",
+      "bytes": 158977,
+      "sha256": "62f687bd9cc16950728180573548fa457be17f40ccc0013a5cd561a9f580789f",
+      "dimensions": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "panel-form-F05.png",
+      "bytes": 253005,
+      "sha256": "5d1b39f8b3d4ca9ad7020a32e7e68fd55765e4f6cbbe9e94240efed4a1bbacc3",
+      "dimensions": [
+        1440,
+        1679
+      ]
+    },
+    {
+      "file": "panel-form-F06.png",
+      "bytes": 149732,
+      "sha256": "3c76cc60bde434313f3561bb0ea4adfb555ae62ea73716cf33eda36b14c46914",
+      "dimensions": [
+        390,
+        2462
+      ]
+    }
+  ],
+  "cleanup": "contexts, bodies, streams and owned groups verified",
+  "screenshotsViewed": [
+    "F01",
+    "F02",
+    "F03",
+    "F04",
+    "F05",
+    "F06"
+  ]
+}

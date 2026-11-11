@@ -63,6 +63,13 @@ See [Vercel and self-hosting](docs/deployment.md), [architecture](docs/architect
 
 The [focused local-import receipt](docs/results/2026/11-07/local-import-checks.md) records 27 authored checks, a real production build and four passing desktop/narrow Chromium scenarios. It separates actual browser-local file/SQL proof from hosted bootstrap, model, PostgreSQL and physical-device acceptance.
 
+The [Add-panel browser receipt](docs/results/2026/11-11/panel-form-browser-checks.md)
+records six passing production-UI cases with real DuckDB results and reloads.
+Pending queries preserve replacement/edited drafts, deleted views stay deleted,
+and a real authentication-driven React remount cancels the old request without
+blocking a new submission. These controlled loopback cases keep live model,
+PostgreSQL, hosted and physical-device acceptance separate.
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
