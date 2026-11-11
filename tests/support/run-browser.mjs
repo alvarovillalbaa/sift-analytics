@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
-import { createHash } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
 import { open, readFile, writeFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { guardRoot } from './fixtures.mjs';
@@ -10,10 +10,17 @@ assert.ok(root && proof); await guardRoot(root, process.env.SIFT_IMPORT_NONCE);
 assert.equal(process.version, 'v24.22.2');
 const taskStartTicks = process.env.SIFT_IMPORT_START_TICKS;
 assert.ok(/^[1-9][0-9]{0,19}$/.test(taskStartTicks ?? ''), 'A positive bounded task-start tick cutoff is required');
+const scope = process.env.SIFT_BROWSER_SCOPE ?? 'local-import';
+const scopes = {
+  'local-import': { spec: 'tests/e2e/local-import.spec.mjs', ids: ['L01', 'L02', 'L03', 'L04'] },
+  'panel-form': { spec: 'tests/e2e/panel-form.spec.mjs', ids: ['F01', 'F02', 'F03', 'F04', 'F05', 'F06'] },
+};
+assert.ok(Object.hasOwn(scopes, scope), 'Unknown browser-check scope');
 const env = {};
 for (const key of ['HOME', 'PATH', 'LANG', 'LC_ALL', 'TZ', 'TMPDIR', 'TEMP', 'TMP', 'CI', 'SOURCE_COMMIT', 'SIFT_IMPORT_RUN_ROOT', 'SIFT_IMPORT_NONCE', 'SIFT_IMPORT_START_TICKS', 'SIFT_IMPORT_PROOF_DIR', 'SIFT_IMPORT_PLAYWRIGHT_DIR', 'PLAYWRIGHT_BROWSERS_PATH']) if (process.env[key] !== undefined) env[key] = process.env[key];
 env.NODE_ENV = 'production'; env.NEXT_TELEMETRY_DISABLED = '1';
-const report = { schemaVersion: 1, sourceCommit: env.SOURCE_COMMIT, startedAt: new Date().toISOString(), commands: [], cleanup: {}, passed: false, proofLimits: ['Owned child groups and terminal pipes are observed; an external job kill remains an infrastructure boundary.', 'Only exact unchanged same-UID baseline identities born before the recorded task-start cutoff are excluded from the later marker scan; task-created build/tool residue remains in scope. This is not a host-wide absence check.'] };
+if (scope === 'panel-form') env.SIFT_SESSION_SECRET = randomBytes(32).toString('hex');
+const report = { schemaVersion: 1, scope, sourceCommit: env.SOURCE_COMMIT, startedAt: new Date().toISOString(), commands: [], cleanup: {}, passed: false, proofLimits: ['Owned child groups and terminal pipes are observed; an external job kill remains an infrastructure boundary.', 'Only exact unchanged same-UID baseline identities born before the recorded task-start cutoff are excluded from the later marker scan; task-created build/tool residue remains in scope. This is not a host-wide absence check.'] };
 const children = [];
 const baseline = new Map();
 const processLimit = 2048;
@@ -106,13 +113,13 @@ try {
     await delay(200);
   }
   assert.ok(ready, 'Production Next server did not become ready');
-  const test = await launch('browser', ['tests/e2e/local-import.spec.mjs']);
+  const test = await launch('browser', [scopes[scope].spec]);
   const browserBudget = Math.min(300000, workEnd - Date.now()); assert.ok(browserBudget > 0);
   report.browserBudgetMs = browserBudget;
-  assert.ok(await wait(test, browserBudget), 'Four-case browser deadline exceeded');
+  assert.ok(await wait(test, browserBudget), 'Focused browser deadline exceeded');
   await stop(test);
   const value = JSON.parse(await readFile(path.join(proof, 'browser.json'), 'utf8'));
-  assert.equal(value.passed, true); assert.deepEqual(value.cases.map((row) => row.id), ['L01', 'L02', 'L03', 'L04']);
+  assert.equal(value.passed, true); assert.deepEqual(value.cases.map((row) => row.id), scopes[scope].ids);
   assert.ok(value.cases.every((row) => row.status === 'passed'));
   report.passed = true;
 } catch (error) { report.error = String(error.stack ?? error).slice(0, 12000); }
