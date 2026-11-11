@@ -14,12 +14,13 @@ const scope = process.env.SIFT_BROWSER_SCOPE ?? 'local-import';
 const scopes = {
   'local-import': { spec: 'tests/e2e/local-import.spec.mjs', ids: ['L01', 'L02', 'L03', 'L04'] },
   'panel-form': { spec: 'tests/e2e/panel-form.spec.mjs', ids: ['F01', 'F02', 'F03', 'F04', 'F05', 'F06'] },
+  'panel-chart': { spec: 'tests/e2e/panel-chart.spec.mjs', ids: ['C01', 'C02', 'C03', 'C04'] },
 };
 assert.ok(Object.hasOwn(scopes, scope), 'Unknown browser-check scope');
 const env = {};
 for (const key of ['HOME', 'PATH', 'LANG', 'LC_ALL', 'TZ', 'TMPDIR', 'TEMP', 'TMP', 'CI', 'SOURCE_COMMIT', 'SIFT_IMPORT_RUN_ROOT', 'SIFT_IMPORT_NONCE', 'SIFT_IMPORT_START_TICKS', 'SIFT_IMPORT_PROOF_DIR', 'SIFT_IMPORT_PLAYWRIGHT_DIR', 'PLAYWRIGHT_BROWSERS_PATH']) if (process.env[key] !== undefined) env[key] = process.env[key];
 env.NODE_ENV = 'production'; env.NEXT_TELEMETRY_DISABLED = '1';
-if (scope === 'panel-form') env.SIFT_SESSION_SECRET = randomBytes(32).toString('hex');
+if (scope === 'panel-form' || scope === 'panel-chart') env.SIFT_SESSION_SECRET = randomBytes(32).toString('hex');
 const report = { schemaVersion: 1, scope, sourceCommit: env.SOURCE_COMMIT, startedAt: new Date().toISOString(), commands: [], cleanup: {}, passed: false, proofLimits: ['Owned child groups and terminal pipes are observed; an external job kill remains an infrastructure boundary.', 'Only exact unchanged same-UID baseline identities born before the recorded task-start cutoff are excluded from the later marker scan; task-created build/tool residue remains in scope. This is not a host-wide absence check.'] };
 const children = [];
 const baseline = new Map();
