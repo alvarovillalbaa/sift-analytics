@@ -1,0 +1,775 @@
+{
+  "baseline": {
+    "source": "4dc2bc00c03611f6c01a916914480615bfc7dfbb",
+    "lockSha256": "8726376275284ee65af11748927cb9626295e5e4f12d3e0cc84f25268ee0b07e",
+    "exitCode": 1,
+    "audit": {
+      "auditReportVersion": 2,
+      "vulnerabilities": {
+        "eve": {
+          "name": "eve",
+          "severity": "moderate",
+          "isDirect": true,
+          "via": [
+            "undici"
+          ],
+          "effects": [],
+          "range": "0.27.12 - 0.88.0",
+          "nodes": [
+            "node_modules/eve"
+          ],
+          "fixAvailable": {
+            "name": "eve",
+            "version": "1.0.0-rc.18",
+            "isSemVerMajor": true
+          }
+        },
+        "undici": {
+          "name": "undici",
+          "severity": "high",
+          "isDirect": false,
+          "via": [
+            {
+              "source": 1243077,
+              "name": "undici",
+              "dependency": "undici",
+              "title": "undici vulnerable to Denial of Service via unbounded memory in the EventSource parser",
+              "url": "https://github.com/advisories/GHSA-4qv8-2p9j-2685",
+              "severity": "moderate",
+              "cwe": [
+                "CWE-770"
+              ],
+              "cvss": {
+                "score": 5.9,
+                "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+              },
+              "range": ">=8.0.0 <8.12.2"
+            },
+            {
+              "source": 1243080,
+              "name": "undici",
+              "dependency": "undici",
+              "title": "undici vulnerable to Subresource Integrity bypass via non-lowercase algorithm tokens",
+              "url": "https://github.com/advisories/GHSA-f72v-6w45-q472",
+              "severity": "moderate",
+              "cwe": [
+                "CWE-178"
+              ],
+              "cvss": {
+                "score": 5.9,
+                "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N"
+              },
+              "range": ">=8.0.0 <8.12.2"
+            },
+            {
+              "source": 1243112,
+              "name": "undici",
+              "dependency": "undici",
+              "title": "undici vulnerable to Denial of Service via unhandled error on excessive content-encodings",
+              "url": "https://github.com/advisories/GHSA-xjj6-f33q-929c",
+              "severity": "high",
+              "cwe": [
+                "CWE-248",
+                "CWE-459"
+              ],
+              "cvss": {
+                "score": 7.5,
+                "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+              },
+              "range": ">=8.0.0 <8.12.2"
+            },
+            {
+              "source": 1243472,
+              "name": "undici",
+              "dependency": "undici",
+              "title": "undici vulnerable to cache poisoning and cross-user disclosure via cross-origin redirects",
+              "url": "https://github.com/advisories/GHSA-4w7w-5xrc-9h26",
+              "severity": "high",
+              "cwe": [
+                "CWE-346",
+                "CWE-524"
+              ],
+              "cvss": {
+                "score": 7.4,
+                "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N"
+              },
+              "range": ">=8.0.0 <8.12.2"
+            },
+            {
+              "source": 1243474,
+              "name": "undici",
+              "dependency": "undici",
+              "title": "undici vulnerable to TLS certificate validation bypass via dropped tls options in Agent",
+              "url": "https://github.com/advisories/GHSA-2m5v-pch6-74hx",
+              "severity": "high",
+              "cwe": [
+                "CWE-295"
+              ],
+              "cvss": {
+                "score": 7.4,
+                "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N"
+              },
+              "range": ">=8.0.0 <8.12.2"
+            },
+            {
+              "source": 1243477,
+              "name": "undici",
+              "dependency": "undici",
+              "title": "undici vulnerable to Denial of Service via TLS 1.2 certificate-changing renegotiation",
+              "url": "https://github.com/advisories/GHSA-qrxm-fqhp-jwvm",
+              "severity": "high",
+              "cwe": [
+                "CWE-248",
+                "CWE-617"
+              ],
+              "cvss": {
+                "score": 7.5,
+                "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+              },
+              "range": ">=8.0.0 <8.12.2"
+            },
+            {
+              "source": 1243480,
+              "name": "undici",
+              "dependency": "undici",
+              "title": "undici WebSocket client vulnerable to Denial of Service via unbounded automatic PONG buffering",
+              "url": "https://github.com/advisories/GHSA-9fm3-97px-rjf6",
+              "severity": "moderate",
+              "cwe": [
+                "CWE-400",
+                "CWE-405",
+                "CWE-770"
+              ],
+              "cvss": {
+                "score": 5.9,
+                "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+              },
+              "range": ">=8.0.0 <8.12.2"
+            },
+            {
+              "source": 1243483,
+              "name": "undici",
+              "dependency": "undici",
+              "title": "undici vulnerable to Denial of Service via unhandled exception in the decompress interceptor",
+              "url": "https://github.com/advisories/GHSA-55wc-3pg8-jfw6",
+              "severity": "moderate",
+              "cwe": [
+                "CWE-248"
+              ],
+              "cvss": {
+                "score": 5.9,
+                "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+              },
+              "range": ">=8.0.0 <8.12.2"
+            }
+          ],
+          "effects": [
+            "eve"
+          ],
+          "range": "8.0.0 - 8.12.1",
+          "nodes": [
+            "node_modules/eve/node_modules/undici"
+          ],
+          "fixAvailable": {
+            "name": "eve",
+            "version": "1.0.0-rc.18",
+            "isSemVerMajor": true
+          }
+        }
+      },
+      "metadata": {
+        "vulnerabilities": {
+          "info": 0,
+          "low": 0,
+          "moderate": 1,
+          "high": 1,
+          "critical": 0,
+          "total": 2
+        },
+        "dependencies": {
+          "prod": 167,
+          "dev": 25,
+          "optional": 75,
+          "peer": 1,
+          "peerOptional": 0,
+          "total": 247
+        }
+      }
+    },
+    "scope": "Read-only npm audit, no install or application execution; isolated public registry configuration/cache",
+    "note": "npm notice about a newer npm version was retained; no npm update performed"
+  },
+  "qualifiedSource": "c026994f6fb79d87352a660d999046268e0b8045",
+  "lockEntries": 248,
+  "graphDelta": {
+    "packageNodes": [
+      "node_modules/eve",
+      "node_modules/eve/node_modules/undici"
+    ],
+    "versions": {
+      "eve": [
+        "0.81.1",
+        "0.88.1"
+      ],
+      "nestedUndici": [
+        "8.10.2",
+        "8.12.3"
+      ]
+    },
+    "otherPackageNodesUnchanged": true,
+    "directSpecsPinnedToExistingLock": true
+  },
+  "fixture": {
+    "path": "scripts/fixtures/legacy-chat.json",
+    "bytes": 2014,
+    "sha256": "1990fe163c817967445b4336806e312aaa0a26042f074a27e8c3996245b0f0b5",
+    "sdk": "0.81.1",
+    "events": 10,
+    "messages": 2,
+    "transportAttached": false
+  },
+  "localHarnessFailure": {
+    "scope": "First attempt to run the three authored usage checks with the existing local environment",
+    "node": "v26.8.2",
+    "exitCode": 1,
+    "observedFailure": "TypeError reading ModuleKind.CommonJS: TypeScript 7.0.2 does not expose the older transpileModule API at its main export",
+    "classification": "Harness failed before individual checks ran; no application failure or passing identity is claimed",
+    "correction": "Use the existing pinned Next SWC transformation API for the authored VM harness; no dependency install or application build",
+    "rawOutput": "Not separately captured; this record is a summary of the observed tool output"
+  },
+  "attempts": [
+    {
+      "run": 43629048205,
+      "url": "https://github.com/alvarovillalbaa/sift-analytics/actions/runs/43629048205",
+      "receipt": {
+        "source": "a49384d5a3107851a1a244875392ef6d390d8471",
+        "node": "v24.21.0",
+        "npm": "11.19.0",
+        "commands": [
+          {
+            "name": "resolve",
+            "argv": [
+              "npm",
+              "install",
+              "--package-lock-only",
+              "--ignore-scripts",
+              "--no-audit",
+              "--no-fund"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "4549dcac6f2e9f3efbf14b94200ef8f617dad765522521bc94f6bc80528b527a",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "audit",
+            "argv": [
+              "npm",
+              "audit",
+              "--json",
+              "--package-lock-only",
+              "--ignore-scripts"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "ce592b6d6ad350d730738fcc7381dfb619e8d3e5c4e93d4299fc809a2caac87d",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "cleanup": true,
+        "qualified": false,
+        "lockSha256": "785f191b7e9364ec53a894982e27ac1a40f03d3a1704808c5b1e737268eecd2f",
+        "changedPackageNodes": [
+          "node_modules/eve",
+          "node_modules/eve/node_modules/undici"
+        ],
+        "vulnerabilities": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 0,
+          "critical": 0,
+          "total": 0
+        },
+        "sourceLockMatchesResolved": false,
+        "generatedNextEnvChanged": false,
+        "sourceUnchanged": true,
+        "endedAt": "2026-11-14T18:53:32.475337+00:00"
+      },
+      "streams": [
+        {
+          "command": "resolve",
+          "stream": "stdout",
+          "bytes": 19,
+          "sha256": "4549dcac6f2e9f3efbf14b94200ef8f617dad765522521bc94f6bc80528b527a",
+          "utf8": "\nup to date in 16s\n"
+        },
+        {
+          "command": "resolve",
+          "stream": "stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        {
+          "command": "audit",
+          "stream": "stdout",
+          "bytes": 364,
+          "sha256": "ce592b6d6ad350d730738fcc7381dfb619e8d3e5c4e93d4299fc809a2caac87d",
+          "utf8": "{\n  \"auditReportVersion\": 2,\n  \"vulnerabilities\": {},\n  \"metadata\": {\n    \"vulnerabilities\": {\n      \"info\": 0,\n      \"low\": 0,\n      \"moderate\": 0,\n      \"high\": 0,\n      \"critical\": 0,\n      \"total\": 0\n    },\n    \"dependencies\": {\n      \"prod\": 167,\n      \"dev\": 25,\n      \"optional\": 75,\n      \"peer\": 1,\n      \"peerOptional\": 0,\n      \"total\": 247\n    }\n  }\n}\n"
+        },
+        {
+          "command": "audit",
+          "stream": "stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        }
+      ],
+      "sourceManifestReceipts": []
+    },
+    {
+      "run": 43629190816,
+      "url": "https://github.com/alvarovillalbaa/sift-analytics/actions/runs/43629190816",
+      "receipt": {
+        "source": "88a3ca206f22927b5f6ae103a2376e04e4bab231",
+        "node": "v24.21.0",
+        "npm": "11.19.0",
+        "commands": [
+          {
+            "name": "resolve",
+            "argv": [
+              "npm",
+              "install",
+              "--package-lock-only",
+              "--ignore-scripts",
+              "--no-audit",
+              "--no-fund"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "673701019a178dfc1a0eab353d3f99086d613375ad753ddc8083a1089919f390",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "audit",
+            "argv": [
+              "npm",
+              "audit",
+              "--json",
+              "--package-lock-only",
+              "--ignore-scripts"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "ce592b6d6ad350d730738fcc7381dfb619e8d3e5c4e93d4299fc809a2caac87d",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "source-before",
+            "argv": [
+              "node",
+              "tests/support/source-manifest.mjs",
+              "/home/runner/work/_temp/sift-eve-output-43629190816-1/source-before.json"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "dc9c275181bae0105a9076199335dd771f76dbb3be62256637bf27c3d08ade12",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ci",
+            "argv": [
+              "npm",
+              "ci",
+              "--no-audit",
+              "--no-fund"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "7cc1dc08f228162af421f8f307d7ccc856ffeef15b5759b99b63c758c6be072b",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "migration",
+            "argv": [
+              "node",
+              "--test",
+              "--test-reporter=tap",
+              "tests/unit/chat-archive.test.mjs",
+              "tests/unit/agent-channel.test.mjs",
+              "tests/unit/chat-component.test.mjs",
+              "tests/unit/session-usage.test.mjs"
+            ],
+            "exitCode": 1,
+            "stdoutSha256": "fbd8b4ea2705660055afdea8fa563a706f20b22d7b0f80fed8bd1aa9e0ac6298",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "cleanup": true,
+        "qualified": false,
+        "sourceLockMatchesResolved": true,
+        "lockSha256": "785f191b7e9364ec53a894982e27ac1a40f03d3a1704808c5b1e737268eecd2f",
+        "changedPackageNodes": [],
+        "vulnerabilities": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 0,
+          "critical": 0,
+          "total": 0
+        },
+        "generatedNextEnvChanged": false,
+        "sourceUnchanged": true,
+        "endedAt": "2026-11-14T18:54:56.604594+00:00"
+      },
+      "streams": [
+        {
+          "command": "resolve",
+          "stream": "stdout",
+          "bytes": 21,
+          "sha256": "673701019a178dfc1a0eab353d3f99086d613375ad753ddc8083a1089919f390",
+          "utf8": "\nup to date in 270ms\n"
+        },
+        {
+          "command": "resolve",
+          "stream": "stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        {
+          "command": "audit",
+          "stream": "stdout",
+          "bytes": 364,
+          "sha256": "ce592b6d6ad350d730738fcc7381dfb619e8d3e5c4e93d4299fc809a2caac87d",
+          "utf8": "{\n  \"auditReportVersion\": 2,\n  \"vulnerabilities\": {},\n  \"metadata\": {\n    \"vulnerabilities\": {\n      \"info\": 0,\n      \"low\": 0,\n      \"moderate\": 0,\n      \"high\": 0,\n      \"critical\": 0,\n      \"total\": 0\n    },\n    \"dependencies\": {\n      \"prod\": 167,\n      \"dev\": 25,\n      \"optional\": 75,\n      \"peer\": 1,\n      \"peerOptional\": 0,\n      \"total\": 247\n    }\n  }\n}\n"
+        },
+        {
+          "command": "audit",
+          "stream": "stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        {
+          "command": "source-before",
+          "stream": "stdout",
+          "bytes": 67,
+          "sha256": "dc9c275181bae0105a9076199335dd771f76dbb3be62256637bf27c3d08ade12",
+          "utf8": "SOURCE_MANIFEST 88a3ca206f22927b5f6ae103a2376e04e4bab231 287 files\n"
+        },
+        {
+          "command": "source-before",
+          "stream": "stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        {
+          "command": "ci",
+          "stream": "stdout",
+          "bytes": 94,
+          "sha256": "7cc1dc08f228162af421f8f307d7ccc856ffeef15b5759b99b63c758c6be072b",
+          "utf8": "\n> sift-analytics@0.1.0 postinstall\n> node scripts/copy-duckdb.mjs\n\n\nadded 182 packages in 8s\n"
+        },
+        {
+          "command": "ci",
+          "stream": "stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        {
+          "command": "migration",
+          "stream": "stdout",
+          "bytes": 6722,
+          "sha256": "fbd8b4ea2705660055afdea8fa563a706f20b22d7b0f80fed8bd1aa9e0ac6298",
+          "utf8": "TAP version 13\n# lib/auth.ts:86\n#     const secure = new URL(request.url).protocol === 'https:' || process.env.VERCEL === '1';\n#                    ^\n# ReferenceError: URL is not defined\n#     at serializeCookie (lib/auth.ts:86:20)\n#     at Object.browserIdentityCookie (lib/auth.ts:91:12)\n#     at file:///home/runner/work/sift-analytics/sift-analytics/tests/unit/agent-channel.test.mjs:20:29\n#     at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n#     at async node:internal/modules/esm/loader:647:26\n#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)\n# Node.js v24.21.0\n# Subtest: tests/unit/agent-channel.test.mjs\nnot ok 1 - tests/unit/agent-channel.test.mjs\n  ---\n  duration_ms: 638.064949\n  type: 'test'\n  location: '/home/runner/work/sift-analytics/sift-analytics/tests/unit/agent-channel.test.mjs:1:1'\n  failureType: 'testCodeFailure'\n  exitCode: 1\n  signal: ~\n  error: 'test failed'\n  code: 'ERR_TEST_FAILURE'\n  ...\n# Subtest: actual 0.81.1 captured cache converts with native 0.88.1 metadata and cursor intact\nok 2 - actual 0.81.1 captured cache converts with native 0.88.1 metadata and cursor intact\n  ---\n  duration_ms: 7.834542\n  type: 'test'\n  ...\n# Subtest: first native save keeps exact old bytes, opaque session state and scoped legacy receipt\nok 3 - first native save keeps exact old bytes, opaque session state and scoped legacy receipt\n  ---\n  duration_ms: 3.668725\n  type: 'test'\n  ...\n# Subtest: bad, unknown, mixed-session and missing-prefix caches stay recoverable without replacement\nok 4 - bad, unknown, mixed-session and missing-prefix caches stay recoverable without replacement\n  ---\n  duration_ms: 2.150615\n  type: 'test'\n  ...\n# Subtest: empty saved event prefixes preserve valid session state for native replay\nok 5 - empty saved event prefixes preserve valid session state for native replay\n  ---\n  duration_ms: 0.375917\n  type: 'test'\n  ...\n# Subtest: backup quota and conflicting backups never overwrite the original cache\nok 6 - backup quota and conflicting backups never overwrite the original cache\n  ---\n  duration_ms: 9.439514\n  type: 'test'\n  ...\n# Subtest: a failed primary write retains the old cache and its recovery copy\nok 7 - a failed primary write retains the old cache and its recovery copy\n  ---\n  duration_ms: 1.548226\n  type: 'test'\n  ...\n# Subtest: stale tabs cannot save or clear another tab\u2019s newer cache\nok 8 - stale tabs cannot save or clear another tab\u2019s newer cache\n  ---\n  duration_ms: 1.58384\n  type: 'test'\n  ...\n# Subtest: a lower native durable position or cursor cannot replace fuller same-session history\nok 9 - a lower native durable position or cursor cannot replace fuller same-session history\n  ---\n  duration_ms: 0.837423\n  type: 'test'\n  ...\n# Subtest: explicit New removes before resetting and late snapshots cannot resurrect its old session\nok 10 - explicit New removes before resetting and late snapshots cannot resurrect its old session\n  ---\n  duration_ms: 1.309936\n  type: 'test'\n  ...\n# Subtest: undefined snapshots are not deletion commands and failed removal preserves current state\nok 11 - undefined snapshots are not deletion commands and failed removal preserves current state\n  ---\n  duration_ms: 0.754999\n  type: 'test'\n  ...\n# Subtest: receipts preserve only the restored legacy session and qualify every new session\nok 12 - receipts preserve only the restored legacy session and qualify every new session\n  ---\n  duration_ms: 0.290698\n  type: 'test'\n  ...\n# Subtest: native messages and completed tool labels render without legacy wrappers\nok 13 - native messages and completed tool labels render without legacy wrappers\n  ---\n  duration_ms: 19.260723\n  type: 'test'\n  ...\n# Subtest: paused turns remain followed, stoppable and block New and ordinary messages\nok 14 - paused turns remain followed, stoppable and block New and ordinary messages\n  ---\n  duration_ms: 20.554374\n  type: 'test'\n  ...\n# Subtest: approval, budget and question options send native interaction IDs while paused\nok 15 - approval, budget and question options send native interaction IDs while paused\n  ---\n  duration_ms: 39.084395\n  type: 'test'\n  ...\n# Subtest: freeform questions use a bounded native text answer and clear only after acceptance\nok 16 - freeform questions use a bounded native text answer and clear only after acceptance\n  ---\n  duration_ms: 13.185336\n  type: 'test'\n  ...\n# Subtest: resuming and pending commands disable answers and prevent plan replay\nok 17 - resuming and pending commands disable answers and prevent plan replay\n  ---\n  duration_ms: 22.465378\n  type: 'test'\n  ...\n# Subtest: invalid history and unavailable browser authentication prevent automatic tool application\nok 18 - invalid history and unavailable browser authentication prevent automatic tool application\n  ---\n  duration_ms: 20.607615\n  type: 'test'\n  ...\n# Subtest: legacy plan replay is skipped, while the same call ID in an explicit new session is applied atomically once\nok 19 - legacy plan replay is skipped, while the same call ID in an explicit new session is applied atomically once\n  ---\n  duration_ms: 20.556378\n  type: 'test'\n  ...\n# Subtest: result explanations wait for actual turn settlement and cap explicitly shared rows\nok 20 - result explanations wait for actual turn settlement and cap explicitly shared rows\n  ---\n  duration_ms: 12.860285\n  type: 'test'\n  ...\n# Subtest: result sharing remains opt-in and queued summaries are discarded when sharing is revoked\nok 21 - result sharing remains opt-in and queued summaries are discarded when sharing is revoked\n  ---\n  duration_ms: 16.549592\n  type: 'test'\n  ...\n# Subtest: failed storage removal leaves the native conversation attached\nok 22 - failed storage removal leaves the native conversation attached\n  ---\n  duration_ms: 8.184951\n  type: 'test'\n  ...\n# Subtest: an idle replay error permits a local New even when the saved turn remains paused\nok 23 - an idle replay error permits a local New even when the saved turn remains paused\n  ---\n  duration_ms: 7.878468\n  type: 'test'\n  ...\n# Subtest: input token budget holds at 80,000 without discounting cached tokens\nok 24 - input token budget holds at 80,000 without discounting cached tokens\n  ---\n  duration_ms: 0.862772\n  type: 'test'\n  ...\n# Subtest: output token budget holds at 12,000\nok 25 - output token budget holds at 12,000\n  ---\n  duration_ms: 0.178199\n  type: 'test'\n  ...\n# Subtest: reported cost budget holds at $0.25 and absent cost is unknown\nok 26 - reported cost budget holds at $0.25 and absent cost is unknown\n  ---\n  duration_ms: 0.151879\n  type: 'test'\n  ...\n1..26\n# tests 26\n# suites 0\n# pass 25\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 644.746251\n"
+        },
+        {
+          "command": "migration",
+          "stream": "stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        }
+      ],
+      "sourceManifestReceipts": [
+        {
+          "name": "source-before.json",
+          "bytes": 104860,
+          "sha256": "be19df499d4420daa46faf21794cb5e9872f531f03d4fc1f7e175df75c7c3e70",
+          "files": 287,
+          "head": "88a3ca206f22927b5f6ae103a2376e04e4bab231"
+        }
+      ]
+    },
+    {
+      "run": 43629326905,
+      "url": "https://github.com/alvarovillalbaa/sift-analytics/actions/runs/43629326905",
+      "receipt": {
+        "source": "c026994f6fb79d87352a660d999046268e0b8045",
+        "node": "v24.21.0",
+        "npm": "11.19.0",
+        "commands": [
+          {
+            "name": "resolve",
+            "argv": [
+              "npm",
+              "install",
+              "--package-lock-only",
+              "--ignore-scripts",
+              "--no-audit",
+              "--no-fund"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "f38b2c0c03801b1d61cdea290d256afc5dfde84adf57a49e05fcd341839cdcf1",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "audit",
+            "argv": [
+              "npm",
+              "audit",
+              "--json",
+              "--package-lock-only",
+              "--ignore-scripts"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "ce592b6d6ad350d730738fcc7381dfb619e8d3e5c4e93d4299fc809a2caac87d",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "source-before",
+            "argv": [
+              "node",
+              "tests/support/source-manifest.mjs",
+              "/home/runner/work/_temp/sift-eve-output-43629326905-1/source-before.json"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "83e76c9712256cadf6acfcc06374408443b3c9d092a48d355a68a1380b81c678",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ci",
+            "argv": [
+              "npm",
+              "ci",
+              "--no-audit",
+              "--no-fund"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "ae61cfc8efe36521edfcdb81bae3f5128e215d89dd087f9fc7424a0beaee3860",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "migration",
+            "argv": [
+              "node",
+              "--test",
+              "--test-reporter=tap",
+              "tests/unit/chat-archive.test.mjs",
+              "tests/unit/agent-channel.test.mjs",
+              "tests/unit/chat-component.test.mjs",
+              "tests/unit/session-usage.test.mjs"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "f28790b233bbe6fe15123f21d5a16627ab1ec18bf3bcc2b50fbf0a35c407f021",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "check",
+            "argv": [
+              "npm",
+              "run",
+              "check"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "0803d8fb2b9ff7d4315fc7cb828cc4ba0e5fd4823e431633154d51ecf9635b60",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "build",
+            "argv": [
+              "npm",
+              "run",
+              "build"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "7d9569944e753b6dc772b8f6965e648ddb34f55b66d3c639dd7f8f72c0e951e1",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "source-after",
+            "argv": [
+              "node",
+              "tests/support/source-manifest.mjs",
+              "/home/runner/work/_temp/sift-eve-output-43629326905-1/source-after.json"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "83e76c9712256cadf6acfcc06374408443b3c9d092a48d355a68a1380b81c678",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "cleanup": true,
+        "qualified": true,
+        "sourceLockMatchesResolved": true,
+        "lockSha256": "785f191b7e9364ec53a894982e27ac1a40f03d3a1704808c5b1e737268eecd2f",
+        "changedPackageNodes": [],
+        "vulnerabilities": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 0,
+          "critical": 0,
+          "total": 0
+        },
+        "generatedNextEnvChanged": false,
+        "sourceUnchanged": true,
+        "endedAt": "2026-11-14T18:57:09.620258+00:00",
+        "sourceManifestsMatch": true
+      },
+      "streams": [
+        {
+          "command": "resolve",
+          "stream": "stdout",
+          "bytes": 21,
+          "sha256": "f38b2c0c03801b1d61cdea290d256afc5dfde84adf57a49e05fcd341839cdcf1",
+          "utf8": "\nup to date in 308ms\n"
+        },
+        {
+          "command": "resolve",
+          "stream": "stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        {
+          "command": "audit",
+          "stream": "stdout",
+          "bytes": 364,
+          "sha256": "ce592b6d6ad350d730738fcc7381dfb619e8d3e5c4e93d4299fc809a2caac87d",
+          "utf8": "{\n  \"auditReportVersion\": 2,\n  \"vulnerabilities\": {},\n  \"metadata\": {\n    \"vulnerabilities\": {\n      \"info\": 0,\n      \"low\": 0,\n      \"moderate\": 0,\n      \"high\": 0,\n      \"critical\": 0,\n      \"total\": 0\n    },\n    \"dependencies\": {\n      \"prod\": 167,\n      \"dev\": 25,\n      \"optional\": 75,\n      \"peer\": 1,\n      \"peerOptional\": 0,\n      \"total\": 247\n    }\n  }\n}\n"
+        },
+        {
+          "command": "audit",
+          "stream": "stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        {
+          "command": "source-before",
+          "stream": "stdout",
+          "bytes": 67,
+          "sha256": "83e76c9712256cadf6acfcc06374408443b3c9d092a48d355a68a1380b81c678",
+          "utf8": "SOURCE_MANIFEST c026994f6fb79d87352a660d999046268e0b8045 287 files\n"
+        },
+        {
+          "command": "source-before",
+          "stream": "stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        {
+          "command": "ci",
+          "stream": "stdout",
+          "bytes": 94,
+          "sha256": "ae61cfc8efe36521edfcdb81bae3f5128e215d89dd087f9fc7424a0beaee3860",
+          "utf8": "\n> sift-analytics@0.1.0 postinstall\n> node scripts/copy-duckdb.mjs\n\n\nadded 182 packages in 7s\n"
+        },
+        {
+          "command": "ci",
+          "stream": "stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        {
+          "command": "migration",
+          "stream": "stdout",
+          "bytes": 7970,
+          "sha256": "f28790b233bbe6fe15123f21d5a16627ab1ec18bf3bcc2b50fbf0a35c407f021",
+          "utf8": "TAP version 13\n# Subtest: native message, answer and inbox envelopes preserve principal and session ownership\nok 1 - native message, answer and inbox envelopes preserve principal and session ownership\n  ---\n  duration_ms: 12.988987\n  type: 'test'\n  ...\n# Subtest: owner-only controls accept native nullable cancellation and end semantics\nok 2 - owner-only controls accept native nullable cancellation and end semantics\n  ---\n  duration_ms: 4.786349\n  type: 'test'\n  ...\n# Subtest: foreign, missing and tampered grants and cross-origin requests fail closed\nok 3 - foreign, missing and tampered grants and cross-origin requests fail closed\n  ---\n  duration_ms: 3.050845\n  type: 'test'\n  ...\n# Subtest: files, legacy inputResponses, unsupported fields and ambiguous answers are refused\nok 4 - files, legacy inputResponses, unsupported fields and ambiguous answers are refused\n  ---\n  duration_ms: 4.02706\n  type: 'test'\n  ...\n# Subtest: body and field limits hold for actual bytes, malformed JSON and length headers\nok 5 - body and field limits hold for actual bytes, malformed JSON and length headers\n  ---\n  duration_ms: 3.291302\n  type: 'test'\n  ...\n# Subtest: native route filtering exposes only the bounded owned HTTP surface\nok 6 - native route filtering exposes only the bounded owned HTTP surface\n  ---\n  duration_ms: 1.337436\n  type: 'test'\n  ...\n# Subtest: grant cookies remain HttpOnly, Secure, path scoped and expire within 24 hours\nok 7 - grant cookies remain HttpOnly, Secure, path scoped and expire within 24 hours\n  ---\n  duration_ms: 0.468625\n  type: 'test'\n  ...\n# Subtest: production without the signing secret remains unavailable\nok 8 - production without the signing secret remains unavailable\n  ---\n  duration_ms: 4.217397\n  type: 'test'\n  ...\n# Subtest: the create wrapper binds only successful session IDs from its handler\nok 9 - the create wrapper binds only successful session IDs from its handler\n  ---\n  duration_ms: 7.60778\n  type: 'test'\n  ...\n# Subtest: the authored onMessage boundary strips schemas and results unless each setting opts in\nok 10 - the authored onMessage boundary strips schemas and results unless each setting opts in\n  ---\n  duration_ms: 2.063073\n  type: 'test'\n  ...\n# Subtest: actual 0.81.1 captured cache converts with native 0.88.1 metadata and cursor intact\nok 11 - actual 0.81.1 captured cache converts with native 0.88.1 metadata and cursor intact\n  ---\n  duration_ms: 7.711567\n  type: 'test'\n  ...\n# Subtest: first native save keeps exact old bytes, opaque session state and scoped legacy receipt\nok 12 - first native save keeps exact old bytes, opaque session state and scoped legacy receipt\n  ---\n  duration_ms: 3.069803\n  type: 'test'\n  ...\n# Subtest: bad, unknown, mixed-session and missing-prefix caches stay recoverable without replacement\nok 13 - bad, unknown, mixed-session and missing-prefix caches stay recoverable without replacement\n  ---\n  duration_ms: 2.085574\n  type: 'test'\n  ...\n# Subtest: empty saved event prefixes preserve valid session state for native replay\nok 14 - empty saved event prefixes preserve valid session state for native replay\n  ---\n  duration_ms: 0.378545\n  type: 'test'\n  ...\n# Subtest: backup quota and conflicting backups never overwrite the original cache\nok 15 - backup quota and conflicting backups never overwrite the original cache\n  ---\n  duration_ms: 16.588227\n  type: 'test'\n  ...\n# Subtest: a failed primary write retains the old cache and its recovery copy\nok 16 - a failed primary write retains the old cache and its recovery copy\n  ---\n  duration_ms: 1.747482\n  type: 'test'\n  ...\n# Subtest: stale tabs cannot save or clear another tab\u2019s newer cache\nok 17 - stale tabs cannot save or clear another tab\u2019s newer cache\n  ---\n  duration_ms: 1.093901\n  type: 'test'\n  ...\n# Subtest: a lower native durable position or cursor cannot replace fuller same-session history\nok 18 - a lower native durable position or cursor cannot replace fuller same-session history\n  ---\n  duration_ms: 0.943003\n  type: 'test'\n  ...\n# Subtest: explicit New removes before resetting and late snapshots cannot resurrect its old session\nok 19 - explicit New removes before resetting and late snapshots cannot resurrect its old session\n  ---\n  duration_ms: 1.065505\n  type: 'test'\n  ...\n# Subtest: undefined snapshots are not deletion commands and failed removal preserves current state\nok 20 - undefined snapshots are not deletion commands and failed removal preserves current state\n  ---\n  duration_ms: 1.106155\n  type: 'test'\n  ...\n# Subtest: receipts preserve only the restored legacy session and qualify every new session\nok 21 - receipts preserve only the restored legacy session and qualify every new session\n  ---\n  duration_ms: 0.187277\n  type: 'test'\n  ...\n# Subtest: native messages and completed tool labels render without legacy wrappers\nok 22 - native messages and completed tool labels render without legacy wrappers\n  ---\n  duration_ms: 17.156671\n  type: 'test'\n  ...\n# Subtest: paused turns remain followed, stoppable and block New and ordinary messages\nok 23 - paused turns remain followed, stoppable and block New and ordinary messages\n  ---\n  duration_ms: 18.379174\n  type: 'test'\n  ...\n# Subtest: approval, budget and question options send native interaction IDs while paused\nok 24 - approval, budget and question options send native interaction IDs while paused\n  ---\n  duration_ms: 28.301198\n  type: 'test'\n  ...\n# Subtest: freeform questions use a bounded native text answer and clear only after acceptance\nok 25 - freeform questions use a bounded native text answer and clear only after acceptance\n  ---\n  duration_ms: 8.542525\n  type: 'test'\n  ...\n# Subtest: resuming and pending commands disable answers and prevent plan replay\nok 26 - resuming and pending commands disable answers and prevent plan replay\n  ---\n  duration_ms: 14.318575\n  type: 'test'\n  ...\n# Subtest: invalid history and unavailable browser authentication prevent automatic tool application\nok 27 - invalid history and unavailable browser authentication prevent automatic tool application\n  ---\n  duration_ms: 12.000267\n  type: 'test'\n  ...\n# Subtest: legacy plan replay is skipped, while the same call ID in an explicit new session is applied atomically once\nok 28 - legacy plan replay is skipped, while the same call ID in an explicit new session is applied atomically once\n  ---\n  duration_ms: 18.466561\n  type: 'test'\n  ...\n# Subtest: result explanations wait for actual turn settlement and cap explicitly shared rows\nok 29 - result explanations wait for actual turn settlement and cap explicitly shared rows\n  ---\n  duration_ms: 9.124977\n  type: 'test'\n  ...\n# Subtest: result sharing remains opt-in and queued summaries are discarded when sharing is revoked\nok 30 - result sharing remains opt-in and queued summaries are discarded when sharing is revoked\n  ---\n  duration_ms: 16.48901\n  type: 'test'\n  ...\n# Subtest: failed storage removal leaves the native conversation attached\nok 31 - failed storage removal leaves the native conversation attached\n  ---\n  duration_ms: 12.064487\n  type: 'test'\n  ...\n# Subtest: an idle replay error permits a local New even when the saved turn remains paused\nok 32 - an idle replay error permits a local New even when the saved turn remains paused\n  ---\n  duration_ms: 9.643793\n  type: 'test'\n  ...\n# Subtest: input token budget holds at 80,000 without discounting cached tokens\nok 33 - input token budget holds at 80,000 without discounting cached tokens\n  ---\n  duration_ms: 0.837005\n  type: 'test'\n  ...\n# Subtest: output token budget holds at 12,000\nok 34 - output token budget holds at 12,000\n  ---\n  duration_ms: 0.209137\n  type: 'test'\n  ...\n# Subtest: reported cost budget holds at $0.25 and absent cost is unknown\nok 35 - reported cost budget holds at $0.25 and absent cost is unknown\n  ---\n  duration_ms: 0.176764\n  type: 'test'\n  ...\n1..35\n# tests 35\n# suites 0\n# pass 35\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 699.460822\n"
+        },
+        {
+          "command": "migration",
+          "stream": "stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        {
+          "command": "check",
+          "stream": "stdout",
+          "bytes": 46,
+          "sha256": "0803d8fb2b9ff7d4315fc7cb828cc4ba0e5fd4823e431633154d51ecf9635b60",
+          "utf8": "\n> sift-analytics@0.1.0 check\n> tsc --noEmit\n\n"
+        },
+        {
+          "command": "check",
+          "stream": "stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        {
+          "command": "build",
+          "stream": "stdout",
+          "bytes": 8577,
+          "sha256": "7d9569944e753b6dc772b8f6965e648ddb34f55b66d3c639dd7f8f72c0e951e1",
+          "utf8": "\n> sift-analytics@0.1.0 build\n> node scripts/build.mjs\n\neve: initializing 1 sandbox template...\neve: sandbox template \"root\" (default): starting template build container\neve: sandbox template \"root\" (default): preparing base runtime inside container\neve: sandbox template \"root\" (default): stopping template build container\neve: sandbox template \"root\" (default): committing template image \"eve-sandbox-template:4a024a1132f8e86d04835047-02a084fd45a2334e2408\"\neve: initialized 1 sandbox template.\n[success] [nitro] Generated public \u001b[36m.eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/public\u001b[39m\n[info] [nitro] Building server (builder: `rolldown`, preset: `node-server`, compatibility date: `2026-11-14`)\n[info] Generated \u001b[36m.eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/nitro.json\u001b[39m\n[success] [nitro] Server built in 2242ms\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_chunks/compiled-artifacts-instrumentation.mjs (621 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_chunks/node-server.mjs (5.27 MB)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_chunks/storage.mjs (1.39 kB)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_.mjs (835 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_10.mjs (498 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_11.mjs (236 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_12.mjs (235 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_13.mjs (275 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_14.mjs (345 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_15.mjs (262 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_16.mjs (267 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_17.mjs (256 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_18.mjs (266 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_19.mjs (243 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_2.mjs (313 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_20.mjs (243 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_21.mjs (241 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_22.mjs (241 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_23.mjs (241 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_24.mjs (243 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_25.mjs (253 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_26.mjs (244 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_27.mjs (263 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_28.mjs (260 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_29.mjs (255 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_3.mjs (273 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_30.mjs (268 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_31.mjs (267 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_32.mjs (251 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_33.mjs (244 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_34.mjs (308 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_35.mjs (252 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_36.mjs (289 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_37.mjs (307 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_38.mjs (307 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_39.mjs (311 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_4.mjs (312 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_40.mjs (290 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_5.mjs (270 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_6.mjs (294 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_7.mjs (244 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_8.mjs (243 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/_9.mjs (241 B)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/@ai-sdk/gateway+[...].mjs (455 kB)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/ai.mjs (760 kB)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/eve.mjs (6.85 MB)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/h3+rou3+srvx.mjs (56.2 kB)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/hookable.mjs (1.31 kB)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/ufo.mjs (2.39 kB)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/undici.mjs (1.22 MB)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/unstorage.mjs (22.5 kB)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_libs/vercel__oidc.mjs (2.79 kB)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_runtime.mjs (1.73 kB)\u001b[39m\n\u001b[90m  \u251c\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/_virtual/skills.json.mjs (301 B)\u001b[39m\n\u001b[90m  \u2514\u2500 .eve/builds/mwgrofai-f49db8cf-71a3-4100-a7e7-500c24e11512/output/server/index.mjs (418 B)\u001b[39m\n\u001b[36m\u03a3 Total size:\u001b[39m 14.6 MB\n[success] [nitro] You can preview this build using `npx nitro preview`\n[BUILD] built output at /home/runner/work/sift-analytics/sift-analytics/.output\n\u25b2 Next.js 16.4.2 (Turbopack)\n\u2713 Running next.config.ts took 191ms\n\u26a0 No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache\nAttention: Next.js now collects completely anonymous telemetry regarding usage.\nThis information is used to shape Next.js' roadmap and prioritize features.\nYou can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:\nhttps://nextjs.org/telemetry\n\n\n  Creating an optimized production build ...\n\u2713 Compiled successfully in 17.4s\n  Running TypeScript ...\n  Finished TypeScript in 1050ms ...\n  Collecting page data using 3 workers ...\n  Generating static pages using 3 workers (0/6) ...\n  Generating static pages using 3 workers (1/6) \r\n  Generating static pages using 3 workers (2/6) \r\n  Generating static pages using 3 workers (4/6) \r\n\u2713 Generating static pages using 3 workers (6/6) in 668ms\n  Finalizing page optimization ...\n\nRoute (app)\n\u250c \u25cb /\n\u251c \u25cb /_not-found\n\u251c \u0192 /api/postgres\n\u251c \u0192 /api/session\n\u2514 \u25cb /icon.svg\n\n\n\u25cb  (Static)   prerendered as static content\n\u0192  (Dynamic)  server-rendered on demand\n\n"
+        },
+        {
+          "command": "build",
+          "stream": "stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        {
+          "command": "source-after",
+          "stream": "stdout",
+          "bytes": 67,
+          "sha256": "83e76c9712256cadf6acfcc06374408443b3c9d092a48d355a68a1380b81c678",
+          "utf8": "SOURCE_MANIFEST c026994f6fb79d87352a660d999046268e0b8045 287 files\n"
+        },
+        {
+          "command": "source-after",
+          "stream": "stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        }
+      ],
+      "sourceManifestReceipts": [
+        {
+          "name": "source-before.json",
+          "bytes": 104860,
+          "sha256": "6b87d643aabb21fdba9873968db79166155fea4f41f67286620c4caef3d2ef8d",
+          "files": 287,
+          "head": "c026994f6fb79d87352a660d999046268e0b8045"
+        },
+        {
+          "name": "source-after.json",
+          "bytes": 104860,
+          "sha256": "6b87d643aabb21fdba9873968db79166155fea4f41f67286620c4caef3d2ef8d",
+          "files": 287,
+          "head": "c026994f6fb79d87352a660d999046268e0b8045"
+        }
+      ]
+    }
+  ],
+  "distinctPassingChecks": 35,
+  "workflow": {
+    "id": 418549478,
+    "observedState": "disabled_manually",
+    "activeFileRemoved": true
+  },
+  "proofLimits": [
+    "Native SDK converter/fold/selectors and app functions execute over authored fixture state.",
+    "React hooks, messages, JSX, storage and SQL results are harness state; no DOM or browser lifecycle executes.",
+    "Create handler dispatch is stubbed only for the grant wrapper test.",
+    "No live workflow turn, model/provider, PostgreSQL, Docker or physical device acceptance.",
+    "Recorded audit covers known registry advisories only; artifact ZIP digest is unverified.",
+    "Original extracted files and streams were verified against command receipts and retained in task evidence.",
+    "No local dependency install/build or production configuration change."
+  ],
+  "release": "Production publication and bounded HTTP observation pending at receipt creation."
+}

@@ -1,5 +1,15 @@
 # Release evidence
 
+## Eve transport repair — 2026-11-14
+
+Eve 0.88.1/Undici 8.12.3 and the required native chat/history/answer/usage
+migration pass 35 focused authored checks, a fresh locked install, TypeScript
+and Eve/Next builds. The [owning receipt](results/2026/11-14/eve-dependency-review.md)
+retains baseline findings, failed harness initialization, corrected qualification
+and separate hosted release limits. Explicit sharing and signed ownership stay
+enforced. Production AI setup remains owner-deferred; no live model or browser
+acceptance is claimed by this repair.
+
 ## 0.1.0 — 2026-10-20
 
 Implemented: Next.js workspace; local CSV/TSV/JSON/JSONL/XLSX/Parquet import and persistence; DuckDB query execution; configured PostgreSQL adapter; eve dashboard/analysis planning; signed session ownership; saved draggable/resizable views; charts/tables/metrics; SQL/source/freshness/truncation inspector; exports; metric definitions; explicit model-exposure settings; SDK contract/conformance helper; Node/Docker self-hosting configuration.
