@@ -6,7 +6,7 @@ import { agentSessionGrantCookie, isSameOriginRequest, ownsAgentSession, readBro
 
 const clientContextSchema = z.record(z.string(), z.unknown());
 const responseSchema = z.object({
-  requestId: z.string().min(1).max(200),
+  interactionId: z.string().min(1).max(200),
   optionId: z.string().min(1).max(200).optional(),
   text: z.string().min(1).max(6_000).optional(),
 }).strict().refine((value) => Boolean(value.optionId) !== Boolean(value.text));
@@ -16,8 +16,9 @@ const messageSchema = z.object({
   turnPolicy: z.enum(['steer', 'queue']).optional(),
 }).strict();
 const continuationSchema = messageSchema.extend({
-  inputResponses: z.array(responseSchema).min(1).max(12).optional(),
-}).refine((value) => Boolean(value.message) !== Boolean(value.inputResponses));
+  answers: z.array(responseSchema).min(1).max(12).optional(),
+  inbox: z.string().min(1).max(12_000).optional(),
+}).refine((value) => Boolean(value.message) !== Boolean(value.answers));
 
 async function requestBody(request: Request): Promise<unknown> {
   if (Number(request.headers.get('content-length')) > 100_000) {
@@ -49,12 +50,12 @@ async function requestBody(request: Request): Promise<unknown> {
   }
 }
 
-const browserAuth: AuthFn<Request> = async (request) => {
+export const browserAuth: AuthFn<Request> = async (request) => {
   const identity = readBrowserIdentity(request);
   if (!identity) throw new UnauthenticatedError({ message: 'Initialize your Sift browser session before using the agent.' });
   if (!isSameOriginRequest(request)) throw new ForbiddenError({ message: 'Agent requests must originate from Sift.' });
 
-  const match = new URL(request.url).pathname.match(/\/eve\/v1\/session(?:\/([a-zA-Z0-9_-]{1,200})(?:\/(stream|cancel|compact|clear|reset))?)?$/);
+  const match = new URL(request.url).pathname.match(/^\/eve\/v1\/session(?:\/([a-zA-Z0-9_-]{1,200})(?:\/(stream|cancel|compact|clear|end))?)?$/);
   if (!match || (request.method !== 'POST' && !(request.method === 'GET' && match[2] === 'stream'))) {
     throw new ForbiddenError({ message: 'This agent channel does not expose session lists or unscoped records.' });
   }
@@ -64,8 +65,8 @@ const browserAuth: AuthFn<Request> = async (request) => {
     throw new ForbiddenError({ message: 'This browser does not own that agent session. Start a new conversation.' });
   }
   if (request.method === 'POST') {
-    const schema = operation === 'cancel' ? z.object({ turnId: z.string().min(1).max(200).optional() }).strict()
-      : operation === 'reset' ? z.object({ reason: z.string().min(1).max(1_000).optional() }).strict()
+    const schema = operation === 'cancel' ? z.object({ turnId: z.string().min(1).max(200).nullable().optional() }).strict()
+      : operation === 'end' ? z.object({ reason: z.string().min(1).max(1_000).optional() }).strict()
       : operation ? z.object({}).strict()
       : sessionId ? continuationSchema : messageSchema;
     if (!schema.safeParse(await requestBody(request)).success) {
@@ -102,7 +103,7 @@ const channel = eveChannel({
   },
 });
 
-function isRequiredRoute(route: RouteDefinition): boolean {
+export function isRequiredRoute(route: RouteDefinition): boolean {
   if (route.transport === 'websocket') return false;
   if (route.path === '/eve/v1/health') return route.method === 'GET' || route.method === 'HEAD';
   // Workflow resumes authenticate their opaque callback token inside eve.
@@ -110,7 +111,7 @@ function isRequiredRoute(route: RouteDefinition): boolean {
   if (route.path === '/eve/v1/session') return route.method === 'POST';
   if (route.path === '/eve/v1/session/:sessionId/stream') return route.method === 'GET';
   return route.method === 'POST'
-    && /^\/eve\/v1\/session\/:sessionId(?:\/(?:cancel|compact|clear|reset))?$/.test(route.path);
+    && /^\/eve\/v1\/session\/:sessionId(?:\/(?:cancel|compact|clear|end))?$/.test(route.path);
 }
 
 export default {

@@ -12,25 +12,25 @@
     "postinstall": "node scripts/copy-duckdb.mjs"
   },
   "dependencies": {
-    "@duckdb/duckdb-wasm": "latest",
-    "ai": "latest",
-    "eve": "0.81.1",
-    "lucide-react": "latest",
-    "next": "latest",
-    "node-sql-parser": "latest",
-    "pg": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "react-grid-layout": "latest",
-    "recharts": "latest",
-    "read-excel-file": "latest",
-    "zod": "latest"
+    "@duckdb/duckdb-wasm": "1.33.1-dev57.0",
+    "ai": "7.0.146",
+    "eve": "0.88.1",
+    "lucide-react": "1.60.0",
+    "next": "16.4.2",
+    "node-sql-parser": "5.4.0",
+    "pg": "8.23.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-grid-layout": "2.3.0",
+    "recharts": "3.10.1",
+    "read-excel-file": "9.3.12",
+    "zod": "4.6.7"
   },
   "devDependencies": {
-    "@types/node": "latest",
-    "@types/pg": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "typescript": "latest"
+    "@types/node": "26.6.5",
+    "@types/pg": "8.23.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "7.0.2"
   }
 }
