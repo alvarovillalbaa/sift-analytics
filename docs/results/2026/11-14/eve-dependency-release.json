@@ -1,0 +1,11 @@
+{
+  "status": "qualified_source_pending_production_observation",
+  "qualifiedSource": "c026994f6fb79d87352a660d999046268e0b8045",
+  "qualificationRun": 43629326905,
+  "canonicalUrl": "https://sift-analytics.vercel.app",
+  "workflowId": 418549478,
+  "workflowObservedState": "disabled_manually",
+  "activeWorkflowFileRemoved": true,
+  "browserModelPostgresAcceptance": false,
+  "productionSigningSecret": "owner-deferred; untouched"
+}

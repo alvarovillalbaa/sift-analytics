@@ -1,6 +1,6 @@
 # Architecture
 
-Last updated: 2026-11-09
+Last updated: 2026-11-14
 
 Sift is a self-hostable Next.js application with Vercel eve for conversational planning, DuckDB WASM for browser-local analysis, and an authenticated PostgreSQL adapter for approved server-side reporting datasets.
 
@@ -60,6 +60,27 @@ Worker startup and import operations have 30-second deadlines; saved-file restor
 IndexedDB stores file bytes, chosen sheets, stable dataset IDs, and import timestamps. localStorage stores dataset metadata, view definitions, layouts, metric definitions, sharing preferences, and conversation state. Workspace saving omits query result rows; panels rerun after reload. Conversation history can contain results explicitly shared with the model. Browser storage belongs to one browser profile and deployment origin. Clearing it removes the local workspace and files. Exported view/workspace JSON can contain results and should be handled as data.
 
 AI tool plans add a stable view ID and an applied-call receipt in the same workspace update. Reloading cannot retain a receipt without its view: pending panels rerun, and durable tool replay does not duplicate the view. Concurrent plans retain separate cancellation controllers. Conversation reset waits for local work, clears queued explanations, and cannot receive an old session's results; remounting cancels the old component's local work.
+
+Conversation persistence in [`lib/chat-archive.ts`](../lib/chat-archive.ts) uses
+Eve 0.88.1's native event converter and fold. The version-2 cache preserves the
+opaque session state/cursor and reader metadata; the original pre-upgrade raw
+cache is retained before its first replacement. Compare-and-save prevents an
+observably stale tab from replacing or clearing another tab's latest copy. A
+lower durable position/cursor cannot replace fuller same-session history.
+Browser localStorage does not provide an atomic cross-tab transaction; two
+simultaneous writes after both reads remain a platform limit. Invalid history,
+quota errors and conflicts show recovery/export controls instead of silently
+discarding a conversation. An explicit New removes storage before local hook
+reset; late snapshots cannot restore the cleared session.
+
+Old raw plan receipts retain their existing meaning only for the restored
+pre-upgrade session. New sessions qualify call receipts, view IDs and panel IDs
+by session ID. Native `messages`/tool parts drive replay and rendering;
+`openInteractions(view)` provides addressed `answers`/`interactionId` controls.
+An idle store can still have a paused active turn: it stays followed and
+stoppable, blocks a new ordinary message, and never triggers an automatic
+result explanation until that turn settles. A failed idle replay permits local
+New so an expired/stranded session cannot trap the browser in an old turn.
 
 Query settlement in [`lib/panel-results.ts`](../lib/panel-results.ts) updates only
 result/error fields on the current panel with matching ID, SQL and ordered

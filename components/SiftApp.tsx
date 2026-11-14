@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useEveAgent } from 'eve/react';
+import { activeTurn, idle, openInteractions } from 'eve/events';
 import { ArrowDownToLine, ArrowUp, Check, ChevronDown, ChevronRight, Database, FileSpreadsheet, Filter, Code2, LayoutDashboard, LoaderCircle, Menu, MessageSquare, Plus, RefreshCw, Search, Settings2, ShieldCheck, Sparkles, Square, Trash2, X } from 'lucide-react';
 import DashboardGrid from './DashboardGrid';
 import LocalImport from './LocalImport';
@@ -10,6 +11,7 @@ import { initEngine, query, deleteDataset, getRestoreErrors, getRestoreFailures 
 import { loadWorkspace, saveWorkspace } from '@/lib/storage';
 import { applyPanelResults } from '@/lib/panel-results';
 import { createPanelFormLease } from '@/lib/panel-form';
+import { createChatArchive, planReceipt, type ChatSnapshot } from '@/lib/chat-archive';
 import type { Dataset, Panel, QueryResult, View, Workspace } from '@/lib/types';
 
 type Modal = 'sources' | 'settings' | 'metrics' | 'panel' | 'new-view' | null;
@@ -109,18 +111,28 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
   }, []);
   function notify(message: string) { if (mounted.current) sendNotification(message); }
   const workspaceRef = useRef(workspace); workspaceRef.current = workspace;
-  const [saved] = useState(() => { try { return JSON.parse(localStorage.getItem('sift-chat') ?? 'null'); } catch { return null; } });
+  const [chatArchive] = useState(() => createChatArchive({
+    getItem: key => localStorage.getItem(key), setItem: (key, value) => localStorage.setItem(key, value), removeItem: key => localStorage.removeItem(key),
+  }));
+  const [chatWarning, setChatWarning] = useState(chatArchive.warning);
+  const saved = chatArchive.initial;
+  function persistChat(snapshot: ChatSnapshot) {
+    if (!mounted.current || !authReady) return;
+    try { chatArchive.save(snapshot); } catch (error) { setChatWarning(errorText(error)); }
+  }
   const agent = useEveAgent({
-    initialSession: authReady ? saved?.session : undefined, initialEvents: saved?.events ?? [], resume: authReady && Boolean(saved?.session), followIdle: false,
-    onFinish(snapshot) { try { localStorage.setItem('sift-chat', JSON.stringify({ session: snapshot.session, events: snapshot.events })); } catch { /* The workspace remains available if chat history exceeds device storage. */ } },
+    initialSession: authReady ? saved?.session : undefined, initialEvents: authReady ? saved?.events ?? [] : [], resume: authReady && Boolean(saved?.session),
+    followWhile: view => !idle(view) || activeTurn(view) !== undefined,
+    onFinish: persistChat,
     onError(error) { notify(`AI: ${errorText(error)}`); },
   });
   useEffect(() => {
-    if (!agent.session) return;
-    const timer = setTimeout(() => { try { localStorage.setItem('sift-chat', JSON.stringify({ session: agent.session, events: agent.events })); } catch { /* Device storage may be full. */ } }, 250);
+    if (!authReady || !agent.session || agent.status === 'resuming' || chatWarning) return;
+    const timer = setTimeout(() => persistChat(agent), 250);
     return () => clearTimeout(timer);
-  }, [agent.session, agent.events]);
-  const busy = agent.status === 'submitted' || agent.status === 'streaming' || agent.status === 'resuming';
+  }, [agent.session, agent.events, agent.status, authReady, chatWarning]);
+  const openTurn = activeTurn(agent.view) !== undefined;
+  const busy = agent.status !== 'idle' || (openTurn && !agent.error);
   const activeView = workspace.views.find(v => v.id === workspace.activeViewId) ?? workspace.views[0];
   function update(fn: (value: Workspace) => Workspace) {
     if (mounted.current) setWorkspace(current => {
@@ -146,15 +158,19 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
   }
   function resetConversation() {
     if (busy || executing || loading) return;
+    try {
+      if (chatWarning) download('sift-conversation-recovery.json', chatArchive.recovery());
+      chatArchive.clear();
+    } catch (error) { setChatWarning(errorText(error)); return; }
     pendingSummary.current = null;
-    agent.reset();
-    localStorage.removeItem('sift-chat');
+    agent.newSession();
+    setChatWarning('');
     setLocalNotes([]);
   }
   function stopWork() {
     pendingSummary.current = null;
     for (const controller of controllers.current) controller.abort();
-    if (busy) void agent.cancel().catch(error => notify(errorText(error)));
+    if (busy || openTurn) void agent.cancel().catch(error => notify(errorText(error)));
   }
   async function runQuery(statement: string, datasetIds: string[], signal?: AbortSignal) {
     const datasets = workspaceRef.current.datasets.filter(d => datasetIds.includes(d.id));
@@ -196,35 +212,41 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
   }
   async function send(message = text) {
     if (!message.trim() || busy || executing || loading) return;
+    if (agent.error) { setChatOpen(true); notify('Start a new conversation to reconnect with AI. Your saved dashboards stay available.'); return; }
+    if (chatWarning) { setChatOpen(true); notify('Export your saved conversation and start fresh, or reload to restore the latest copy.'); return; }
     if (!authReady) { notify('AI is not connected. You can still upload data and create SQL panels.'); return; }
     if (!workspace.shareSchema) { changeModal('settings'); notify('Enable schema sharing to let AI work with your selected datasets.'); return; }
     setText(''); setChatOpen(true);
     try { await agent.send(message.trim(), { clientContext: context() }); } catch (error) { notify(errorText(error)); }
   }
   useEffect(() => {
-    for (const message of agent.data.messages) for (const part of message.parts) {
-      if (part.type !== 'dynamic-tool' || part.state !== 'output-available' || part.partial || processed.current.has(part.toolCallId)) continue;
-      processed.current.add(part.toolCallId);
-      if (part.toolName === 'create_view') {
+    if (!authReady || agent.status === 'resuming' || !agent.session || chatWarning) return;
+    for (const message of agent.messages) for (const part of message.parts) {
+      if (part.type !== 'tool' || part.state !== 'completed') continue;
+      const receipt = planReceipt(agent.session.sessionId, part.callId, chatArchive.legacyReceiptSessionId());
+      if (processed.current.has(receipt)) continue;
+      if (part.name === 'create_view') {
         const output = part.output as View;
         if (!output?.panels?.length) continue;
-        const view: View = { ...output, id: `eve-${part.toolCallId}`, createdAt: new Date().toISOString(),
-          panels: output.panels.map((p, i) => ({ ...p, id: `${part.toolCallId}-${i}`, result: undefined, error: undefined,
-            layout: { i: `${part.toolCallId}-${i}`, x: i % 2 * 6, y: Math.floor(i / 2) * 5, w: p.type === 'metric' ? 4 : 6, h: p.type === 'metric' ? 3 : 5 } })) };
-        startPlan(view, part.toolCallId);
+        processed.current.add(receipt);
+        const view: View = { ...output, id: `eve-${receipt}`, createdAt: new Date().toISOString(),
+          panels: output.panels.map((p, i) => ({ ...p, id: `${receipt}-${i}`, result: undefined, error: undefined,
+            layout: { i: `${receipt}-${i}`, x: i % 2 * 6, y: Math.floor(i / 2) * 5, w: p.type === 'metric' ? 4 : 6, h: p.type === 'metric' ? 3 : 5 } })) };
+        startPlan(view, receipt);
         void (async () => {
           const panels = await evaluate(view.panels);
           savePanelResults(view, panels);
           notify(`Created “${view.name}” with ${view.panels.length} panels.`);
         })().catch(error => notify(errorText(error))).finally(() => finishPlan(view.id));
       }
-      if (part.toolName === 'analyze_data') {
+      if (part.name === 'analyze_data') {
         const output = part.output as { queries?: { id: string; title: string; sql: string; datasetIds: string[] }[] };
         if (!output?.queries?.length) continue;
+        processed.current.add(receipt);
         const sessionId = agent.session?.sessionId;
-        const view: View = { id: `eve-${part.toolCallId}`, name: output.queries[0].title, description: 'Reproducible results from your conversation.',
-          panels: output.queries.map((plan, i) => ({ id: `${part.toolCallId}-${i}`, title: plan.title, sql: plan.sql, datasetIds: plan.datasetIds, type: 'table' })) };
-        startPlan(view, part.toolCallId);
+        const view: View = { id: `eve-${receipt}`, name: output.queries[0].title, description: 'Reproducible results from your conversation.',
+          panels: output.queries.map((plan, i) => ({ id: `${receipt}-${i}`, title: plan.title, sql: plan.sql, datasetIds: plan.datasetIds, type: 'table' })) };
+        startPlan(view, receipt);
         const controller = new AbortController(); controllers.current.add(controller); setLoading(true);
         void (async () => {
           const results: (QueryResult & { title: string; datasetIds: string[] } | { title: string; error: string })[] = [];
@@ -248,15 +270,15 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
         })().catch(error => notify(errorText(error))).finally(() => { controllers.current.delete(controller); setLoading(controllers.current.size > 0 || fileOperations.current > 0); finishPlan(view.id); });
       }
     }
-  }, [agent.data.messages]); // Tool call IDs prevent durable replay from applying a plan twice.
+  }, [agent.messages, agent.status, agent.session, authReady, chatWarning]);
   useEffect(() => {
-    if (agent.status !== 'ready' || executing || !pendingSummary.current) return;
+    if (agent.status !== 'idle' || activeTurn(agent.view) || !idle(agent.view) || executing || chatWarning || !pendingSummary.current) return;
     const summary = pendingSummary.current; pendingSummary.current = null;
     if (!workspaceRef.current.shareResults || summary.sessionId !== agent.session?.sessionId) return;
     const bounded = JSON.parse(JSON.stringify(summary.results));
     if (JSON.stringify(bounded).length > 60000) { notify('Results are too large to share. Use a smaller aggregate query.'); return; }
     void agent.send('Explain the locally executed results in clientContext.results. Do not call planning tools again. Ground every quantitative claim in the supplied evidence and disclose limitations.', { clientContext: { ...context(), results: bounded } }).catch(error => notify(errorText(error)));
-  }, [agent.status, executing]);
+  }, [agent.status, agent.view, executing, chatWarning]);
   function beginImport(controller: AbortController) {
     pendingSummary.current = null;
     workspaceRef.current = { ...workspaceRef.current, shareSchema: false, shareResults: false };
@@ -320,9 +342,41 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
           {activeView?.panels.length ? <DashboardGrid panels={activeView.panels} loading={loading} onInspect={inspectPanel} onRemove={id => update(w => ({ ...w, views: w.views.map(v => v.id === activeView.id ? { ...v, panels: v.panels.filter(p => p.id !== id) } : v) }))} onLayoutChange={panels => update(w => ({ ...w, views: w.views.map(v => v.id === activeView.id ? { ...v, panels } : v) }))} /> : <div className="empty-workspace"><span className="empty-icon"><LayoutDashboard size={28} /></span><h2>A blank canvas. A better question.</h2><p>Ask Sift to build a dashboard, or add your first SQL panel.</p><button className="button button-primary" onClick={() => { setText('Create a dashboard for my data'); document.getElementById('sift-prompt')?.focus(); }}><Sparkles size={16} />Start with a question</button></div>}
           <div className="workspace-footnote"><ShieldCheck size={14} />Every chart starts with a query. Click a panel’s source to see the evidence.<span>Powered by DuckDB + eve</span></div>
         </section>
-        {chatOpen && <aside className="conversation"><div className="conversation-header"><span><Sparkles size={17} />Your data partner</span><div><button className="icon-button" aria-label="New conversation" disabled={busy || executing || loading} onClick={resetConversation}><Plus size={17} /></button><button className="icon-button" aria-label="Close conversation" onClick={() => setChatOpen(false)}><X size={17} /></button></div></div><div className="conversation-messages" aria-live="polite">{!agent.data.messages.length && <div className="chat-welcome"><span className="empty-icon"><Sparkles size={24} /></span><h3>Let’s find the signal.</h3><p>Ask a question, explore a trend, or turn your data into a whole new view.</p></div>}{agent.data.messages.map(message => <div className={`chat-message ${message.role}`} key={message.id}><small>{message.role === 'user' ? 'YOU' : 'SIFT'}</small>{message.parts.map((part, i) => part.type === 'text' ? <p key={i}>{part.text}</p> : part.type === 'dynamic-tool' ? <div className="tool-activity" key={i}>{part.state === 'output-available' ? <Check size={14} /> : <LoaderCircle size={14} className="spin" />}{part.toolName === 'create_view' ? 'Designing your view' : 'Planning your analysis'}</div> : null)}</div>)}{localNotes.map((note, i) => <div className="chat-message assistant" key={i}><p>{note}</p></div>)}{(busy || executing) && <div className="thinking"><span /><span /><span /><small>{executing ? 'Running queries locally' : 'Working with your data'}</small></div>}{agent.error && <div className="inline-error">{agent.error.message}<button className="button" disabled={busy || executing || loading} onClick={resetConversation}>Start a new conversation</button></div>}{Object.values(agent.data.inputs).filter(input => input.status === 'open').map(input => <div key={input.request.requestId} className="inline-notice"><p>{input.request.prompt}</p>{input.request.options?.map(option => <button className="button" key={option.id} disabled={agent.status === 'resuming'} onClick={() => void agent.respond([{ requestId: input.request.requestId, optionId: option.id }]).catch(error => notify(errorText(error)))}>{option.label}</button>)}</div>)}</div></aside>}
+        {chatOpen && <aside className="conversation">
+          <div className="conversation-header"><span><Sparkles size={17} />Your data partner</span><div>
+            <button className="icon-button" aria-label="New conversation" disabled={busy || executing || loading} onClick={resetConversation}><Plus size={17} /></button>
+            <button className="icon-button" aria-label="Close conversation" onClick={() => setChatOpen(false)}><X size={17} /></button>
+          </div></div>
+          <div className="conversation-messages" aria-live="polite">
+            {chatWarning && <div className="inline-error" role="alert"><p>{chatWarning}</p>
+              <button className="button" onClick={() => { try { download('sift-conversation-recovery.json', chatArchive.recovery()); } catch (error) { notify(errorText(error)); } }}>Export recovery copy</button>
+              <button className="button" disabled={busy || executing || loading} onClick={resetConversation}>Export and start fresh</button>
+            </div>}
+            {!agent.messages.length && <div className="chat-welcome"><span className="empty-icon"><Sparkles size={24} /></span><h3>Let’s find the signal.</h3><p>Ask a question, explore a trend, or turn your data into a whole new view.</p></div>}
+            {agent.messages.map(message => <div className={`chat-message ${message.role}`} key={message.id}>
+              <small>{message.role === 'user' ? 'YOU' : 'SIFT'}</small>
+              {message.parts.map((part, i) => part.type === 'text' ? <p key={i}>{part.text}</p> : part.type === 'tool' ? <div className="tool-activity" key={part.callId}>
+                {part.state === 'completed' && <Check size={14} />}{part.label || part.name} · {part.state}
+              </div> : null)}
+            </div>)}
+            {localNotes.map((note, i) => <div className="chat-message assistant" key={i}><p>{note}</p></div>)}
+            {(agent.status !== 'idle' || executing) && <div className="thinking"><span /><span /><span /><small>{executing ? 'Running queries locally' : 'Working with your data'}</small></div>}
+            {agent.error && <div className="inline-error">{agent.error.message}<button className="button" disabled={busy || executing || loading} onClick={resetConversation}>Start a new conversation</button></div>}
+            {openInteractions(agent.view).map(input => <div key={input.interactionId} className="inline-notice">
+              <p>{input.request.prompt}</p>
+              {input.request.options?.map(option => <button className="button" key={option.id} disabled={!authReady || Boolean(chatWarning) || agent.status !== 'idle'} onClick={() => void agent.respond([{ interactionId: input.interactionId, optionId: option.id }]).catch(error => notify(errorText(error)))}>{option.label}</button>)}
+              {input.request.allowFreeform && <form onSubmit={event => {
+                event.preventDefault();
+                const form = event.currentTarget;
+                const answer = String(new FormData(form).get('answer') ?? '').trim();
+                if (!answer || !authReady || chatWarning || agent.status !== 'idle') return;
+                void agent.respond([{ interactionId: input.interactionId, text: answer }]).then(() => form.reset()).catch(error => notify(errorText(error)));
+              }}><input className="input" name="answer" aria-label="Your answer" maxLength={6000} required disabled={!authReady || Boolean(chatWarning) || agent.status !== 'idle'} /><button className="button" disabled={!authReady || Boolean(chatWarning) || agent.status !== 'idle'}>Send answer</button></form>}
+            </div>)}
+          </div>
+        </aside>}
       </div>
-      <div className="composer-shell"><div className="prompt-suggestions">{suggestions.map(suggestion => <button key={suggestion} onClick={() => void send(suggestion)} disabled={busy || executing || loading}><Sparkles size={13} />{suggestion}</button>)}</div><form className="composer" onSubmit={event => { event.preventDefault(); void send(); }}><span className="composer-spark"><Sparkles size={20} /></span><textarea id="sift-prompt" rows={1} placeholder="Ask your data anything, or describe a dashboard…" value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void send(); } }} maxLength={6000} aria-label="Ask Sift" /><button type="button" className="icon-button" aria-label="Connect data" onClick={() => changeModal('sources')}><Plus size={20} /></button>{busy || loading || executing ? <button type="button" className="send-button" aria-label="Stop current work" onClick={stopWork}><Square size={14} fill="currentColor" /></button> : <button type="submit" className="send-button" aria-label="Send question" disabled={!text.trim()}><ArrowUp size={19} /></button>}</form><div className="composer-caption"><span><span className="status-dot" />{workspace.shareSchema ? 'Schema sharing on' : 'Schema sharing off'} · {workspace.shareResults ? 'Query results shared with AI' : 'Query results stay local'}</span><span>Built with <a href="https://eve.dev" target="_blank" rel="noreferrer">eve</a> <span className="key-hint">↵</span> to send</span></div></div>
+      <div className="composer-shell"><div className="prompt-suggestions">{suggestions.map(suggestion => <button key={suggestion} onClick={() => void send(suggestion)} disabled={busy || executing || loading}><Sparkles size={13} />{suggestion}</button>)}</div><form className="composer" onSubmit={event => { event.preventDefault(); void send(); }}><span className="composer-spark"><Sparkles size={20} /></span><textarea id="sift-prompt" rows={1} placeholder="Ask your data anything, or describe a dashboard…" value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void send(); } }} maxLength={6000} aria-label="Ask Sift" /><button type="button" className="icon-button" aria-label="Connect data" onClick={() => changeModal('sources')}><Plus size={20} /></button>{busy || openTurn || loading || executing ? <button type="button" className="send-button" aria-label="Stop current work" onClick={stopWork}><Square size={14} fill="currentColor" /></button> : <button type="submit" className="send-button" aria-label="Send question" disabled={!text.trim()}><ArrowUp size={19} /></button>}</form><div className="composer-caption"><span><span className="status-dot" />{workspace.shareSchema ? 'Schema sharing on' : 'Schema sharing off'} · {workspace.shareResults ? 'Query results shared with AI' : 'Query results stay local'}</span><span>Built with <a href="https://eve.dev" target="_blank" rel="noreferrer">eve</a> <span className="key-hint">↵</span> to send</span></div></div>
     </main>
     {toast && <div role="status" className="toast">{toast}<button className="icon-button" aria-label="Dismiss notification" onClick={() => notify('')}><X size={15} /></button></div>}
     {(modal || inspect) && <div className="dialog-backdrop" onMouseDown={e => { if (e.target === e.currentTarget) close(); }}><section role="dialog" aria-modal="true" aria-label={inspect ? inspect.title : modal ?? 'Dialog'} className={`dialog ${modal === 'sources' || inspect ? 'dialog-wide' : ''}`}><div className="dialog-header"><div><div className="eyebrow">YOUR WORKSPACE</div><h2>{inspect ? inspect.title : modal === 'sources' ? 'Bring your data' : modal === 'settings' ? 'Privacy & workspace' : modal === 'metrics' ? 'Define what matters' : modal === 'panel' ? 'Create a panel' : 'Create a view'}</h2></div><button className="icon-button" onClick={close} aria-label="Close dialog"><X size={20} /></button></div>

@@ -11,6 +11,20 @@
 
 The app uses no build-time secrets. Database credentials are read only by the server adapter. Vercel production protection should match the intended audience; use a private deployment when enabling internal database sources.
 
+The locked Eve version is 0.88.1 with Undici 8.12.3. Its session-usage callback
+keeps Sift's 80,000 input-token, 12,000 output-token and reported $0.25 thresholds.
+Input accounting includes cached input. The SDK's 24-hour timeout measures idle
+time; the app's signed conversation grant expires after 24 hours regardless.
+Reported token/cost boundaries are cooperative usage checks, not a hard billing
+cap. Apply provider spending controls separately when enabling model access.
+
+Upgrading does not establish that an older deployed workflow can resume under
+the new runtime. Local history is converted and retained; use New conversation
+for an expired or stranded session. The bounded owned route surface accepts
+native answers and inbox tokens, nullable cancellation, and `/end`; it excludes
+uploads, session lists, arbitrary records and WebSockets. New conversation uses
+the SDK's local reset rather than ending a remote workflow.
+
 ## Complete self-hosting
 
 Use the provided container or a Node.js 24 host. Set `SIFT_SESSION_SECRET` and `AI_GATEWAY_API_KEY` at runtime. The Next/eve integration runs the agent beside Next and proxies its browser transport. Local Workflow callbacks use the eve service's internal port. Uploaded datasets remain in each browser; the server needs no copied customer file directory.
