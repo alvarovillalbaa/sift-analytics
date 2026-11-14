@@ -63,6 +63,21 @@ is removed after all three runs finished. Its exact source remains in Git
 history. Release metadata and bounded production HTTP observations are recorded
 separately in [the release receipt](eve-dependency-release.json).
 
+[PR #1](https://github.com/alvarovillalbaa/sift-analytics/pull/1) merged at
+`37d4a6d7f60e722b490faa53a2192aa8a651d921`. Actual production
+`dpl_2dm3YrNa8DMJSWjovhAr1pCvvbhC` is READY and owns the canonical alias.
+Three anonymous bounded GETs observe home 200 (7,313 bytes), Eve health 200
+(ready, 72 bytes), and the expected signing-setup 503 (87 bytes). No session
+cookie, user message or model call was created. Compilation, TypeScript and
+Eve service build pass in the hosted Node 26.x environment selected by the
+unchanged `>=24` engine range; fresh CI used Node 24.21.0. The transfer output
+included public certificates and was truncated; complete body/header files
+and selected complete metadata fields were retained without repeating requests.
+
+The QA ref is absent remotely and locally after its exact merged head/ancestry
+was verified. No application, dependency or test bytes change after the native
+qualification; subsequent release-status documents do not add acceptance cases.
+
 No local install/build/server/browser was started below Storage Guard's
 2.3/34 GiB measurement. The existing local installed Eve remains 0.81.1;
 the fresh CI install and hosted build qualify the upgraded source. The

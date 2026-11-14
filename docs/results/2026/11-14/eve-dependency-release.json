@@ -1,11 +1,124 @@
 {
-  "status": "qualified_source_pending_production_observation",
+  "status": "merged_production_observed",
+  "pullRequest": "https://github.com/alvarovillalbaa/sift-analytics/pull/1",
+  "mergeSource": "37d4a6d7f60e722b490faa53a2192aa8a651d921",
   "qualifiedSource": "c026994f6fb79d87352a660d999046268e0b8045",
   "qualificationRun": 43629326905,
+  "distinctPassingChecks": 35,
+  "lockSha256": "785f191b7e9364ec53a894982e27ac1a40f03d3a1704808c5b1e737268eecd2f",
   "canonicalUrl": "https://sift-analytics.vercel.app",
-  "workflowId": 418549478,
-  "workflowObservedState": "disabled_manually",
-  "activeWorkflowFileRemoved": true,
-  "browserModelPostgresAcceptance": false,
-  "productionSigningSecret": "owner-deferred; untouched"
+  "production": {
+    "id": "dpl_2dm3YrNa8DMJSWjovhAr1pCvvbhC",
+    "url": "sift-analytics-oasvnt07z-my-team-4f230354.vercel.app",
+    "readyState": "READY",
+    "target": "production",
+    "alias": [
+      "sift-analytics.vercel.app",
+      "sift-analytics-my-team-4f230354.vercel.app",
+      "sift-analytics-git-main-my-team-4f230354.vercel.app"
+    ],
+    "meta": {
+      "githubCommitRef": "main",
+      "githubCommitSha": "37d4a6d7f60e722b490faa53a2192aa8a651d921",
+      "githubCommitMessage": "Merge pull request #1 from alvarovillalbaa/qa/sift-eve-20261114\n\nPatch Eve transport and preserve Sift conversations on v27",
+      "githubRepo": "sift-analytics",
+      "githubOrg": "alvarovillalbaa"
+    }
+  },
+  "preview": {
+    "id": "dpl_7uez26Kj32CW6i1BVjGN5Rjt2o7K",
+    "url": "sift-analytics-n7ie72par-my-team-4f230354.vercel.app",
+    "readyState": "READY",
+    "target": null,
+    "alias": [
+      "sift-analytics-git-qa-sift-eve-20261114-my-team-4f230354.vercel.app"
+    ]
+  },
+  "requests": [
+    {
+      "name": "home",
+      "exitCode": 0,
+      "httpStatus": 200,
+      "sizeDownload": 7313,
+      "contentType": "text/html; charset=utf-8",
+      "url": "https://sift-analytics.vercel.app/",
+      "redirects": 0,
+      "sslVerifyResult": 0,
+      "transferOutputTruncated": true,
+      "bodySha256": "c70674f0c20d8c7b778edd7ea417f818411bfc5e3d21b8f151b30ef350de55c5",
+      "headerBytes": 622,
+      "headersSha256": "ea899d5f3a67ae1788e9a33477efd667e32135593ca5e066d0e1d3bff1979ae9"
+    },
+    {
+      "name": "health",
+      "exitCode": 0,
+      "httpStatus": 200,
+      "sizeDownload": 72,
+      "contentType": "application/json",
+      "url": "https://sift-analytics.vercel.app/eve/v1/health",
+      "redirects": 0,
+      "sslVerifyResult": 0,
+      "transferOutputTruncated": true,
+      "bodySha256": "f0659998451dee06164647c05954391885c80d3f933e51cf37f5c0dfcc15b0e4",
+      "headerBytes": 345,
+      "headersSha256": "cb3d8dea5b6ff0f891b4b411468d036440b36d6a171b83b1bcd486df1d73450f",
+      "bodyUtf8": "{\"ok\":true,\"status\":\"ready\",\"workflowId\":\"workflow//eve//workflowEntry\"}"
+    },
+    {
+      "name": "session",
+      "exitCode": 0,
+      "httpStatus": 503,
+      "sizeDownload": 87,
+      "contentType": "application/json",
+      "url": "https://sift-analytics.vercel.app/api/session",
+      "redirects": 0,
+      "sslVerifyResult": 0,
+      "transferOutputTruncated": true,
+      "bodySha256": "004aba35acc1d074a2e8d858411fe48eadab01189ad77858e89e330ac9a343f2",
+      "headerBytes": 317,
+      "headersSha256": "83745ca791f1c9b764ac43971c6b8018d458d4996e3ccf2aac9197897acb6364",
+      "bodyUtf8": "{\"error\":\"The agent session is not configured. Set SIFT_SESSION_SECRET on the server.\"}"
+    }
+  ],
+  "workflow": {
+    "id": 418549478,
+    "state": "disabled_manually",
+    "fileAbsent": true,
+    "runs": [
+      43629048205,
+      43629190816,
+      43629326905
+    ],
+    "allRunsTerminal": true
+  },
+  "branch": {
+    "name": "qa/sift-eve-20261114",
+    "head": "d96b3a8be4af44a61883127832150fddea78485a",
+    "mergedPr": 1,
+    "remoteMatchingRefs": [],
+    "localDeleted": true,
+    "ancestryVerified": true
+  },
+  "hostedBuild": {
+    "deployment": "dpl_2dm3YrNa8DMJSWjovhAr1pCvvbhC",
+    "state": "READY",
+    "compilation": "passed",
+    "typeScript": "passed",
+    "eveService": "built",
+    "node": "26.x as selected by unchanged >=24 engine range",
+    "ciNode": "24.21.0",
+    "buildLogSha256": "4f82b270b27184ae8e9af9b0985aada74755210163eda534cf279fd2dc43e58e"
+  },
+  "runtimeAfterQualification": "Only result documents and temporary-workflow removal differ from qualified source. No runtime/dependency/test change.",
+  "productionSigningSecret": "owner-deferred; untouched; expected bootstrap 503 observed",
+  "acceptanceOpen": [
+    "React lifecycle and actual browser",
+    "Real provider/model and hosted Workflow turn",
+    "PostgreSQL and physical devices",
+    "Provider spending and all application security beyond recorded advisories"
+  ],
+  "notes": [
+    "Transfer output included public TLS certificates and exceeded the output budget. Selected complete tail fields are normalized here; no full transfer JSON digest is claimed.",
+    "Full raw body/header files are retained separately. No request was repeated to repair logging."
+  ]
 }
