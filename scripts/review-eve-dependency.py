@@ -23,7 +23,7 @@ env = {**os.environ, 'npm_config_cache': str(task / 'cache'), 'npm_config_userco
 (task / 'package.json').write_bytes(manifest)
 (task / 'package-lock.json').write_bytes(original_lock)
 (out / 'package.json').write_bytes(manifest)
-receipt = {'source': os.environ['GITHUB_SHA'], 'node': subprocess.check_output(['node', '--version'], text=True).strip(), 'npm': subprocess.check_output(['npm', '--version'], text=True).strip(), 'commands': [], 'cleanup': False, 'qualified': False}
+receipt = {'source': os.environ['GITHUB_SHA'], 'node': subprocess.check_output(['node', '--version'], text=True).strip(), 'npm': subprocess.check_output(['npm', '--version'], text=True).strip(), 'commands': [], 'cleanup': False, 'qualified': False, 'sourceLockMatchesResolved': False}
 
 
 def run(name, args, cwd=repo, timeout=180):

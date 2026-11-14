@@ -142,3 +142,10 @@ test('failed storage removal leaves the native conversation attached', () => {
   const h = harness({ storage }); button(h.render(), 'New conversation').props.onClick();
   assert.deepEqual(h.calls, []); assert.ok(storage.getItem('sift-chat')); assert.match(h.states[17], /Removal denied/);
 });
+test('an idle replay error permits a local New even when the saved turn remains paused', () => {
+  const h = harness({ view: paused(), storage: memoryStorage({ 'sift-chat': raw }) });
+  h.agent.error = new Error('Authored expired session grant');
+  const tree = h.render(); assert.equal(button(tree, 'New conversation').props.disabled, false);
+  button(tree, 'New conversation').props.onClick(); assert.deepEqual(h.calls, [['newSession']]);
+  assert.equal(h.workspace.views.length, 1); assert.equal(h.storage.getItem('sift-chat'), null);
+});

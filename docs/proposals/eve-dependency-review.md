@@ -40,14 +40,14 @@ Local Storage Guard requires remote installation/builds. One public Ubuntu job
 on `qa/sift-eve-20261114`, at most 20 minutes per run, resolves the lock without
 scripts or installing. Retain that generated lock, commit it, then run the same
 job against exact matching source. Require a zero-finding audit, `npm ci`, the
-34 focused authored checks, TypeScript and the existing production build
+35 focused authored checks, TypeScript and the existing production build
 (including Eve). Check source hashes before/after and remove only runner-owned
 dependencies, build outputs and temporary cache. Disable/remove the active
 workflow and remove its owned branch after publication; retain its source,
 receipts and failures in history/evidence.
 
 Checks cover 11 persistence cases using a fixture captured by the real installed
-0.81.1 store with no transport attached, 10 channel/auth boundary cases, 10
+0.81.1 store with no transport attached, 10 channel/auth boundary cases, 11
 actual WorkspaceApp callback/effect cases and three usage thresholds. The new
 SDK fold/converter/selectors are real; React hooks/JSX, browser storage, query
 results and messages are authored harness state. The create-handler grant test

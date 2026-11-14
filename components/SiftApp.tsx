@@ -131,7 +131,8 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
     const timer = setTimeout(() => persistChat(agent), 250);
     return () => clearTimeout(timer);
   }, [agent.session, agent.events, agent.status, authReady, chatWarning]);
-  const busy = agent.status !== 'idle' || activeTurn(agent.view) !== undefined;
+  const openTurn = activeTurn(agent.view) !== undefined;
+  const busy = agent.status !== 'idle' || (openTurn && !agent.error);
   const activeView = workspace.views.find(v => v.id === workspace.activeViewId) ?? workspace.views[0];
   function update(fn: (value: Workspace) => Workspace) {
     if (mounted.current) setWorkspace(current => {
@@ -169,7 +170,7 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
   function stopWork() {
     pendingSummary.current = null;
     for (const controller of controllers.current) controller.abort();
-    if (busy) void agent.cancel().catch(error => notify(errorText(error)));
+    if (busy || openTurn) void agent.cancel().catch(error => notify(errorText(error)));
   }
   async function runQuery(statement: string, datasetIds: string[], signal?: AbortSignal) {
     const datasets = workspaceRef.current.datasets.filter(d => datasetIds.includes(d.id));
@@ -211,6 +212,7 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
   }
   async function send(message = text) {
     if (!message.trim() || busy || executing || loading) return;
+    if (agent.error) { setChatOpen(true); notify('Start a new conversation to reconnect with AI. Your saved dashboards stay available.'); return; }
     if (chatWarning) { setChatOpen(true); notify('Export your saved conversation and start fresh, or reload to restore the latest copy.'); return; }
     if (!authReady) { notify('AI is not connected. You can still upload data and create SQL panels.'); return; }
     if (!workspace.shareSchema) { changeModal('settings'); notify('Enable schema sharing to let AI work with your selected datasets.'); return; }
@@ -374,7 +376,7 @@ function WorkspaceApp({ workspace, setWorkspace, authReady, toast, notify: sendN
           </div>
         </aside>}
       </div>
-      <div className="composer-shell"><div className="prompt-suggestions">{suggestions.map(suggestion => <button key={suggestion} onClick={() => void send(suggestion)} disabled={busy || executing || loading}><Sparkles size={13} />{suggestion}</button>)}</div><form className="composer" onSubmit={event => { event.preventDefault(); void send(); }}><span className="composer-spark"><Sparkles size={20} /></span><textarea id="sift-prompt" rows={1} placeholder="Ask your data anything, or describe a dashboard…" value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void send(); } }} maxLength={6000} aria-label="Ask Sift" /><button type="button" className="icon-button" aria-label="Connect data" onClick={() => changeModal('sources')}><Plus size={20} /></button>{busy || loading || executing ? <button type="button" className="send-button" aria-label="Stop current work" onClick={stopWork}><Square size={14} fill="currentColor" /></button> : <button type="submit" className="send-button" aria-label="Send question" disabled={!text.trim()}><ArrowUp size={19} /></button>}</form><div className="composer-caption"><span><span className="status-dot" />{workspace.shareSchema ? 'Schema sharing on' : 'Schema sharing off'} · {workspace.shareResults ? 'Query results shared with AI' : 'Query results stay local'}</span><span>Built with <a href="https://eve.dev" target="_blank" rel="noreferrer">eve</a> <span className="key-hint">↵</span> to send</span></div></div>
+      <div className="composer-shell"><div className="prompt-suggestions">{suggestions.map(suggestion => <button key={suggestion} onClick={() => void send(suggestion)} disabled={busy || executing || loading}><Sparkles size={13} />{suggestion}</button>)}</div><form className="composer" onSubmit={event => { event.preventDefault(); void send(); }}><span className="composer-spark"><Sparkles size={20} /></span><textarea id="sift-prompt" rows={1} placeholder="Ask your data anything, or describe a dashboard…" value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void send(); } }} maxLength={6000} aria-label="Ask Sift" /><button type="button" className="icon-button" aria-label="Connect data" onClick={() => changeModal('sources')}><Plus size={20} /></button>{busy || openTurn || loading || executing ? <button type="button" className="send-button" aria-label="Stop current work" onClick={stopWork}><Square size={14} fill="currentColor" /></button> : <button type="submit" className="send-button" aria-label="Send question" disabled={!text.trim()}><ArrowUp size={19} /></button>}</form><div className="composer-caption"><span><span className="status-dot" />{workspace.shareSchema ? 'Schema sharing on' : 'Schema sharing off'} · {workspace.shareResults ? 'Query results shared with AI' : 'Query results stay local'}</span><span>Built with <a href="https://eve.dev" target="_blank" rel="noreferrer">eve</a> <span className="key-hint">↵</span> to send</span></div></div>
     </main>
     {toast && <div role="status" className="toast">{toast}<button className="icon-button" aria-label="Dismiss notification" onClick={() => notify('')}><X size={15} /></button></div>}
     {(modal || inspect) && <div className="dialog-backdrop" onMouseDown={e => { if (e.target === e.currentTarget) close(); }}><section role="dialog" aria-modal="true" aria-label={inspect ? inspect.title : modal ?? 'Dialog'} className={`dialog ${modal === 'sources' || inspect ? 'dialog-wide' : ''}`}><div className="dialog-header"><div><div className="eyebrow">YOUR WORKSPACE</div><h2>{inspect ? inspect.title : modal === 'sources' ? 'Bring your data' : modal === 'settings' ? 'Privacy & workspace' : modal === 'metrics' ? 'Define what matters' : modal === 'panel' ? 'Create a panel' : 'Create a view'}</h2></div><button className="icon-button" onClick={close} aria-label="Close dialog"><X size={20} /></button></div>
