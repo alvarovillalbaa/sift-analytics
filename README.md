@@ -49,11 +49,19 @@ No arbitrary database URL is accepted from public HTTP requests. Only configured
 
 ## Privacy and evidence
 
-Uploaded file bytes never go to an upload endpoint or to eve. With schema sharing enabled, names, columns, types, and metric definitions go to the deployment's model provider. With query-result sharing enabled, up to 50 rows per analysis query may also be shared and retained in the server conversation history. These can be raw values; choose the setting accordingly.
+Uploaded file bytes never go to an upload endpoint or to eve. With schema sharing enabled, names, columns, types, and metric definitions go to the deployment's model provider. With query-result sharing enabled, up to 50 rows per analysis query may also enter the current model turn. These can be raw values, and generated replies can repeat them in saved conversation history; choose the setting accordingly. Eve treats this client context as ephemeral, which does not establish the provider's retention policy.
 
 Local workspace definitions are stored in localStorage; files use IndexedDB. Query results remain in memory unless exported or explicitly shared in conversation. Clearing site data removes local files and definitions. Server-side conversations use eve's durable session storage. Signed, HttpOnly browser identity and session-grant cookies enforce conversation ownership. Start a new conversation when a session grant expires after 24 hours.
 
 Files do not sync between devices. Use JSON/CSV exports to keep a copy. The app does not claim that two connected sources can be joined without a common approved execution engine and a modeled relationship.
+
+The Eve 0.88.1 upgrade converts the previous saved conversation with Eve's native
+event converter and retains its original browser copy before replacement. A
+recovery warning offers an export and a fresh conversation if history cannot be
+restored. The export can contain conversation values and both recovery copies.
+An expired or stranded server session may require New conversation even when
+its local history is readable. New conversation clears only the local chat
+attachment; it retains saved dashboards and the before-upgrade backup.
 
 Folder selection is a one-time snapshot, with relative paths retained as source names. The preview reads metadata only; workbook inspection and importing read only the files you choose. A preview accepts up to 200 files; one import run accepts up to 20 files and 100 MB combined, with a 20 MB per-file limit. Successful files stay available if a later file fails or you stop the batch. Retrying the current selection skips its completed files. Choosing the folder again starts a new selection and can import additional copies. Browser folder-picker support varies; the multiple-file picker is also available.
 

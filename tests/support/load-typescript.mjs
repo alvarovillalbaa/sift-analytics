@@ -6,7 +6,7 @@ export function loadTypescript(path, imports, globals = {}, suffix = '') {
   const source = readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8') + suffix;
   const compiled = transformSync(source, { filename: path, jsc: { parser: { syntax: 'typescript', tsx: path.endsWith('.tsx') }, target: 'es2022', transform: { react: { runtime: 'automatic' } } }, module: { type: 'commonjs' } }).code;
   const exports = {};
-  const context = vm.createContext({ exports, module: { exports }, console, Request, Response, Headers, TextDecoder, AbortController, Buffer,
+  const context = vm.createContext({ exports, module: { exports }, console, Request, Response, Headers, URL, TextDecoder, AbortController, Buffer,
     require(name) { if (!(name in imports)) throw new Error(`Unexpected import: ${name}`); return imports[name]; },
     ...globals,
   });
