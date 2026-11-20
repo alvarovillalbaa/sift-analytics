@@ -1,5 +1,9 @@
 # Sift
 
+<!-- project-family:start -->
+> **Project family:** [Web & Creative Apps](https://github.com/alvarovillalbaa#web-and-creative-apps) · **Area:** Analytics
+<!-- project-family:end -->
+
 A conversation with your data. Sift turns questions into reproducible dashboards with movable, resizable panels. Built with **Vercel eve**, Next.js, and browser-local DuckDB.
 
 ## What you can do
